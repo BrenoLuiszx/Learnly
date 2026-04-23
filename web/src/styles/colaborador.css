@@ -1,0 +1,1189 @@
+/* =============================================
+   COLABORADOR — lesson manager + preview
+   ============================================= */
+
+/* Action buttons on course cards */
+.btn-aulas {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-aulas:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+}
+
+/* Feedback messages */
+.colab-msg {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+.colab-msg.sucesso {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #34d399;
+}
+
+.colab-msg.erro {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+/* ── Lesson manager modal ── */
+.colab-aulas-modal {
+  max-width: 760px;
+}
+
+.colab-aulas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.colab-aula-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: #2c2c2e;
+  border: 1px solid #3a3a3c;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+}
+
+.colab-aula-item:hover {
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.colab-aula-ordem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 32px;
+  padding-top: 4px;
+}
+
+.colab-aula-ordem span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffd700;
+  line-height: 1;
+}
+
+.colab-ordem-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.15s;
+  line-height: 1;
+}
+
+.colab-ordem-btn:hover:not(:disabled) {
+  color: #ffd700;
+}
+
+.colab-ordem-btn:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.colab-aula-campos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.colab-aula-input {
+  padding: 8px 12px;
+  background: #1c1c1e;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  color: #f2f2f7;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.colab-aula-input:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+.colab-aula-input::placeholder {
+  color: #555;
+}
+
+.colab-aula-desc {
+  font-size: 0.82rem;
+}
+
+.colab-aula-remove {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.colab-aula-remove:hover:not(:disabled) {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.colab-aula-remove:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.colab-add-aula-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px dashed #3a3a3c;
+  border-radius: 10px;
+  color: #888;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.colab-add-aula-btn:hover {
+  border-color: #ffd700;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.04);
+}
+
+/* ── Preview modal ── */
+.colab-preview-modal {
+  position: relative;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 1.5rem;
+  width: 95vw;
+  max-width: 1100px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  animation: slideUp 0.25s ease;
+  overflow: hidden;
+}
+
+.colab-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid #2c2c2e;
+  gap: 16px;
+}
+
+.colab-preview-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f2f2f7;
+  margin: 6px 0 0;
+}
+
+.colab-preview-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 20px;
+  color: #ffd700;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.colab-preview-body {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.colab-preview-player {
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  overflow: hidden;
+}
+
+.colab-preview-player iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  flex-shrink: 0;
+}
+
+.colab-preview-no-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #666;
+  font-size: 0.9rem;
+  background: #0a0a0b;
+}
+
+.colab-preview-no-video a {
+  color: #ffd700;
+  font-size: 0.85rem;
+}
+
+.colab-preview-aula-info {
+  padding: 14px 18px;
+  background: #111;
+  border-top: 1px solid #2c2c2e;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.colab-preview-aula-badge {
+  padding: 3px 10px;
+  background: #ffd700;
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.colab-preview-aula-titulo {
+  color: #f2f2f7;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.colab-preview-sidebar {
+  border-left: 1px solid #2c2c2e;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #161618;
+}
+
+.colab-preview-curso-info {
+  padding: 16px;
+  border-bottom: 1px solid #2c2c2e;
+}
+
+.colab-preview-curso-info h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f2f2f7;
+  margin: 8px 0 6px;
+}
+
+.colab-preview-curso-info p {
+  font-size: 0.8rem;
+  color: #888;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.colab-preview-aulas-lista {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+.colab-preview-aulas-lista::-webkit-scrollbar { width: 6px; }
+.colab-preview-aulas-lista::-webkit-scrollbar-track { background: #0a0a0b; }
+.colab-preview-aulas-lista::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 3px; }
+
+.colab-preview-aula-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-bottom: 4px;
+}
+
+.colab-preview-aula-item:hover {
+  background: rgba(255, 215, 0, 0.06);
+}
+
+.colab-preview-aula-item.ativa {
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+}
+
+.colab-preview-aula-num {
+  width: 26px;
+  height: 26px;
+  background: #2c2c2e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffd700;
+  flex-shrink: 0;
+}
+
+.colab-preview-aula-item.ativa .colab-preview-aula-num {
+  background: #ffd700;
+  color: #000;
+}
+
+.colab-preview-aula-nome {
+  font-size: 0.85rem;
+  color: #ccc;
+  line-height: 1.3;
+}
+
+.colab-preview-aula-item.ativa .colab-preview-aula-nome {
+  color: #f2f2f7;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .colab-preview-body {
+    grid-template-columns: 1fr;
+  }
+
+  .colab-preview-sidebar {
+    border-left: none;
+    border-top: 1px solid #2c2c2e;
+    max-height: 220px;
+  }
+}
+
+/* =============================================
+   COLABORADOR — DASHBOARD
+   ============================================= */
+
+.cd-dash {
+  position: relative;
+  z-index: 1;
+}
+
+/* KPI bar */
+.cd-kpis {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.cd-kpi {
+  flex: 1;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 1.1rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.875rem;
+}
+
+.cd-kpi-val {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cd-kpi-lbl {
+  font-size: 0.75rem;
+  color: #8e8e93;
+  font-weight: 500;
+  text-align: center;
+}
+
+.cd-loading {
+  color: #888;
+  text-align: center;
+  padding: 60px 0;
+  font-size: 0.9rem;
+}
+
+/* Course card list */
+.cd-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cd-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.cd-card.expanded {
+  border-color: rgba(255, 215, 0, 0.25);
+}
+
+/* Card header */
+.cd-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  gap: 1rem;
+  transition: background 0.15s;
+}
+
+.cd-card-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cd-card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cd-chevron {
+  color: #ffd700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  width: 14px;
+}
+
+.cd-card-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #f2f2f7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+.cd-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.cd-meta-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.cd-meta-score {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.cd-card-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.cd-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 48px;
+}
+
+.cd-stat span:first-child {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cd-stat span:last-child {
+  font-size: 0.68rem;
+  color: #8e8e93;
+  font-weight: 500;
+}
+
+/* Detail panel */
+.cd-detail {
+  border-top: 1px solid #2c2c2e;
+  padding: 1.1rem 1.25rem;
+}
+
+/* Sub-tabs */
+.cd-subtabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1.1rem;
+}
+
+.cd-subtab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: #2c2c2e;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  color: #8e8e93;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cd-subtab.active {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+}
+
+.cd-subtab:hover:not(.active) {
+  background: #3a3a3c;
+  color: #f2f2f7;
+}
+
+.cd-subtab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 1px 7px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Alunos table */
+.cd-alunos {
+  display: flex;
+  flex-direction: column;
+}
+
+.cd-alunos-head {
+  display: grid;
+  grid-template-columns: 180px 1fr 150px 120px 110px;
+  gap: 10px;
+  padding: 6px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #2c2c2e;
+  margin-bottom: 2px;
+}
+
+.cd-aluno-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 150px 120px 110px;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: 8px;
+  transition: background 0.12s;
+}
+
+.cd-aluno-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cd-aluno-nome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cd-aluno-nome span {
+  font-size: 0.83rem;
+  color: #f2f2f7;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cd-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.22);
+  color: #ffd700;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Progress bar */
+.cd-prog-cell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cd-prog-track {
+  flex: 1;
+  height: 5px;
+  background: #2c2c2e;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cd-prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #60a5fa, #34d399);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.cd-prog-pct {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aeaeb2;
+  min-width: 30px;
+  text-align: right;
+}
+
+/* Lesson dots */
+.cd-dots-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+}
+
+.cd-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #3a3a3c;
+  border: 1px solid #555;
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.cd-dot.done {
+  background: #34d399;
+  border-color: #34d399;
+}
+
+.cd-no-aulas {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+/* Status badges */
+.cd-badge-done {
+  display: inline-block;
+  padding: 2px 9px;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  color: #34d399;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cd-badge-prog {
+  display: inline-block;
+  padding: 2px 9px;
+  background: rgba(96, 165, 250, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.22);
+  color: #60a5fa;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cd-date {
+  font-size: 0.77rem;
+  color: #888;
+}
+
+.cd-empty {
+  color: #555;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* Reviews section */
+.cd-avaliacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cd-av-summary {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: 0.9rem 1.1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #2c2c2e;
+  border-radius: 10px;
+}
+
+.cd-av-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 72px;
+}
+
+.cd-av-big {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffd700;
+  line-height: 1;
+}
+
+.cd-av-stars {
+  display: flex;
+  gap: 1px;
+}
+
+.cd-star { color: #3a3a3c; font-size: 0.82rem; }
+.cd-star.on { color: #ffd700; }
+
+.cd-av-count {
+  font-size: 0.72rem;
+  color: #888;
+  text-align: center;
+}
+
+.cd-av-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cd-av-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cd-av-star-lbl {
+  font-size: 0.72rem;
+  color: #ffd700;
+  min-width: 22px;
+  text-align: right;
+}
+
+.cd-av-bar-track {
+  flex: 1;
+  height: 5px;
+  background: #2c2c2e;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cd-av-bar-fill {
+  height: 100%;
+  background: #ffd700;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.cd-av-bar-cnt {
+  font-size: 0.7rem;
+  color: #888;
+  min-width: 18px;
+  text-align: right;
+}
+
+.cd-av-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.cd-av-list::-webkit-scrollbar { width: 4px; }
+.cd-av-list::-webkit-scrollbar-track { background: transparent; }
+.cd-av-list::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 2px; }
+
+.cd-av-item {
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #2c2c2e;
+  border-radius: 8px;
+}
+
+.cd-av-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cd-av-item-date {
+  font-size: 0.72rem;
+  color: #555;
+}
+
+.cd-av-comment {
+  font-size: 0.8rem;
+  color: #aeaeb2;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .cd-alunos-head,
+  .cd-aluno-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .cd-alunos-head span:nth-child(n+3),
+  .cd-aluno-row > *:nth-child(n+3) {
+    display: none;
+  }
+
+  .cd-card-stats { gap: 1rem; }
+  .cd-card-title { max-width: 200px; }
+}
+
+@media (max-width: 560px) {
+  .cd-kpis { gap: 0.5rem; }
+  .cd-kpi { min-width: 80px; padding: 0.8rem 0.5rem; }
+  .cd-kpi-val { font-size: 1.5rem; }
+
+  .cd-card-header { flex-direction: column; align-items: flex-start; }
+  .cd-card-stats { width: 100%; justify-content: space-between; }
+
+  .cd-alunos-head { display: none; }
+  .cd-aluno-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* =============================================
+   COURSE FORM — Links & Attachments sections
+   ============================================= */
+
+.cf-section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #2c2c2e;
+}
+
+.cf-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.cf-section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f2f2f7;
+}
+
+.cf-add-btn {
+  padding: 4px 12px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 6px;
+  color: #ffd700;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.cf-add-btn:hover {
+  background: rgba(255, 215, 0, 0.18);
+  border-color: #ffd700;
+}
+
+.cf-empty {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 0 0 4px;
+  font-style: italic;
+}
+
+.cf-resource-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cf-resource-input {
+  padding: 7px 10px;
+  background: #1c1c1e;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  color: #f2f2f7;
+  font-size: 0.82rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  min-width: 0;
+  flex: 0 0 160px;
+}
+
+.cf-resource-input.cf-resource-url {
+  flex: 1;
+}
+
+.cf-resource-input:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+.cf-resource-input::placeholder {
+  color: #555;
+}
+
+.cf-remove-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.cf-remove-btn:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* =============================================
+   LESSON MANAGER — Redesigned expandable items
+   ============================================= */
+
+/* Wider modal for the expanded lesson editor */
+.colab-aulas-modal {
+  max-width: 820px;
+}
+
+/* Each lesson item */
+.colab-aula-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: #2c2c2e;
+  border: 1px solid #3a3a3c;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+  overflow: hidden;
+}
+
+.colab-aula-item.expanded {
+  border-color: rgba(255, 215, 0, 0.35);
+}
+
+/* Compact header row */
+.colab-aula-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.colab-aula-item:hover .colab-aula-header {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Order controls — now with number input */
+.colab-aula-ordem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.colab-ordem-num {
+  width: 36px;
+  padding: 2px 4px;
+  background: #1c1c1e;
+  border: 1px solid #3a3a3c;
+  border-radius: 5px;
+  color: #ffd700;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: inherit;
+  -moz-appearance: textfield;
+}
+
+.colab-ordem-num::-webkit-inner-spin-button,
+.colab-ordem-num::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.colab-ordem-num:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+/* Inline title input */
+.colab-aula-titulo-inline {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Header action buttons */
+.colab-aula-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.colab-aula-expand-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px 7px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+
+.colab-aula-expand-btn:hover {
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.08);
+}
+
+/* Expanded detail panel */
+.colab-aula-detail {
+  padding: 0 12px 14px;
+  border-top: 1px solid #3a3a3c;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.colab-aula-campos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+.colab-detail-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #aeaeb2;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.colab-aula-textarea {
+  resize: vertical;
+  min-height: 70px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* Per-lesson resources */
+.colab-aula-recursos {
+  padding-top: 10px;
+  border-top: 1px solid #3a3a3c;
+}
+
+.colab-recursos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.colab-recursos-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #aeaeb2;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.colab-rec-tipo {
+  padding: 6px 8px;
+  background: #1c1c1e;
+  border: 1px solid #3a3a3c;
+  border-radius: 7px;
+  color: #f2f2f7;
+  font-size: 0.78rem;
+  font-family: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.colab-rec-tipo:focus {
+  outline: none;
+  border-color: #ffd700;
+}

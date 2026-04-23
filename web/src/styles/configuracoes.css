@@ -1,0 +1,869 @@
+/* =============================================
+   LEARNLY — SETTINGS PAGE
+   ============================================= */
+
+.cfg-page {
+  min-height: 100vh;
+  background: #0a0a0b;
+  color: #f2f2f7;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ── Layout ── */
+.cfg-layout {
+  display: flex;
+  min-height: calc(100vh - 64px);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 32px 80px;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* ── Sidebar ── */
+.cfg-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: #1c1c1e;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 1.5rem;
+  padding: 22px 14px;
+  position: sticky;
+  top: 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfg-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+}
+
+.cfg-sidebar-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cfg-mobile-close {
+  display: none;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+/* User card in sidebar */
+.cfg-user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+}
+
+.cfg-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.15);
+  border: 2px solid rgba(255,215,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: #ffd700;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cfg-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cfg-user-info { min-width: 0; }
+
+.cfg-user-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #f2f2f7;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cfg-user-email {
+  font-size: 0.72rem;
+  color: #666;
+  margin: 1px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Nav items */
+.cfg-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.cfg-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: #888;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  font-family: inherit;
+  width: 100%;
+}
+
+.cfg-nav-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: #f2f2f7;
+}
+
+.cfg-nav-item.active {
+  background: rgba(255,215,0,0.1);
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.cfg-nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Sidebar footer */
+.cfg-sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 8px;
+}
+
+.cfg-footer-link {
+  display: block;
+  padding: 8px 12px;
+  color: #888;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.cfg-footer-link:hover {
+  background: rgba(255,255,255,0.05);
+  color: #f2f2f7;
+}
+
+.cfg-footer-logout {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: left;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.cfg-footer-logout:hover {
+  background: rgba(239,68,68,0.08);
+}
+
+/* ── Mobile toggle ── */
+.cfg-mobile-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #1c1c1e;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: #f2f2f7;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 16px;
+}
+
+.cfg-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 99;
+}
+
+/* ── Main content ── */
+.cfg-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Section ── */
+.cfg-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cfg-section-head {
+  margin-bottom: 4px;
+}
+
+.cfg-section-head h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #f2f2f7;
+  margin: 0 0 4px;
+}
+
+.cfg-section-head p {
+  color: #888;
+  font-size: 0.925rem;
+  margin: 0;
+}
+
+/* ── Card ── */
+.cfg-card {
+  background: #1c1c1e;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 1.5rem;
+  padding: 28px 32px;
+}
+
+.cfg-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f2f2f7;
+  margin: 0 0 8px;
+}
+
+.cfg-card-desc {
+  font-size: 0.85rem;
+  color: #888;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.cfg-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* ── Photo ── */
+.cfg-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.cfg-photo-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+.cfg-photo-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,215,0,0.4);
+}
+
+.cfg-photo-initial {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.12);
+  border: 3px solid rgba(255,215,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.cfg-photo-edit-btn {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffd700;
+  border: 2px solid #0a0a0b;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.cfg-photo-edit-btn:hover { transform: scale(1.1); }
+
+.cfg-photo-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cfg-photo-hint {
+  font-size: 0.78rem;
+  color: #666;
+  margin: 0;
+}
+
+/* ── Fields ── */
+.cfg-field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.cfg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cfg-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #aeaeb2;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cfg-input {
+  padding: 11px 14px;
+  background: #0a0a0b;
+  border: 1px solid #3a3a3c;
+  border-radius: 10px;
+  color: #f2f2f7;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.cfg-input:focus { border-color: #ffd700; }
+.cfg-input:disabled { color: #555; cursor: not-allowed; }
+.cfg-input::placeholder { color: #555; }
+
+.cfg-field-hint {
+  font-size: 0.72rem;
+  color: #555;
+}
+
+/* ── Stats ── */
+.cfg-stats-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cfg-stat {
+  flex: 1;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 16px;
+  background: #0a0a0b;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+}
+
+.cfg-stat-value {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cfg-stat-label {
+  font-size: 0.78rem;
+  color: #888;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ── Theme cards ── */
+.cfg-theme-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cfg-theme-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  min-width: 160px;
+}
+
+.cfg-theme-card:hover:not(.disabled) {
+  border-color: rgba(255,215,0,0.3);
+  background: rgba(255,215,0,0.04);
+}
+
+.cfg-theme-card.active {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.06);
+}
+
+.cfg-theme-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cfg-theme-preview {
+  width: 100%;
+  height: 96px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cfg-theme-dark  { background: #0a0a0b; }
+.cfg-theme-light { background: #f2f2f7; }
+
+.cfg-tp-bar {
+  height: 18px;
+  background: rgba(255,215,0,0.25);
+}
+
+.cfg-theme-light .cfg-tp-bar { background: rgba(0,0,0,0.12); }
+
+.cfg-tp-body {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cfg-tp-line {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.15);
+}
+
+.cfg-theme-light .cfg-tp-line { background: rgba(0,0,0,0.12); }
+.cfg-tp-line.short   { width: 70%; }
+.cfg-tp-line.shorter { width: 45%; }
+
+.cfg-theme-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f2f2f7;
+}
+
+/* ── Accent dots ── */
+.cfg-accent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cfg-accent-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.cfg-accent-dot.active {
+  border-color: #fff;
+  transform: scale(1.15);
+}
+
+.cfg-accent-dot:disabled { cursor: not-allowed; opacity: 0.4; }
+
+/* ── Font size buttons ── */
+.cfg-font-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cfg-font-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.03);
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  color: #888;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  min-width: 80px;
+}
+
+.cfg-font-btn:hover {
+  border-color: rgba(255,215,0,0.3);
+  color: #f2f2f7;
+}
+
+.cfg-font-btn.active {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.08);
+  color: #ffd700;
+}
+
+/* ── Toggle ── */
+.cfg-toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cfg-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  gap: 16px;
+}
+
+.cfg-toggle-row:last-child { border-bottom: none; }
+
+.cfg-toggle-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f2f2f7;
+  margin: 0 0 3px;
+}
+
+.cfg-toggle-desc {
+  font-size: 0.78rem;
+  color: #888;
+  margin: 0;
+}
+
+.cfg-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: #3a3a3c;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.cfg-toggle.on { background: #ffd700; }
+
+.cfg-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  display: block;
+}
+
+.cfg-toggle.on .cfg-toggle-thumb { transform: translateX(20px); }
+
+/* ── Session info ── */
+.cfg-session-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cfg-session-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.12);
+  border: 2px solid rgba(255,215,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: #ffd700;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cfg-session-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cfg-session-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f2f2f7;
+  margin: 0 0 2px;
+}
+
+.cfg-session-email {
+  font-size: 0.82rem;
+  color: #888;
+  margin: 0 0 6px;
+}
+
+.cfg-role-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  background: rgba(255,215,0,0.1);
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 999px;
+  color: #ffd700;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* ── Danger card ── */
+.cfg-danger-card {
+  border-color: rgba(239,68,68,0.2) !important;
+}
+
+.cfg-danger-title { color: #ef4444 !important; }
+
+/* ── Badges ── */
+.cfg-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(255,255,255,0.08);
+  color: #888;
+}
+
+.cfg-badge.active {
+  background: rgba(255,215,0,0.15);
+  color: #ffd700;
+}
+
+/* ── Buttons ── */
+.cfg-btn-primary {
+  padding: 9px 20px;
+  background: #ffd700;
+  border: none;
+  border-radius: 9px;
+  color: #000;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.cfg-btn-primary:hover { background: #ffdc00; transform: translateY(-1px); }
+
+.cfg-btn-secondary {
+  padding: 9px 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 9px;
+  color: #f2f2f7;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.cfg-btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+.cfg-btn-ghost {
+  padding: 9px 20px;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s;
+  font-family: inherit;
+}
+
+.cfg-btn-ghost:hover { color: #f2f2f7; }
+
+.cfg-btn-danger {
+  padding: 9px 20px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 9px;
+  color: #ef4444;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.cfg-btn-danger:hover { background: rgba(239,68,68,0.18); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .cfg-layout {
+    flex-direction: column;
+    padding: 16px 16px 48px;
+    gap: 0;
+  }
+
+  .cfg-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 260px;
+    height: 100vh;
+    border-radius: 0;
+    z-index: 100;
+    transition: left 0.25s ease;
+    overflow-y: auto;
+  }
+
+  .cfg-sidebar.open { left: 0; }
+
+  .cfg-sidebar-header { display: flex; }
+  .cfg-mobile-close { display: block; }
+  .cfg-mobile-toggle { display: flex; }
+  .cfg-overlay { display: block; }
+
+  .cfg-field-grid { grid-template-columns: 1fr; }
+  .cfg-theme-grid { flex-direction: column; }
+  .cfg-theme-card { min-width: unset; }
+}
+
+@media (max-width: 480px) {
+  .cfg-stats-row { flex-direction: column; }
+  .cfg-photo-row { flex-direction: column; align-items: flex-start; }
+  .cfg-card { padding: 20px 18px; }
+  .cfg-section-head h2 { font-size: 1.35rem; }
+}
+
+/* ── Account links (Minha Conta section) ── */
+.cfg-account-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cfg-account-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.cfg-account-link:hover {
+  background: rgba(255,215,0,0.06);
+  border-color: rgba(255,215,0,0.2);
+}
+
+.cfg-account-link-icon {
+  width: 20px;
+  height: 20px;
+  color: #ffd700;
+  flex-shrink: 0;
+}
+
+.cfg-account-link div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cfg-account-link-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f2f2f7;
+}
+
+.cfg-account-link-desc {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.cfg-account-link-arrow {
+  width: 18px;
+  height: 18px;
+  color: #555;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.cfg-account-link:hover .cfg-account-link-arrow {
+  color: #ffd700;
+}

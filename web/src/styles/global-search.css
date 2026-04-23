@@ -1,0 +1,299 @@
+/* =============================================
+   GLOBAL SEARCH
+   ============================================= */
+
+.gs-container {
+  position: relative;
+  flex: 1;
+  max-width: 480px;
+  margin-left: 20px;
+}
+
+/* ── Input bar ───────────────────────────────── */
+
+.gs-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: text;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.gs-input-wrap:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.gs-input-wrap.gs-focused {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 215, 0, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.07);
+}
+
+/* ── Search icon & spinner ───────────────────── */
+
+.gs-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: #555;
+  display: block;
+  transition: color 0.2s;
+}
+
+.gs-input-wrap.gs-focused .gs-icon {
+  color: #aeaeb2;
+}
+
+.gs-spinner {
+  animation: gs-spin 0.8s linear infinite;
+}
+
+@keyframes gs-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Input field ─────────────────────────────── */
+
+.gs-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #c7c7cc;
+  font-size: 0.85rem;
+  font-family: inherit;
+  font-weight: 400;
+  min-width: 0;
+}
+
+.gs-input::placeholder {
+  color: #48484a;
+}
+
+.gs-input-wrap.gs-focused .gs-input {
+  color: #f2f2f7;
+}
+
+/* ── Clear button ────────────────────────────── */
+
+.gs-clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #48484a;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.gs-clear-btn:hover { color: #8e8e93; }
+
+.gs-clear-icon {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Dropdown panel ──────────────────────────── */
+
+.gs-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -16px;
+  right: -16px;
+  background: #111113;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  overflow: hidden;
+  max-height: 480px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2c2c2e transparent;
+  animation: gs-in 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top center;
+}
+
+@keyframes gs-in {
+  from { opacity: 0; transform: translateY(-4px) scaleY(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scaleY(1);    }
+}
+
+.gs-dropdown::-webkit-scrollbar       { width: 3px; }
+.gs-dropdown::-webkit-scrollbar-thumb { background: #2c2c2e; border-radius: 2px; }
+
+/* ── Group ───────────────────────────────────── */
+
+.gs-group {
+  padding: 6px 0;
+}
+
+.gs-group + .gs-group {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gs-group-label {
+  padding: 6px 16px 3px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #3a3a3c;
+}
+
+/* ── Result row ──────────────────────────────── */
+
+.gs-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.gs-result:hover        { background: rgba(255, 255, 255, 0.03); }
+.gs-result-active       { background: rgba(255, 255, 255, 0.05) !important; }
+
+.gs-result-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gs-result-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #aeaeb2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.1s;
+}
+
+.gs-result:hover .gs-result-label,
+.gs-result-active .gs-result-label {
+  color: #f2f2f7;
+}
+
+.gs-result-sub {
+  font-size: 0.72rem;
+  color: #3a3a3c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-mark {
+  background: transparent;
+  color: #f2f2f7;
+  font-weight: 600;
+}
+
+.gs-result-type {
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+
+.gs-result:hover .gs-result-type,
+.gs-result-active .gs-result-type {
+  opacity: 0.9;
+}
+
+.gs-result-arrow {
+  width: 12px;
+  height: 12px;
+  color: #2c2c2e;
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.gs-result:hover .gs-result-arrow,
+.gs-result-active .gs-result-arrow {
+  color: #636366;
+  transform: translateX(2px);
+}
+
+/* ── Recent searches ─────────────────────────── */
+
+.gs-recent-icon {
+  width: 13px;
+  height: 13px;
+  color: #3a3a3c;
+  flex-shrink: 0;
+}
+
+/* ── Loading skeleton ────────────────────────── */
+
+.gs-loading-rows {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gs-skeleton-row { display: flex; }
+
+.gs-skeleton {
+  background: linear-gradient(90deg, #1a1a1c 25%, #222224 50%, #1a1a1c 75%);
+  background-size: 200% 100%;
+  animation: gs-shimmer 1.4s ease infinite;
+  border-radius: 4px;
+}
+
+@keyframes gs-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.gs-skeleton-text  { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.gs-skeleton-label { height: 11px; }
+.gs-skeleton-sub   { height: 9px; }
+
+/* ── Empty state ─────────────────────────────── */
+
+.gs-empty {
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.gs-empty-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #48484a;
+  margin: 0;
+}
+
+/* ── Responsive ──────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .gs-container { max-width: 340px; }
+}
+
+@media (max-width: 900px) {
+  .gs-container { display: none; }
+}

@@ -1,0 +1,548 @@
+/* =============================================
+   PLANO DE ESTUDO
+   Follows the same surface hierarchy as user-dashboard:
+     L0  #0a0a0b  — page bg
+     L1  #111113  — hero / banners
+     L2  #1c1c1e  — cards
+     L3  #242426  — inset rows
+   ============================================= */
+
+.pe-page {
+  min-height: 100vh;
+  background: #0a0a0b;
+  color: #f2f2f7;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ── Hero ── */
+.pe-hero {
+  background: #111113;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.pe-hero-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pe-hero-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffd700;
+}
+
+.pe-hero-icon svg { width: 22px; height: 22px; }
+
+.pe-hero-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f2f2f7;
+  margin: 0 0 4px;
+}
+
+.pe-hero-sub {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0;
+  max-width: 560px;
+}
+
+/* ── Body ── */
+.pe-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 40px 80px;
+}
+
+/* ── Form card ── */
+.pe-form-card {
+  background: #1c1c1e;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── Field ── */
+.pe-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pe-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #d1d1d6;
+}
+
+.pe-label svg { width: 15px; height: 15px; color: #ffd700; flex-shrink: 0; }
+
+.pe-label-hint {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #3a3a3c;
+}
+
+.pe-label-req { color: #ffd700; margin-left: 2px; }
+
+/* ── Radio buttons ── */
+.pe-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pe-radio-btn {
+  padding: 9px 20px;
+  background: #242426;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.pe-radio-btn:hover { background: #2a2a2c; color: #d1d1d6; }
+
+.pe-radio-btn--active {
+  background: rgba(255,215,0,0.1);
+  border-color: rgba(255,215,0,0.4);
+  color: #ffd700;
+  font-weight: 700;
+}
+
+/* ── Chips ── */
+.pe-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pe-chip {
+  padding: 7px 16px;
+  background: #242426;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 999px;
+  color: #888;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.pe-chip:hover { background: #2a2a2c; color: #d1d1d6; }
+
+.pe-chip--active {
+  background: rgba(96,165,250,0.1);
+  border-color: rgba(96,165,250,0.4);
+  color: #60a5fa;
+  font-weight: 700;
+}
+
+.pe-chip--focus.pe-chip--active {
+  background: rgba(255,215,0,0.1);
+  border-color: rgba(255,215,0,0.4);
+  color: #ffd700;
+}
+
+/* ── Generate button ── */
+.pe-generate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: #ffd700;
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  align-self: flex-start;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+}
+
+.pe-generate-btn svg { width: 17px; height: 17px; }
+.pe-generate-btn:hover:not(:disabled) { background: #ffe033; transform: translateY(-1px); }
+.pe-generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Spinner ── */
+@keyframes pe-spin { to { transform: rotate(360deg); } }
+.pe-spinner { animation: pe-spin 0.9s linear infinite; width: 17px; height: 17px; }
+
+/* ── Result ── */
+.pe-result {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Banner */
+.pe-result-banner {
+  background: linear-gradient(135deg, #161200 0%, #1c1c1e 60%);
+  border: 1px solid rgba(255,215,0,0.18);
+  border-radius: 16px;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pe-result-banner-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #f2f2f7;
+  margin: 0 0 4px;
+}
+
+.pe-result-banner-sub {
+  font-size: 0.82rem;
+  color: #888;
+  margin: 0;
+}
+
+.pe-result-banner-sub strong { color: #ffd700; font-weight: 700; }
+
+/* Reset button */
+.pe-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 9px;
+  color: #888;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.pe-reset-btn svg { width: 13px; height: 13px; }
+.pe-reset-btn:hover { background: rgba(255,255,255,0.09); color: #d1d1d6; }
+
+/* ── Section ── */
+.pe-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pe-section-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f2f2f7;
+  margin: 0;
+}
+
+.pe-section-sub {
+  font-size: 0.78rem;
+  color: #555;
+  margin: -8px 0 0;
+}
+
+/* ── Jornadas grid ── */
+.pe-jornadas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pe-jornada-card {
+  background: #1c1c1e;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: border-color 0.15s;
+}
+
+.pe-jornada-card:hover { border-color: rgba(255,215,0,0.2); }
+
+.pe-jornada-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #ffd700;
+  flex-shrink: 0;
+}
+
+.pe-jornada-info { flex: 1; min-width: 0; }
+
+.pe-jornada-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f2f2f7;
+  margin: 0 0 4px;
+}
+
+.pe-jornada-desc {
+  font-size: 0.78rem;
+  color: #888;
+  margin: 0 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pe-jornada-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── Badge ── */
+.pe-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.18);
+  border-radius: 999px;
+  color: #ffd700;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.pe-badge--dim {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+  color: #555;
+}
+
+/* ── Card button ── */
+.pe-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #ffd700;
+  border: none;
+  border-radius: 9px;
+  color: #000;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.pe-card-btn svg { width: 13px; height: 13px; }
+.pe-card-btn:hover { background: #ffe033; transform: translateY(-1px); }
+
+.pe-card-btn--sm { padding: 8px 14px; font-size: 0.75rem; }
+
+/* ── Courses list ── */
+.pe-courses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pe-course-row {
+  background: #1c1c1e;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: border-color 0.15s;
+}
+
+.pe-course-row:hover { border-color: rgba(255,255,255,0.12); }
+
+.pe-course-step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #ffd700;
+  flex-shrink: 0;
+}
+
+.pe-course-info { flex: 1; min-width: 0; }
+
+.pe-course-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.pe-reason {
+  font-size: 0.7rem;
+  color: #555;
+}
+
+.pe-course-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f2f2f7;
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pe-course-desc {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Empty state ── */
+.pe-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 24px;
+  color: #3a3a3c;
+  text-align: center;
+  background: #1c1c1e;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+}
+
+.pe-empty svg { width: 36px; height: 36px; opacity: 0.3; }
+.pe-empty p   { margin: 0; font-size: 0.9rem; color: #555; }
+.pe-empty span { font-size: 0.78rem; color: #3a3a3c; }
+
+/* ── CTA ── */
+.pe-cta {
+  background: #111113;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pe-cta p {
+  font-size: 0.88rem;
+  color: #888;
+  margin: 0;
+}
+
+.pe-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 22px;
+  background: rgba(255,215,0,0.1);
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 10px;
+  color: #ffd700;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.pe-cta-btn svg { width: 13px; height: 13px; }
+.pe-cta-btn:hover { background: rgba(255,215,0,0.16); transform: translateY(-1px); }
+
+/* ── Course row actions ── */
+.pe-course-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Save button ── */
+.pe-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 13px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #555;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.pe-save-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+.pe-save-btn:hover {
+  border-color: rgba(255,215,0,0.3);
+  color: #ffd700;
+  background: rgba(255,215,0,0.05);
+}
+
+.pe-save-btn--active {
+  border-color: rgba(255,215,0,0.35);
+  color: #ffd700;
+  background: rgba(255,215,0,0.07);
+}
+
+@media (max-width: 700px) {
+  .pe-hero-inner { padding: 24px 20px; }
+  .pe-body       { padding: 24px 16px 60px; }
+  .pe-form-card  { padding: 24px 20px; gap: 24px; }
+  .pe-result-banner { flex-direction: column; align-items: flex-start; }
+  .pe-course-row { flex-wrap: wrap; }
+  .pe-course-actions { flex-direction: row; align-items: center; }
+  .pe-cta        { flex-direction: column; align-items: flex-start; }
+  .pe-jornada-card { flex-wrap: wrap; }
+  .pe-jornada-desc { white-space: normal; }
+  .pe-course-title { white-space: normal; }
+  .pe-course-desc  { white-space: normal; }
+}

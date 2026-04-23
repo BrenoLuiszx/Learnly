@@ -1,0 +1,346 @@
+/* =============================================
+   LEARNLY — HEADER ACCOUNT WIDGET
+   ============================================= */
+
+/* ── Widget wrapper (both dropdowns side by side) ── */
+.ud-header-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1000;
+}
+
+/* ── Individual dropdown wrapper ── */
+.ud-wrap {
+  position: relative;
+}
+
+/* ── Shared panel base ── */
+.ud-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  animation: udFadeIn 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  z-index: 1001;
+}
+
+@keyframes udFadeIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+/* ── Divider ── */
+.ud-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  margin: 4px 0;
+}
+
+/* ── Group ── */
+.ud-group {
+  padding: 6px 8px;
+}
+
+.ud-group-label {
+  display: block;
+  padding: 4px 8px 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Shared item ── */
+.ud-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #aeaeb2;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.ud-item svg {
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.ud-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #f2f2f7;
+}
+
+.ud-item:hover svg { opacity: 1; }
+
+.ud-item-danger { color: #ef4444; }
+.ud-item-danger svg { opacity: 0.8; }
+.ud-item-danger:hover { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+/* =============================================
+   PROFILE DROPDOWN
+   ============================================= */
+
+/* Avatar button */
+.ud-avatar-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid #ffd700;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  flex-shrink: 0;
+}
+
+.ud-avatar-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+.ud-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ud-avatar-initial {
+  width: 100%;
+  height: 100%;
+  background: #ffd700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Profile panel */
+.ud-profile-panel {
+  min-width: 260px;
+}
+
+.ud-profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 14px;
+}
+
+.ud-profile-hero-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.12);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: #ffd700;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.ud-profile-hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ud-profile-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ud-profile-hero-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f2f2f7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ud-profile-hero-email {
+  font-size: 0.75rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ud-role-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: 999px;
+  color: #ffd700;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.ud-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 8px 8px;
+  padding: 9px 10px;
+  background: rgba(255, 215, 0, 0.06);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 9px;
+  color: #ffd700;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+
+.ud-profile-link svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.ud-profile-link:hover {
+  background: rgba(255, 215, 0, 0.12);
+}
+
+/* =============================================
+   ACCOUNT DROPDOWN
+   ============================================= */
+
+/* Account button */
+.ud-account-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px 7px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: #aeaeb2;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 180ms ease;
+  white-space: nowrap;
+}
+
+.ud-account-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #f2f2f7;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.ud-account-label { line-height: 1; }
+
+.ud-account-chevron {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+.ud-account-chevron.open { transform: rotate(180deg); }
+
+/* Account panel */
+.ud-account-panel {
+  min-width: 230px;
+  right: 0;
+}
+
+.ud-account-header {
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.ud-account-header-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* =============================================
+   GUEST DROPDOWN
+   ============================================= */
+
+.ud-guest-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ud-guest-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.ud-guest-icon span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #aeaeb2;
+  border-radius: 1px;
+}
+
+.ud-guest-panel {
+  min-width: 160px;
+  padding: 8px;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 480px) {
+  .ud-account-label { display: none; }
+  .ud-account-btn {
+    padding: 7px 10px;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    justify-content: center;
+  }
+  .ud-account-chevron { display: none; }
+  .ud-account-panel { right: 0; min-width: 200px; }
+  .ud-profile-panel { right: 0; }
+}
