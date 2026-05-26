@@ -70,15 +70,18 @@ public class UsuarioService {
 
         Usuario usuario = opt.get();
 
-        // Verifica senha com BCrypt
-        System.out.println("[DEBUG] Senha digitada: '" + senha + "'");
-        System.out.println("[DEBUG] Hash no banco: '" + usuario.getSenha() + "'");
-        System.out.println("[DEBUG] Matches: " + passwordEncoder.matches(senha, usuario.getSenha()));
         if (!passwordEncoder.matches(senha, usuario.getSenha())) {
             throw new RuntimeException("Email ou senha inválidos");
         }
 
         String token = jwtService.gerarToken(usuario.getId(), usuario.getEmail(), usuario.getRole());
+
+        String tokenPreview = token.substring(0, Math.min(20, token.length())) + "..." + token.substring(Math.max(0, token.length() - 4));
+        System.out.println("\n[Learnly Auth] Login bem-sucedido");
+        System.out.println("  Usuário : " + usuario.getEmail());
+        System.out.println("  Role    : " + usuario.getRole());
+        System.out.println("  Token   : " + tokenPreview);
+        System.out.println();
 
         Map<String, Object> response = new java.util.HashMap<>();
         response.put("token", token);

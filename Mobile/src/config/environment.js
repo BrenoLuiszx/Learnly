@@ -16,7 +16,7 @@
 // Procure por "IPv4" ou "inet" e use esse endereço
 
 // ⚠️ AJUSTE O IP ABAIXO CONFORME SUA CONFIGURAÇÃO ⚠️
-export const API_URL = 'http://192.168.0.2:8080/api'; // ← MUDE ESTE IP PARA O SEU
+export const API_URL = 'http://192.168.0.2:8080/Learnly/api'; // ← MUDE ESTE IP PARA O SEU
 
 // Exemplos de configuração:
 // - Backend no mesmo PC: 'http://localhost:8080/api'

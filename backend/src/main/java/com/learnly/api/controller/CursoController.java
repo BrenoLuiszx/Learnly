@@ -2,6 +2,8 @@ package com.learnly.api.controller;
 
 import com.learnly.api.dto.CursoDTO;
 import com.learnly.api.dto.CursoDetalhadoDTO;
+import com.learnly.api.model.entity.Categoria;
+import com.learnly.api.model.repository.CategoriaRepository;
 import com.learnly.api.model.service.CursoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,19 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
     // Listagem pública - apenas aprovados
     @GetMapping
     public ResponseEntity<List<CursoDTO>> listarCursos() {
         return ResponseEntity.ok(cursoService.listarTodos());
+    }
+
+    // Listagem pública de categorias
+    @GetMapping("/categorias")
+    public ResponseEntity<List<Categoria>> listarCategorias() {
+        return ResponseEntity.ok(categoriaRepository.findAll());
     }
 
     // Admin - lista cursos pendentes de aprovação

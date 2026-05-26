@@ -30,8 +30,14 @@ public class SecurityConfig {
         // This lets the frontend distinguish "not logged in" (401) from "no permission" (403).
         return (request, response, ex) -> {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\":\"Token ausente ou inválido\"}");
+            response.setContentType("application/json; charset=UTF-8");
+            response.getWriter().write(
+                "{" +
+                "\"error\":\"Acesso negado\"," +
+                "\"message\":\"Esta rota requer autenticação. Faça login em POST /api/usuarios/login para obter um token JWT.\"," +
+                "\"hint\":\"Envie o token no header: Authorization: Bearer <token>\"" +
+                "}"
+            );
         };
     }
 
@@ -45,18 +51,20 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Preflight CORS
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // Favicon
+                .requestMatchers("/favicon.ico").permitAll()
                 // Rotas públicas
                 .requestMatchers(HttpMethod.POST, "/api/usuarios/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/usuarios/registrar").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/usuarios/gerar-hash/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/usuarios").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/cursos").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/cursos/categorias").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/cursos/buscar").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/cursos/categoria/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/cursos/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/cursos/{id}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/avaliacoes/cursos/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/avaliacoes/cursos/**").authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/certificados/usuario/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/aulas/curso/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/certificados/usuario/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/matriculas/cursos/*/status").permitAll()
                 // Rotas apenas admin
                 .requestMatchers(HttpMethod.POST, "/api/aulas/curso/**").hasAnyRole("ADMIN", "COLABORADOR")

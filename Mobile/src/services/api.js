@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // - Windows: ipconfig  |  Mac/Linux: ifconfig
 // ============================================
 
-const API_URL = 'http://192.168.0.2:8080/api'; // ← AJUSTE ESTE IP
+const API_URL = 'http://192.168.0.2:8080/Learnly/api'; // ← AJUSTE ESTE IP
 
 const api = axios.create({
   baseURL: API_URL,

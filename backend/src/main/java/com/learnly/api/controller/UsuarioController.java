@@ -49,9 +49,20 @@ public class UsuarioController {
     @Autowired
     private AulaService aulaService;
 
-    // Listar todos (admin)
+    // Listar todos (público - dados resumidos)
     @GetMapping
     public ResponseEntity<Map<String, Object>> listarUsuarios() {
+        List<UsuarioDTO> usuarios = usuarioService.listarTodos();
+        return ResponseEntity.ok(Map.of(
+            "message", "Learnly API funcionando",
+            "total", usuarios.size(),
+            "usuarios", usuarios
+        ));
+    }
+
+    // Listar todos (admin - dados completos)
+    @GetMapping("/admin")
+    public ResponseEntity<Map<String, Object>> listarUsuariosAdmin() {
         List<UsuarioDTO> usuarios = usuarioService.listarTodos();
         return ResponseEntity.ok(Map.of(
             "message", "Learnly API funcionando",
