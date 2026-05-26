@@ -159,11 +159,6 @@ export const acoesAPI = {
 };
 
 export const uploadAPI = {
-  video: (file) => {
-    const fd = new FormData();
-    fd.append('file', file);
-    return api.post('/upload/video', fd, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 300000 });
-  },
   imagem: (file) => {
     const fd = new FormData();
     fd.append('file', file);

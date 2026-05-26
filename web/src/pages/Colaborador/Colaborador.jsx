@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cursosAPI, aulasAPI, instrutorAPI, acoesAPI, jornadaRequestAPI } from '../../services/api';
+import { cursosAPI, aulasAPI, instrutorAPI, acoesAPI, jornadaRequestAPI, uploadAPI } from '../../services/api';
 import { getMinhasJornadas } from '../../config/jornadas';
 import { useAuth } from '../../contexts/AuthContext';
 import Header from '../Header/Header';

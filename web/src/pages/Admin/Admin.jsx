@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cursosAPI, usuariosAPI, aulasAPI, adminCursoAPI, acoesAPI } from '../../services/api';
+import { cursosAPI, usuariosAPI, aulasAPI, adminCursoAPI, acoesAPI, uploadAPI } from '../../services/api';
 import { getJornadas, saveJornadas, getMinhasJornadas } from '../../config/jornadas';
 import Header from '../Header/Header';
 import CourseFormPreview from '../../components/CourseFormPreview';

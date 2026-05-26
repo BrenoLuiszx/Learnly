@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="045df365-c898-4415-9bd3-bb0fc61f3f53" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/CorsConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/CorsConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Aula.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Aula.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Curso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Curso.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/AulaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/AulaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CursoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CursoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/ServeFileController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/UploadController.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

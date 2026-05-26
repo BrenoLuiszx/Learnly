@@ -17,34 +17,23 @@ public class UploadController {
     @Value("${upload.dir:uploads}")
     private String uploadDir;
 
-    @PostMapping("/video")
-    public ResponseEntity<?> uploadVideo(@RequestParam("file") MultipartFile file) {
-        return salvar(file, "videos", new String[]{"video/mp4", "video/webm", "video/quicktime", "video/ogg"});
-    }
-
     @PostMapping("/imagem")
     public ResponseEntity<?> uploadImagem(@RequestParam("file") MultipartFile file) {
-        return salvar(file, "imagens", new String[]{"image/jpeg", "image/png", "image/webp", "image/gif"});
-    }
-
-    private ResponseEntity<?> salvar(MultipartFile file, String subdir, String[] tiposPermitidos) {
         if (file.isEmpty()) return ResponseEntity.badRequest().body(Map.of("error", "Arquivo vazio"));
 
         String contentType = file.getContentType();
-        boolean tipoValido = false;
-        for (String t : tiposPermitidos) { if (t.equals(contentType)) { tipoValido = true; break; } }
-        if (!tipoValido) return ResponseEntity.badRequest().body(Map.of("error", "Tipo não permitido: " + contentType));
+        if (contentType == null || !contentType.startsWith("image/"))
+            return ResponseEntity.badRequest().body(Map.of("error", "Tipo não permitido: " + contentType));
 
         try {
             String ext = file.getOriginalFilename() != null && file.getOriginalFilename().contains(".")
                     ? file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."))
                     : "";
             String nome = UUID.randomUUID().toString() + ext;
-            Path dir = Paths.get(uploadDir, subdir);
+            Path dir = Paths.get(uploadDir, "imagens");
             Files.createDirectories(dir);
             Files.copy(file.getInputStream(), dir.resolve(nome), StandardCopyOption.REPLACE_EXISTING);
-            String url = "/uploads/" + subdir + "/" + nome;
-            return ResponseEntity.ok(Map.of("url", url));
+            return ResponseEntity.ok(Map.of("url", "/uploads/imagens/" + nome));
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body(Map.of("error", "Erro ao salvar arquivo: " + e.getMessage()));
         }
