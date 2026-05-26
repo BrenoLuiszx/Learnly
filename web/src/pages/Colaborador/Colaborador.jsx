@@ -6,6 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import Header from '../Header/Header';
 import CourseFormPreview from '../../components/CourseFormPreview';
 import LessonManager from '../../components/LessonManager';
+import VideoUploadField from '../../components/VideoUploadField';
 import UserAvatar from '../../components/UserAvatar';
 import '../../styles/admin-bigtech.css';
 import '../../styles/colaborador.css';
@@ -28,10 +29,10 @@ const CATEGORIAS = [
 ];
 
 const CURSO_VAZIO = {
-  titulo: '', descricao: '', url: '', categoria: '',
+  titulo: '', descricao: '', url: '', _urlTab: 'youtube', categoria: '',
   instrutor: '', duracao: '', imagem: '', descricaoDetalhada: '',
-  linksExternos: [],  // [{ titulo, url }]
-  anexos: [],         // [{ nome, url }]
+  linksExternos: [],
+  anexos: [],
 };
 
 const AULA_VAZIA = { titulo: '', url: '', descricao: '' };
@@ -266,6 +267,7 @@ const Colaborador = () => {
       titulo: curso.titulo || '',
       descricao: curso.descricao || '',
       url: curso.url || '',
+      _urlTab: curso.url && curso.url.includes('/uploads/') ? 'upload' : 'youtube',
       categoria: curso.categoria || '',
       instrutor: curso.instrutor || '',
       duracao: curso.duracao ? String(Math.round((curso.duracao / 60) * 10) / 10) : '',
@@ -282,10 +284,12 @@ const Colaborador = () => {
 
   const handleCursoSubmit = async (e) => {
     e.preventDefault();
+    if (!cursoForm.url || !cursoForm.url.trim()) { setCursoMsg('Adicione o vídeo principal do curso.'); return; }
     setSavingCurso(true);
     setCursoMsg('');
+    const { _urlTab, ...formData } = cursoForm;
     const dados = {
-      ...cursoForm,
+      ...formData,
       duracao: Math.round((parseFloat(cursoForm.duracao) || 0) * 60),
       linksExternos: JSON.stringify(cursoForm.linksExternos.filter(l => l.url.trim())),
       anexos: JSON.stringify(cursoForm.anexos.filter(a => a.url.trim())),
@@ -484,9 +488,9 @@ const Colaborador = () => {
                     <label>Descrição Detalhada</label>
                     <textarea value={cursoForm.descricaoDetalhada} onChange={e => setCursoForm({ ...cursoForm, descricaoDetalhada: e.target.value })} rows={5} placeholder="Descrição completa exibida na página do curso. Suporta texto longo com objetivos, pré-requisitos, conteúdo programado..." />
                   </div>
-                  <div className="form-group">
-                    <label>URL Principal *</label>
-                    <input type="url" value={cursoForm.url} onChange={e => setCursoForm({ ...cursoForm, url: e.target.value })} required placeholder="https://youtube.com/..." />
+                  <div className="form-group full-width">
+                    <label>Vídeo Principal *</label>
+                    <VideoUploadField url={cursoForm.url} onChange={url => setCursoForm(f => ({ ...f, url }))} />
                   </div>
                   <div className="form-group">
                     <label>Instrutor</label>
@@ -498,7 +502,31 @@ const Colaborador = () => {
                   </div>
                   <div className="form-group">
                     <label>URL da Imagem de Capa</label>
-                    <input type="url" value={cursoForm.imagem} onChange={e => setCursoForm({ ...cursoForm, imagem: e.target.value })} placeholder="https://..." />
+                    <input type="text" value={cursoForm.imagem && !cursoForm.imagem.includes('/uploads/') ? cursoForm.imagem : ''} onChange={e => setCursoForm({ ...cursoForm, imagem: e.target.value })} placeholder="https://..." />
+                    <div style={{ marginTop: '8px' }}>
+                      <input
+                        id="colab-capa-upload"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={async e => {
+                          const file = e.target.files[0];
+                          if (!file) return;
+                          try {
+                            const res = await uploadAPI.imagem(file);
+                            setCursoForm(f => ({ ...f, imagem: 'http://localhost:8080/Learnly' + res.data.url }));
+                          } catch (err) { alert('Erro ao enviar imagem: ' + (err.response?.data?.error || err.message)); }
+                          e.target.value = '';
+                        }}
+                      />
+                      <label htmlFor="colab-capa-upload" style={{ display: 'inline-block', padding: '6px 14px', background: 'rgba(255,215,0,0.08)', border: '1px solid rgba(255,215,0,0.25)', borderRadius: '7px', color: '#ffd700', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}>📁 Upload de Imagem</label>
+                      {cursoForm.imagem && <span style={{ marginLeft: '10px', color: '#34d399', fontSize: '0.78rem' }}>✓ Imagem selecionada</span>}
+                    </div>
+                    {cursoForm.imagem && (
+                      <div style={{ marginTop: 8, borderRadius: 8, overflow: 'hidden', maxHeight: 100, border: '1px solid #2c2c2e' }}>
+                        <img src={cursoForm.imagem} alt="preview" style={{ width: '100%', objectFit: 'cover', maxHeight: 100, display: 'block' }} onError={e => e.target.style.display = 'none'} />
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1078,6 +1106,8 @@ const Colaborador = () => {
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     />
+                  ) : previewAulaAtual.url?.includes('/uploads/') || previewAulaAtual.url?.startsWith('data:video/') ? (
+                    <video key={previewAulaAtual.id} src={previewAulaAtual.url} controls style={{ width: '100%', height: '100%', background: '#000' }} />
                   ) : (
                     <div className="colab-preview-no-video">
                       <p>URL não é um vídeo do YouTube.</p>

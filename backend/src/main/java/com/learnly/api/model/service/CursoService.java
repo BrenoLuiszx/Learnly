@@ -188,6 +188,16 @@ public class CursoService {
 
         curso.setTitulo(cursoDTO.getTitulo());
         curso.setDescricao(cursoDTO.getDescricao());
+        // Sincroniza URL da aula 1 antes de sobrescrever a URL do curso
+        String urlAntiga = curso.getUrl();
+        if (cursoDTO.getUrl() != null && !cursoDTO.getUrl().equals(urlAntiga)) {
+            aulaRepository.findByCursoIdAndOrdem(curso.getId(), 1).ifPresent(aula1 -> {
+                if (urlAntiga != null && urlAntiga.equals(aula1.getUrl())) {
+                    aula1.setUrl(cursoDTO.getUrl());
+                    aulaRepository.save(aula1);
+                }
+            });
+        }
         curso.setUrl(cursoDTO.getUrl());
         curso.setCategoria(categoria);
         curso.setInstrutor(instrutor);

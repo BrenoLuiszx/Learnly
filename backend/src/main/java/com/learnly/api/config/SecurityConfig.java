@@ -51,8 +51,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Preflight CORS
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // Favicon
+                // Favicon e arquivos estáticos
                 .requestMatchers("/favicon.ico").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/upload/**").hasAnyRole("ADMIN", "COLABORADOR")
                 // Rotas públicas
                 .requestMatchers(HttpMethod.POST, "/api/usuarios/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/usuarios/registrar").permitAll()

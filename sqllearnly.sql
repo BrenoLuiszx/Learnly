@@ -143,6 +143,10 @@ CREATE TABLE Cursos (
 );
 GO
 
+
+ALTER TABLE Cursos ALTER COLUMN imagem NVARCHAR(MAX) NULL;
+ALTER TABLE Cursos ALTER COLUMN url NVARCHAR(MAX) NOT NULL;
+
 -- =============================================
 -- 5. Aulas
 -- =============================================
@@ -159,6 +163,8 @@ CREATE TABLE Aulas (
     CONSTRAINT UQ_Aulas_Ordem UNIQUE (curso_id, ordem)
 );
 GO
+
+ALTER TABLE Aulas ALTER COLUMN url NVARCHAR(MAX) NOT NULL;
 
 -- =============================================
 -- 6. Matriculas

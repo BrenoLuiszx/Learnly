@@ -19,7 +19,7 @@ public class Aula {
     @Column(nullable = false, length = 200)
     private String titulo;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String url;
 
     @Column(length = 1000)

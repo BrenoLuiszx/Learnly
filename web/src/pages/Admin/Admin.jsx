@@ -5,6 +5,7 @@ import { getJornadas, saveJornadas, getMinhasJornadas } from '../../config/jorna
 import Header from '../Header/Header';
 import CourseFormPreview from '../../components/CourseFormPreview';
 import LessonManager from '../../components/LessonManager';
+import VideoUploadField from '../../components/VideoUploadField';
 import UserAvatar from '../../components/UserAvatar';
 import '../../styles/admin-bigtech.css';
 
@@ -352,9 +353,11 @@ const Admin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.url || !form.url.trim()) { alert('Adicione o vídeo principal do curso.'); return; }
     setLoading(true);
+    const { _urlTab, ...formData } = form;
     const dadosCurso = {
-      ...form,
+      ...formData,
       duracao: Math.round((parseFloat(form.duracao) || 0) * 60),
       linksExternos: JSON.stringify(form.linksExternos.filter(l => l.url.trim())),
       anexos: JSON.stringify(form.anexos.filter(a => a.url.trim())),
@@ -381,7 +384,7 @@ const Admin = () => {
   };
 
   const resetForm = () => {
-    setForm({ titulo: '', descricao: '', url: '', categoria: '', instrutor: '', duracao: '', imagem: '', descricaoDetalhada: '', linksExternos: [], anexos: [] });
+    setForm({ titulo: '', descricao: '', url: '', _urlTab: 'youtube', categoria: '', instrutor: '', duracao: '', imagem: '', descricaoDetalhada: '', linksExternos: [], anexos: [] });
     setEditando(null);
     setShowPreview(false);
   };
@@ -392,6 +395,7 @@ const Admin = () => {
       titulo: curso.titulo || '',
       descricao: curso.descricao || '',
       url: curso.url || '',
+      _urlTab: curso.url && curso.url.includes('/uploads/') ? 'upload' : 'youtube',
       categoria: curso.categoria || '',
       instrutor: curso.instrutor || '',
       duracao: curso.duracao ? String(Math.round((curso.duracao / 60) * 10) / 10) : '',
@@ -477,8 +481,10 @@ const Admin = () => {
     setAulasMsg('');
     try {
       await aulasAPI.salvarAulas(cursoAulasId, aulas.map((a, i) => ({
-        titulo: a.titulo.trim(), url: a.url.trim(),
-        descricao: a.descricao ? a.descricao.trim() : '', ordem: i + 1,
+        titulo: a.titulo.trim(),
+        url: a.url, // não aplicar trim em base64
+        descricao: a.descricao ? a.descricao.trim() : '',
+        ordem: i + 1,
       })));
       setAulasMsg('Aulas salvas com sucesso!');
       setTimeout(() => {
@@ -613,9 +619,9 @@ const Admin = () => {
                   <label>Descrição Detalhada</label>
                   <textarea placeholder="Descrição completa: objetivos, pré-requisitos, conteúdo programático..." value={form.descricaoDetalhada} onChange={e => setForm({...form, descricaoDetalhada: e.target.value})} rows={5} />
                 </div>
-                <div className="form-group">
-                  <label>URL Principal *</label>
-                  <input type="url" placeholder="https://youtube.com/..." value={form.url} onChange={e => setForm({...form, url: e.target.value})} required />
+                <div className="form-group full-width">
+                  <label>Vídeo Principal *</label>
+                  <VideoUploadField url={form.url} onChange={url => setForm(f => ({ ...f, url }))} />
                 </div>
                 <div className="form-group">
                   <label>Instrutor</label>
@@ -630,8 +636,32 @@ const Admin = () => {
                   <small className="duration-help">Ex: 8 para 8 horas</small>
                 </div>
                 <div className="form-group">
-                  <label>URL da Imagem de Capa</label>
-                  <input type="url" placeholder="https://..." value={form.imagem} onChange={e => setForm({...form, imagem: e.target.value})} />
+                  <label>Imagem de Capa</label>
+                  <input type="text" placeholder="https://... (URL da imagem)" value={form.imagem && !form.imagem.includes('/uploads/') ? form.imagem : ''} onChange={e => setForm({...form, imagem: e.target.value})} />
+                  <div style={{ marginTop: '8px' }}>
+                    <input
+                      id="admin-capa-upload"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={async e => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        try {
+                          const res = await uploadAPI.imagem(file);
+                          setForm(f => ({ ...f, imagem: 'http://localhost:8080/Learnly' + res.data.url }));
+                        } catch (err) { alert('Erro ao enviar imagem: ' + (err.response?.data?.error || err.message)); }
+                        e.target.value = '';
+                      }}
+                    />
+                    <label htmlFor="admin-capa-upload" style={{ display: 'inline-block', padding: '6px 14px', background: 'rgba(255,215,0,0.08)', border: '1px solid rgba(255,215,0,0.25)', borderRadius: '7px', color: '#ffd700', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}>📁 Upload de Imagem</label>
+                    {form.imagem && <span style={{ marginLeft: '10px', color: '#34d399', fontSize: '0.78rem' }}>✓ Imagem selecionada</span>}
+                  </div>
+                  {form.imagem && (
+                    <div style={{ marginTop: 8, borderRadius: 8, overflow: 'hidden', maxHeight: 100, border: '1px solid #2c2c2e' }}>
+                      <img src={form.imagem} alt="preview" style={{ width: '100%', objectFit: 'cover', maxHeight: 100, display: 'block' }} onError={e => e.target.style.display = 'none'} />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -800,7 +830,7 @@ const Admin = () => {
                   </button>
                   <button
                     className="btn-edit"
-                    style={{ background: '#8b5cf6' }}
+                    style={{ background: '#000', color: '#fff' }}
                     onClick={() => gerenciarAulas(curso.id, curso.titulo)}
                   >
                     Aulas

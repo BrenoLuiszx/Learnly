@@ -17,7 +17,7 @@ public class Curso {
     @Column(nullable = false, length = 1000)
     private String descricao;
     
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String url;
     
     @ManyToOne
@@ -35,7 +35,7 @@ public class Curso {
     @Column(nullable = false, length = 20)
     private String status = "aprovado";
 
-    @Column(length = 500)
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String imagem;
 
     @Column(name = "descricao_detalhada", columnDefinition = "NVARCHAR(MAX)")

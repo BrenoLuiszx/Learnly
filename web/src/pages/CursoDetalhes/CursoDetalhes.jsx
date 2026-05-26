@@ -51,6 +51,8 @@ const CursoDetalhes = () => {
   const [aulaParaIniciar, setAulaParaIniciar] = useState(null);
 
   const [videoAtual, setVideoAtual] = useState(null);
+  const [ultimaConclusaoEm, setUltimaConclusaoEm] = useState(null); // timestamp da última aula concluída
+  const COOLDOWN_MS = 60000; // 1 minuto de cooldown global entre conclusões
 
   // Aulas
   const [aulas, setAulas] = useState([]);
@@ -179,16 +181,44 @@ const CursoDetalhes = () => {
     } catch {}
   };
 
+  // Verifica se a aula anterior está concluída (progressão sequencial)
+  const getAulaBloqueadaPor = (aula) => {
+    const aulasAnteriores = aulas.filter(a => a.ordem < aula.ordem);
+    return aulasAnteriores.find(a => !progressoAulas.some(p => p.aulaId === a.id && p.concluido)) || null;
+  };
+
   const toggleAulaConcluida = async (aula) => {
     if (!user) return navigate(`/login?returnTo=/curso/${id}`);
     if (!matriculado) { setAulaParaIniciar(null); setModalMatricula(true); return; }
+
     const jaConcluida = progressoAulas.some(p => p.aulaId === aula.id && p.concluido);
+
+    if (!jaConcluida) {
+      // Verifica progressão sequencial
+      const bloqueadaPor = getAulaBloqueadaPor(aula);
+      if (bloqueadaPor) {
+        setAvaliacaoMsg(`Você precisa concluir a Aula ${bloqueadaPor.ordem} "${bloqueadaPor.titulo}" antes de avançar para a Aula ${aula.ordem}.`);
+        setTimeout(() => setAvaliacaoMsg(''), 5000);
+        return;
+      }
+
+      // Verifica cooldown global
+      if (ultimaConclusaoEm) {
+        const segundosRestantes = Math.ceil((COOLDOWN_MS - (Date.now() - ultimaConclusaoEm)) / 1000);
+        if (segundosRestantes > 0) {
+          setAvaliacaoMsg(`Aguarde ${segundosRestantes}s antes de marcar outra aula como concluída.`);
+          setTimeout(() => setAvaliacaoMsg(''), 3000);
+          return;
+        }
+      }
+    }
     
     try {
       if (jaConcluida) {
         await aulasAPI.desconcluir(aula.id);
       } else {
         await aulasAPI.concluir(aula.id);
+        setUltimaConclusaoEm(Date.now());
       }
       await carregarProgressoAulas();
       setAvaliacaoMsg(jaConcluida ? 'Aula desmarcada como concluída!' : 'Aula marcada como concluída!');
@@ -227,9 +257,17 @@ const CursoDetalhes = () => {
   const assistirAula = (aula) => {
     if (!user) return navigate(`/login?returnTo=/curso/${id}`);
     if (!aulaAcessivel(aula)) { setAulaParaIniciar(aula); setModalMatricula(true); return; }
+
+    // Bloqueia assistir aula se a anterior não foi concluída
+    const bloqueadaPor = getAulaBloqueadaPor(aula);
+    if (bloqueadaPor) {
+      setAvaliacaoMsg(`Você precisa concluir a Aula ${bloqueadaPor.ordem} "${bloqueadaPor.titulo}" antes de assistir a Aula ${aula.ordem}.`);
+      setTimeout(() => setAvaliacaoMsg(''), 5000);
+      return;
+    }
+
     setAulaAtual(aula);
     setVideoAtual(aula.url);
-    // Track last accessed lesson so the dashboard "Continue" card stays accurate
     saveLastCourse(Number(id), aula.id, aula.titulo);
     document.querySelector('.video-preview')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
@@ -346,6 +384,18 @@ const CursoDetalhes = () => {
     <div>
       <Header />
 
+      {/* Toast flutuante */}
+      {avaliacaoMsg && (
+        <div className={`curso-toast ${avaliacaoMsg.includes('sucesso') || avaliacaoMsg.includes('emitido') || avaliacaoMsg.includes('marcada') || avaliacaoMsg.includes('desmarcada') ? 'sucesso' : 'erro'}`}>
+          {avaliacaoMsg.includes('sucesso') || avaliacaoMsg.includes('emitido') || avaliacaoMsg.includes('marcada') || avaliacaoMsg.includes('desmarcada') ? (
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          )}
+          {avaliacaoMsg}
+        </div>
+      )}
+
       {/* Modal de Matrícula */}
       {modalMatricula && (
         <div className="matricula-modal-overlay" onClick={() => !matriculaLoading && setModalMatricula(false)}>
@@ -382,7 +432,12 @@ const CursoDetalhes = () => {
       <div className="curso-detalhes-container">
         <div className="curso-detalhes-hero">
           <div className="curso-detalhes-breadcrumb">
-            <button onClick={() => navigate(-1)} className="breadcrumb-link">← Voltar</button>
+            <button onClick={() => navigate(-1)} className="breadcrumb-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: 16, height: 16 }}>
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              Voltar
+            </button>
             <span className="breadcrumb-separator">›</span>
             <span className="breadcrumb-current">{curso.titulo}</span>
             <div className="cd-action-btns">
@@ -391,7 +446,7 @@ const CursoDetalhes = () => {
                 onClick={() => toggleFavorite(Number(id))}
                 title={favorites.has(Number(id)) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
               >
-                <svg viewBox="0 0 24 24" fill={favorites.has(Number(id)) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" style={{ width: 16, height: 16 }}>
+                <svg viewBox="0 0 24 24" fill={favorites.has(Number(id)) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" style={{ width: 15, height: 15 }}>
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                 </svg>
                 {favorites.has(Number(id)) ? 'Favoritado' : 'Favoritar'}
@@ -401,7 +456,7 @@ const CursoDetalhes = () => {
                 onClick={() => toggleWatchLater(Number(id))}
                 title={watchLater.has(Number(id)) ? 'Remover de assistir depois' : 'Salvar para depois'}
               >
-                <svg viewBox="0 0 24 24" fill={watchLater.has(Number(id)) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" style={{ width: 16, height: 16 }}>
+                <svg viewBox="0 0 24 24" fill={watchLater.has(Number(id)) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" style={{ width: 15, height: 15 }}>
                   <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
                 </svg>
                 {watchLater.has(Number(id)) ? 'Salvo' : 'Assistir Depois'}
@@ -484,6 +539,14 @@ const CursoDetalhes = () => {
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
+                      />
+                    ) : aulaAtual.url?.startsWith('data:video/') ? (
+                      <video
+                        key={aulaAtual.id}
+                        src={aulaAtual.url}
+                        controls
+                        autoPlay
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#000' }}
                       />
                     ) : (
                       <div className="video-player-fallback">
@@ -599,12 +662,6 @@ const CursoDetalhes = () => {
                           Certificado emitido — veja em Meu Perfil
                         </div>
                       )}
-
-                      {avaliacaoMsg && (
-                        <p className={`acao-msg ${avaliacaoMsg.includes("sucesso") || avaliacaoMsg.includes("emitido") ? "sucesso" : "erro"}`}>
-                          {avaliacaoMsg}
-                        </p>
-                      )}
                     </>
                   )}
                 </>
@@ -661,7 +718,11 @@ const CursoDetalhes = () => {
                         className={`aula-item ${aulaAtual?.id === aula.id ? 'ativa' : ''} ${!acessivel ? 'bloqueada' : ''}`}
                       >
                         <div className="aula-numero">
-                          {!acessivel ? (
+                          {concluida ? (
+                            <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 16, height: 16 }}>
+                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                            </svg>
+                          ) : !acessivel ? (
                             <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 16, height: 16 }}>
                               <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
                             </svg>

@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/Learnly/api'
+  baseURL: 'http://localhost:8080/Learnly/api',
+  timeout: 300000,
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity,
 });
 
 // Interceptor - adiciona token JWT em todas as requisições
@@ -64,8 +67,8 @@ export const usuariosAPI = {
 };
 
 export const progressoAPI = {
-  marcarConcluido:    (cursoId) => api.post(`/progresso/cursos/${cursoId}/concluir`),
-  desmarcarConcluido: (cursoId) => api.post(`/progresso/cursos/${cursoId}/desconcluir`),
+  marcarConcluido:    (cursoId) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso: 100 }),
+  desmarcarConcluido: (cursoId) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso: 0 }),
   meuProgresso:       ()        => api.get('/matriculas/minhas'),
   meusConcluidos:     ()        => api.get('/matriculas/minhas'),
   statusCurso:        (cursoId) => api.get(`/matriculas/cursos/${cursoId}/status`),
@@ -153,6 +156,19 @@ export const acoesAPI = {
   meusAssistirDepois: () => api.get('/acoes/assistir-depois/meus'),
   assistirDepoisPorCurso: (cursoId) => api.get(`/acoes/assistir-depois/curso/${cursoId}`),
   todosAssistirDepois: () => api.get('/acoes/assistir-depois/todos'),
+};
+
+export const uploadAPI = {
+  video: (file) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.post('/upload/video', fd, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 300000 });
+  },
+  imagem: (file) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.post('/upload/imagem', fd, { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 300000 });
+  },
 };
 
 export default api;

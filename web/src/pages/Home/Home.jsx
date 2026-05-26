@@ -180,8 +180,7 @@ const Home = () => {
 
   const handleComecaAgora = () => {
     if (isAuthenticated) {
-      setHeroMsg('Você já está logado!');
-      setTimeout(() => { setHeroMsg(''); navigate('/cursos'); }, 1500);
+      navigate('/cursos');
     } else {
       navigate('/registro');
     }
@@ -217,11 +216,6 @@ const Home = () => {
               Aprenda as habilidades mais demandadas do mercado com nossos cursos práticos e atualizados.
             </p>
             <div className="hero-actions">
-              {heroMsg && (
-                <div style={{ padding: '10px 18px', background: 'rgba(52,211,153,0.15)', border: '1px solid #34d399', borderRadius: '8px', color: '#34d399', fontSize: '0.9rem', fontWeight: 600, marginBottom: '8px', textAlign: 'center' }}>
-                  {heroMsg}
-                </div>
-              )}
               <button className="btn-primary" onClick={handleComecaAgora}>
                 <svg className="btn-icon" viewBox="0 0 24 24">
                   <path d="M5 12l5 5L20 7" stroke="currentColor" strokeWidth="2" fill="none"/>
