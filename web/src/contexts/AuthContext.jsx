@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clearActionsCache, loadUserActions } from '../hooks/useCourseActions';
+import { clearLastCourse } from '../utils/lastCourse';
 
 const AuthContext = createContext();
 
@@ -29,6 +30,7 @@ const clearSession = (uid) => {
   localStorage.removeItem('usuario');
   localStorage.removeItem('token');
   clearActionsCache(uid);
+  clearLastCourse(uid);
   window.dispatchEvent(new CustomEvent('auth:cleared'));
 };
 

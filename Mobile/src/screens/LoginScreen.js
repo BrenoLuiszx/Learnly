@@ -19,11 +19,40 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert('Erro', 'Preencha todos os campos');
       return;
     }
+    
     setLoading(true);
+    
     try {
+      console.log('🚀 Iniciando processo de login...');
+      console.log('📧 Email:', email.trim());
+      
+      // Chama login passando email e senha como parâmetros separados
+      // O AuthContext vai montar o objeto { email, senha }
       await login(email.trim(), senha);
-    } catch {
-      Alert.alert('Erro', 'Email ou senha incorretos');
+      
+      console.log('🎉 Login realizado com sucesso!');
+    } catch (error) {
+      console.error('🚫 Erro capturado na tela:', error);
+      
+      let mensagem = 'Email ou senha incorretos';
+      
+      if (error.message === 'Network Error' || error.code === 'ECONNABORTED') {
+        mensagem = 'Erro de conexão. Verifique se o backend está rodando e se o IP está correto.';
+      } else if (error.response) {
+        if (error.response.status === 401) {
+          mensagem = 'Email ou senha incorretos';
+        } else if (error.response.status === 500) {
+          mensagem = 'Erro no servidor. Tente novamente mais tarde.';
+        } else if (error.response.data?.error) {
+          mensagem = error.response.data.error;
+        } else if (error.response.data?.message) {
+          mensagem = error.response.data.message;
+        }
+      } else if (error.request) {
+        mensagem = 'Sem resposta do servidor. Verifique sua conexão e o IP configurado.';
+      }
+      
+      Alert.alert('Erro', mensagem);
     } finally {
       setLoading(false);
     }
@@ -61,6 +90,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          autoCorrect={false}
         />
         <TextInput
           style={[styles.input, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}
@@ -69,6 +99,7 @@ const LoginScreen = ({ navigation }) => {
           value={senha}
           onChangeText={setSenha}
           secureTextEntry
+          autoCorrect={false}
         />
 
         <TouchableOpacity

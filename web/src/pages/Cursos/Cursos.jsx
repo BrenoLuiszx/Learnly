@@ -114,7 +114,7 @@ const Cursos = () => {
             <h2 className="filters-title">Descubra seu próximo nível</h2>
             <div className="filters-stats">
               <span className="stats-badge">
-                {activeTab === 'cursos' ? `${cursos.length} Cursos Premium` : `${jornadas.length} Jornadas Disponíveis`}
+                {activeTab === 'cursos' ? `${cursos.length} Cursos ` : `${jornadas.length} Jornadas Disponíveis`}
               </span>
               {activeTab === 'cursos' && (
                 <div className="view-toggle">
@@ -152,6 +152,34 @@ const Cursos = () => {
           </div>
 
           {activeTab === 'cursos' && (
+            <>
+            <div className="category-chips">
+              {[
+                { value: "", label: "Tudo" },
+                { value: "Frontend", label: "Frontend" },
+                { value: "Backend", label: "Backend" },
+                { value: "Data Science", label: "Data Science" },
+                { value: "Database", label: "Database" },
+                { value: "DevOps", label: "DevOps" },
+                { value: "Mobile", label: "Mobile" },
+                { value: "Design", label: "Design" },
+                { value: "Marketing", label: "Marketing" },
+                { value: "Negócios", label: "Negócios" },
+                { value: "Idiomas", label: "Idiomas" },
+                { value: "Música", label: "Música" },
+                { value: "Fotografia", label: "Fotografia" },
+                { value: "Saúde", label: "Saúde" },
+                { value: "Diversos", label: "Diversos" },
+              ].map((cat) => (
+                <button
+                  key={cat.value}
+                  className={`category-chip${categoria === cat.value ? " active" : ""}`}
+                  onClick={() => filtrarPorCategoria(cat.value)}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
             <div className="filters-controls">
               <div className="search-group">
                 <input
@@ -164,29 +192,7 @@ const Cursos = () => {
                 />
               </div>
 
-              <select
-                className="category-select"
-                value={categoria}
-                onChange={(e) => filtrarPorCategoria(e.target.value)}
-              >
-                <option value="">Explorar Tudo</option>
-                <option value="Frontend">Frontend</option>
-                <option value="Backend">Backend</option>
-                <option value="Data Science">Data Science</option>
-                <option value="Database">Database</option>
-                <option value="DevOps">DevOps</option>
-                <option value="Mobile">Mobile</option>
-                <option value="Design">Design</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Negócios">Negócios</option>
-                <option value="Idiomas">Idiomas</option>
-                <option value="Música">Música</option>
-                <option value="Violão">Violão</option>
-                <option value="Canto">Canto</option>
-                <option value="Fotografia">Fotografia</option>
-                <option value="Saúde">Saúde</option>
-                <option value="Diversos">Diversos</option>
-              </select>
+
               
 
 
@@ -205,6 +211,7 @@ const Cursos = () => {
                 Limpar
               </button>
             </div>
+            </>
           )}
         </div>
 

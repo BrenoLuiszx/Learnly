@@ -19,7 +19,7 @@ public class Instrutor {
     @Column(length = 500)
     private String foto;
 
-    // Links this instructor record to a Usuario account (collaborator)
+    // Links this instructor record to a Usuario account
     @Column(name = "usuario_id", unique = true)
     private Long usuarioId;
 

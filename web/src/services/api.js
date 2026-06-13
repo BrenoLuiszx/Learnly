@@ -120,6 +120,8 @@ export const certificadosAPI = {
   disponiveis: () => api.get('/certificados/disponiveis'),
   certificadosPublicos: (usuarioId) => api.get(`/certificados/usuario/${usuarioId}/publicos`),
   alternarVisibilidade: (id) => api.put(`/certificados/${id}/visibilidade`),
+  detalhes: (id) => api.get(`/certificados/${id}/detalhes`),
+  emitirDetalhes: (cursoId) => api.post(`/certificados/cursos/${cursoId}/emitir-detalhes`),
 };
 
 export const usuarioDashboardAPI = {

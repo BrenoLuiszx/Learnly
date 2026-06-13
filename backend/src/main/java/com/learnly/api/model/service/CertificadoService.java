@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,5 +87,47 @@ public class CertificadoService {
             throw new RuntimeException("Sem permissão");
         cert.setPublico(!cert.getPublico());
         return certificadoRepository.save(cert);
+    }
+
+    /** Returns enriched certificate details for the certificate page. */
+    public Map<String, Object> detalhesCertificado(Long id, Long usuarioId) {
+        Certificado cert = certificadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Certificado não encontrado"));
+        if (!cert.getUsuarioId().equals(usuarioId))
+            throw new RuntimeException("Sem permissão");
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("id", cert.getId());
+        result.put("nomeUsuario", cert.getNomeUsuario());
+        result.put("tituloCurso", cert.getTituloCurso());
+        result.put("dataEmissao", cert.getDataEmissao());
+        result.put("publico", cert.getPublico());
+
+        // Completion date from enrollment
+        matriculaRepository.findByUsuarioIdAndCursoId(usuarioId, cert.getCursoId()).ifPresent(m -> {
+            result.put("dataConclusao", m.getDataConclusao());
+            result.put("concluido", m.getConcluido());
+        });
+
+        // Instructor name from course
+        cursoRepository.findById(cert.getCursoId()).ifPresent(c -> {
+            result.put("categoriaCurso", c.getCategoria() != null ? c.getCategoria().getNome() : "");
+            if (c.getInstrutor() != null) {
+                result.put("nomeInstrutor", c.getInstrutor().getNome());
+            }
+        });
+
+        return result;
+    }
+
+    /** Validates eligibility and issues certificate atomically. */
+    public Map<String, Object> emitirERetornarDetalhes(Long usuarioId, Long cursoId) {
+        boolean concluido = matriculaRepository.findByUsuarioIdAndCursoId(usuarioId, cursoId)
+                .map(m -> Boolean.TRUE.equals(m.getConcluido()))
+                .orElse(false);
+        if (!concluido) throw new RuntimeException("Curso não concluído");
+
+        Certificado cert = emitir(usuarioId, cursoId, null);
+        return detalhesCertificado(cert.getId(), usuarioId);
     }
 }

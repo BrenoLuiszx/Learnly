@@ -1,6 +1,8 @@
 package com.learnly.api.model.service;
 
 import com.learnly.api.dto.UsuarioDTO;
+import com.learnly.api.enums.Role;
+import com.learnly.api.enums.StatusSolicitacao;
 import com.learnly.api.model.entity.Usuario;
 import com.learnly.api.model.entity.Instrutor;
 import com.learnly.api.model.repository.InstrutorRepository;
@@ -40,7 +42,7 @@ public class UsuarioService {
 
     // Lista usuários com solicitação pendente de colaborador
     public List<UsuarioDTO> listarSolicitacoesPendentes() {
-        return usuarioRepository.findByStatusSolicitacao("pendente").stream()
+        return usuarioRepository.findByStatusSolicitacao(StatusSolicitacao.PENDENTE).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -54,9 +56,9 @@ public class UsuarioService {
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
         if (usuario.getEmail().toLowerCase().contains("admin")) {
-            usuario.setRole("admin");
+            usuario.setRole(Role.ADMIN);
         } else {
-            usuario.setRole("user");
+            usuario.setRole(Role.USER);
         }
 
         Usuario salvo = usuarioRepository.save(usuario);
@@ -74,12 +76,12 @@ public class UsuarioService {
             throw new RuntimeException("Email ou senha inválidos");
         }
 
-        String token = jwtService.gerarToken(usuario.getId(), usuario.getEmail(), usuario.getRole());
+        String token = jwtService.gerarToken(usuario.getId(), usuario.getEmail(), usuario.getRole().name().toLowerCase());
 
         String tokenPreview = token.substring(0, Math.min(20, token.length())) + "..." + token.substring(Math.max(0, token.length() - 4));
         System.out.println("\n[Learnly Auth] Login bem-sucedido");
         System.out.println("  Usuário : " + usuario.getEmail());
-        System.out.println("  Role    : " + usuario.getRole());
+        System.out.println("  Role    : " + usuario.getRole().name().toLowerCase());
         System.out.println("  Token   : " + tokenPreview);
         System.out.println();
 
@@ -94,11 +96,11 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if ("colaborador".equals(usuario.getRole()) || "admin".equals(usuario.getRole())) {
+        if (usuario.getRole() == Role.COLABORADOR || usuario.getRole() == Role.ADMIN) {
             throw new RuntimeException("Usuário já é colaborador ou admin");
         }
 
-        usuario.setStatusSolicitacao("pendente");
+        usuario.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
         usuario.setJustificativaColaborador(justificativa);
         return convertToDTO(usuarioRepository.save(usuario));
     }
@@ -107,7 +109,7 @@ public class UsuarioService {
     public UsuarioDTO solicitarJornada(Long id, String payload) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        usuario.setStatusSolicitacao("pendente");
+        usuario.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
         usuario.setJustificativaColaborador(payload);
         return convertToDTO(usuarioRepository.save(usuario));
     }
@@ -117,8 +119,8 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        usuario.setRole("colaborador");
-        usuario.setStatusSolicitacao("aprovada");
+        usuario.setRole(Role.COLABORADOR);
+        usuario.setStatusSolicitacao(StatusSolicitacao.APROVADA);
         Usuario salvo = usuarioRepository.save(usuario);
 
         // Ensure an Instrutores row exists linked to this user.
@@ -141,7 +143,7 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        usuario.setStatusSolicitacao("recusada");
+        usuario.setStatusSolicitacao(StatusSolicitacao.RECUSADA);
         return convertToDTO(usuarioRepository.save(usuario));
     }
 
@@ -194,13 +196,16 @@ public class UsuarioService {
     }
 
     private UsuarioDTO convertToDTO(Usuario usuario) {
+        Role role = usuario.getRole() != null ? usuario.getRole() : Role.USER;
+        StatusSolicitacao status = usuario.getStatusSolicitacao() != null
+                ? usuario.getStatusSolicitacao() : StatusSolicitacao.NENHUMA;
         return new UsuarioDTO(
             usuario.getId(),
             usuario.getNome(),
             usuario.getEmail(),
             usuario.getFoto(),
-            usuario.getRole(),
-            usuario.getStatusSolicitacao(),
+            role.name().toLowerCase(),
+            status.name().toLowerCase(),
             usuario.getJustificativaColaborador()
         );
     }

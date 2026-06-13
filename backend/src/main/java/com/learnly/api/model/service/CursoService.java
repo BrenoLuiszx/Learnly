@@ -2,6 +2,7 @@ package com.learnly.api.model.service;
 
 import com.learnly.api.dto.CursoDTO;
 import com.learnly.api.dto.CursoDetalhadoDTO;
+import com.learnly.api.enums.StatusCurso;
 import com.learnly.api.model.entity.Aula;
 import com.learnly.api.model.entity.Categoria;
 import com.learnly.api.model.entity.Curso;
@@ -57,14 +58,14 @@ public class CursoService {
 
     // Lista apenas cursos aprovados (público)
     public List<CursoDTO> listarTodos() {
-        return cursoRepository.findByAtivoTrueAndStatus("aprovado").stream()
+        return cursoRepository.findByAtivoTrueAndStatus(StatusCurso.APROVADO).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     // Lista cursos pendentes (admin)
     public List<CursoDTO> listarPendentes() {
-        return cursoRepository.findByStatus("pendente").stream()
+        return cursoRepository.findByStatus(StatusCurso.PENDENTE).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -140,11 +141,10 @@ public class CursoService {
         curso.setLinksExternos(cursoDTO.getLinksExternos());
         curso.setAnexos(cursoDTO.getAnexos());
 
-        // Admin aprova direto, colaborador fica pendente
         if ("admin".equals(role)) {
-            curso.setStatus("aprovado");
+            curso.setStatus(StatusCurso.APROVADO);
         } else {
-            curso.setStatus("pendente");
+            curso.setStatus(StatusCurso.PENDENTE);
         }
 
         Curso cursoSalvo = cursoRepository.save(curso);
@@ -207,9 +207,8 @@ public class CursoService {
         curso.setLinksExternos(cursoDTO.getLinksExternos());
         curso.setAnexos(cursoDTO.getAnexos());
 
-        // Colaborador ao editar volta para pendente
         if ("colaborador".equals(role)) {
-            curso.setStatus("pendente");
+            curso.setStatus(StatusCurso.PENDENTE);
         }
 
         return convertToDTO(cursoRepository.save(curso));
@@ -219,7 +218,7 @@ public class CursoService {
     public CursoDTO aprovarCurso(Long id) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
-        curso.setStatus("aprovado");
+        curso.setStatus(StatusCurso.APROVADO);
         return convertToDTO(cursoRepository.save(curso));
     }
 
@@ -227,7 +226,7 @@ public class CursoService {
     public CursoDTO rejeitarCurso(Long id) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
-        curso.setStatus("rejeitado");
+        curso.setStatus(StatusCurso.REJEITADO);
         return convertToDTO(cursoRepository.save(curso));
     }
 
@@ -243,14 +242,14 @@ public class CursoService {
     }
 
     public List<CursoDTO> buscarPorCategoria(String categoria) {
-        return cursoRepository.findByCategoriaNome(categoria).stream()
+        return cursoRepository.findByCategoriaNome(categoria, StatusCurso.APROVADO).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public List<CursoDTO> buscarPorTitulo(String titulo) {
         if (titulo == null || titulo.trim().isEmpty()) return listarTodos();
-        return cursoRepository.buscarPorTermo(titulo).stream()
+        return cursoRepository.buscarPorTermo(titulo, StatusCurso.APROVADO).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -271,7 +270,7 @@ public class CursoService {
             curso.getInstrutor().getNome(),
             curso.getDuracao()
         );
-        dto.setStatus(curso.getStatus());
+        dto.setStatus(curso.getStatus().getValor());
         dto.setInstrutorId(curso.getInstrutor().getId());
         dto.setImagem(curso.getImagem());
         dto.setDescricaoDetalhada(curso.getDescricaoDetalhada());
@@ -302,12 +301,12 @@ public class CursoService {
         dto.setDescricaoDetalhada(curso.getDescricaoDetalhada());
         dto.setLinksExternos(curso.getLinksExternos());
         dto.setAnexos(curso.getAnexos());
-        dto.setStatus(curso.getStatus());
+        dto.setStatus(curso.getStatus().getValor());
         dto.setMediaAvaliacao(avaliacaoRepository.mediaNotaPorCurso(curso.getId()));
         dto.setTotalAvaliacoes(avaliacaoRepository.totalAvaliacoesPorCurso(curso.getId()));
         return dto;
     }
-    
+
     // Método auxiliar para criar primeira aula automaticamente
     private void criarPrimeiraAula(Curso curso) {
         try {

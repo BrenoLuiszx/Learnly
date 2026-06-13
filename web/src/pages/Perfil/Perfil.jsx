@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import DashboardTab from '../../components/DashboardTab';
 import UserAvatar from '../../components/UserAvatar';
 import { usuariosAPI, certificadosAPI, usuarioDashboardAPI, progressoAPI, cursosAPI, matriculasAPI } from '../../services/api';
@@ -577,6 +578,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
 
 /* ── CertificadosTab ── */
 const CertificadosTab = ({ usuario }) => {
+  const navigate = useNavigate();
   const [emitidos, setEmitidos] = useState([]);
   const [disponiveis, setDisponiveis] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -605,11 +607,15 @@ const CertificadosTab = ({ usuario }) => {
   const handleEmitir = async (cursoId) => {
     setEmitindo(cursoId);
     try {
-      const res = await certificadosAPI.emitir(cursoId);
-      setEmitidos(prev => [res.data, ...prev]);
-      setDisponiveis(prev => prev.filter(d => d.cursoId !== cursoId));
-      toast('Certificado emitido com sucesso!');
-    } catch { toast('Erro ao emitir certificado.'); }
+      const res = await certificadosAPI.emitirDetalhes(cursoId);
+      // After issuing, navigate directly to the certificate page
+      navigate(`/certificado/${res.data.id}`);
+    } catch (e) {
+      const msg = e?.response?.data?.erro;
+      toast(msg === 'Curso não concluído'
+        ? 'Você precisa concluir o curso antes de emitir o certificado.'
+        : 'Erro ao emitir certificado.');
+    }
     setEmitindo(null);
   };
 
@@ -621,12 +627,8 @@ const CertificadosTab = ({ usuario }) => {
     } catch {}
   };
 
-  const handleDownload = (cert) => {
-    if (cert.urlCertificado) {
-      window.open(cert.urlCertificado, '_blank', 'noopener,noreferrer');
-    } else {
-      toast('Download em breve — funcionalidade em desenvolvimento.');
-    }
+  const handleDownload = () => {
+    toast('Download de certificado em breve!');
   };
 
   const handleShare = (cert) => {
@@ -662,8 +664,8 @@ const CertificadosTab = ({ usuario }) => {
             <p className="ct-modal-date">Emitido em {new Date(modal.dataEmissao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
 
             <div className="ct-modal-actions">
-              <button className="ct-action-btn primary" onClick={() => handleDownload(modal)}>
-                <IconDownload /> Baixar PDF
+              <button className="ct-action-btn primary" onClick={() => handleDownload()}>
+                <IconDownload /> Baixar Certificado
               </button>
               <button className="ct-action-btn" onClick={() => handleShare(modal)}>
                 <IconShare /> Compartilhar
@@ -679,7 +681,7 @@ const CertificadosTab = ({ usuario }) => {
             </div>
 
             {!modal.urlCertificado && (
-              <p className="ct-modal-note">O arquivo PDF será gerado automaticamente em breve.</p>
+              <p className="ct-modal-note">Clique em "Baixar Certificado" para visualizar e baixar o PDF.</p>
             )}
 
             <button className="ct-modal-close" onClick={() => setModal(null)}>Fechar</button>

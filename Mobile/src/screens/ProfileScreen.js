@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useNotifications } from '../contexts/NotificationsContext';
 import { certificadosAPI, usuarioDashboardAPI } from '../services/api';
 
 const TABS = ['Estatísticas', 'Certificados', 'Atividade'];
@@ -14,6 +15,7 @@ const TABS = ['Estatísticas', 'Certificados', 'Atividade'];
 const ProfileScreen = ({ navigation }) => {
   const { user, logout, updateUser } = useAuth();
   const { theme, isDark, toggleTheme } = useTheme();
+  const { unreadCount } = useNotifications();
   const [tab, setTab] = useState(0);
 
   const [loading, setLoading] = useState(true);
@@ -325,6 +327,18 @@ const ProfileScreen = ({ navigation }) => {
           >
             <Ionicons name={isDark ? 'sunny' : 'moon'} size={18} color={theme.primary} />
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.themeBtn, { backgroundColor: theme.inputBg, borderColor: theme.border, marginLeft: 8 }]}
+            onPress={() => navigation.navigate('Notifications')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="notifications-outline" size={18} color={theme.primary} />
+            {unreadCount > 0 && (
+              <View style={[styles.notifBadge, { backgroundColor: theme.primary }]}>
+                <Text style={styles.notifBadgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
         </View>
 
         {/* Profile Card */}
@@ -445,8 +459,10 @@ const styles = StyleSheet.create({
   logoText: { fontSize: 16, fontWeight: '600', letterSpacing: 2, flex: 1 },
   themeBtn: {
     width: 40, height: 40, borderRadius: 20, borderWidth: 1,
-    alignItems: 'center', justifyContent: 'center',
+    alignItems: 'center', justifyContent: 'center', position: 'relative',
   },
+  notifBadge: { position: 'absolute', top: -4, right: -4, minWidth: 16, height: 16, borderRadius: 8, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 },
+  notifBadgeText: { fontSize: 9, fontWeight: '700', color: '#000' },
   profileCard: {
     borderRadius: 12, borderWidth: 1, padding: 24,
   },

@@ -87,10 +87,7 @@ GO
 
 -- =============================================
 -- 3. Instrutores
--- usuario_id: vincula ao Usuario colaborador dono dos cursos.
---   NULL  = instrutor externo sem conta na plataforma (ex: Rocketseat).
---   NOT NULL = colaborador aprovado; um usuário → um registro de instrutor.
--- Ownership chain: Cursos.instrutor_id → Instrutores.usuario_id → Usuarios.id
+
 -- =============================================
 CREATE TABLE Instrutores (
     id         INT           IDENTITY(1,1) NOT NULL,
@@ -191,7 +188,7 @@ GO
 -- =============================================
 -- 7. progresso_aula
 -- Rastreia conclusão individual de cada aula por usuário.
--- curso_id é redundante (pode ser derivado via aula_id → Aulas.curso_id)
+
 -- mas mantido por performance — evita JOIN em queries frequentes.
 -- =============================================
 CREATE TABLE progresso_aula (
@@ -265,7 +262,7 @@ GO
 -- Cursos
 CREATE INDEX IX_Cursos_Status    ON Cursos (status, ativo); -- findByAtivoTrueAndStatus (listagem pública)
 CREATE INDEX IX_Cursos_Categoria ON Cursos (categoria_id);  -- findByCategoriaNome
-CREATE INDEX IX_Cursos_Instrutor ON Cursos (instrutor_id);  -- buscarPorTermo + ownership lookup
+CREATE INDEX IX_Cursos_Instrutor ON Cursos (instrutor_id);  -- buscarPorTermo 
 GO
 
 -- Aulas

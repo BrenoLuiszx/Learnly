@@ -1,5 +1,6 @@
 package com.learnly.api.controller;
 
+import com.learnly.api.enums.StatusCurso;
 import com.learnly.api.dto.UsuarioDTO;
 import com.learnly.api.model.entity.Aula;
 import com.learnly.api.model.entity.Matricula;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    @Autowired
+    @Autowired  
     private UsuarioService usuarioService;
 
     @Autowired
@@ -146,7 +147,7 @@ public class UsuarioController {
         }
     }
 
-    // Endpoint temporário para gerar hash BCrypt
+    // Endpoint para gerar hash BCrypt
     @GetMapping("/gerar-hash/{senha}")
     public ResponseEntity<String> gerarHash(@PathVariable String senha) {
         return ResponseEntity.ok(usuarioService.gerarHash(senha));
@@ -214,7 +215,7 @@ public class UsuarioController {
     public ResponseEntity<Map<String, Object>> dashboard(Authentication auth) {
         Long usuarioId = (Long) auth.getCredentials();
 
-        long totalCursos = cursoRepository.countByAtivoTrueAndStatus("aprovado");
+        long totalCursos = cursoRepository.countByAtivoTrueAndStatus(StatusCurso.APROVADO);
         long totalConcluidos = matriculaService.listarConcluidosPorUsuario(usuarioId).size();
         long certificados = certificadoService.listarPorUsuario(usuarioId).size();
         List<Matricula> matriculas = matriculaService.listarPorUsuario(usuarioId);
@@ -280,7 +281,7 @@ public class UsuarioController {
                     detalhe.put("ultimaAtividade", p.getDataConclusao());
                 });
             });
-            // Fallback: if no lesson was ever completed, use enrollment date so the
+            // if no lesson was ever completed, use enrollment date so the
             // course still appears in the "continue" sort and card.
             if (!detalhe.containsKey("ultimaAtividade") && m.getDataInscricao() != null) {
                 detalhe.put("ultimaAtividade", m.getDataInscricao());

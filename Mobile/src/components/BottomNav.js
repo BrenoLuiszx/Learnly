@@ -2,22 +2,25 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../contexts/ThemeContext';
+import { useNotifications } from '../contexts/NotificationsContext';
 
 const tabs = [
-  { name: 'Home',         label: 'Início',     icon: 'home' },
-  { name: 'Courses',      label: 'Cursos',     icon: 'book' },
-  { name: 'Saved',        label: 'Salvos',     icon: 'heart' },
-  { name: 'Planning',     label: 'Planos',     icon: 'grid' },
-  { name: 'Profile',      label: 'Perfil',     icon: 'person' },
+  { name: 'Home',     label: 'Início',  icon: 'home' },
+  { name: 'Courses',  label: 'Cursos',  icon: 'book' },
+  { name: 'Saved',    label: 'Salvos',  icon: 'heart' },
+  { name: 'Planning', label: 'Planos',  icon: 'grid' },
+  { name: 'Profile',  label: 'Perfil',  icon: 'person' },
 ];
 
 const BottomNav = ({ currentRoute, navigation }) => {
   const { theme } = useTheme();
+  const { unreadCount } = useNotifications();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.surface, borderTopColor: theme.border }]}>
       {tabs.map((tab) => {
         const active = currentRoute === tab.name;
+        const showBadge = tab.name === 'Home' && unreadCount > 0;
         return (
           <TouchableOpacity
             key={tab.name}
@@ -30,6 +33,13 @@ const BottomNav = ({ currentRoute, navigation }) => {
                 size={22}
                 color={active ? theme.primary : theme.textSecondary}
               />
+              {showBadge && (
+                <View style={[styles.badge, { backgroundColor: theme.primary }]}>
+                  <Text style={[styles.badgeText, { color: '#000' }]}>
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </Text>
+                </View>
+              )}
             </View>
             <Text style={[styles.label, { color: active ? theme.primary : theme.textSecondary }]}>
               {tab.label}
@@ -55,6 +65,21 @@ const styles = StyleSheet.create({
   },
   iconWrap: {
     position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -5,
+    right: -8,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+  },
+  badgeText: {
+    fontSize: 9,
+    fontWeight: '700',
   },
   label: {
     fontSize: 11,

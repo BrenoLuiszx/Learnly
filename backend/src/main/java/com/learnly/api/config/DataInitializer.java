@@ -1,5 +1,6 @@
 package com.learnly.api.config;
 
+import com.learnly.api.enums.Role;
 import com.learnly.api.model.entity.*;
 import com.learnly.api.model.repository.*;
 
@@ -42,13 +43,13 @@ public class DataInitializer implements CommandLineRunner {
 
         // Criar usuários iniciais
         usuarioRepository.save(new Usuario("Breno", "admin@teste.com", "123456", 
-            "https://i.pinimg.com/736x/72/21/bf/7221bf32061ed0edec3c4e737532b0c8.jpg", "admin"));
+            "https://i.pinimg.com/736x/72/21/bf/7221bf32061ed0edec3c4e737532b0c8.jpg", Role.ADMIN));
         usuarioRepository.save(new Usuario("User", "user@teste.com", "123456", 
-            "https://api.dicebear.com/7.x/avataaars/svg?seed=User", "user"));
+            "https://api.dicebear.com/7.x/avataaars/svg?seed=User", Role.USER));
         usuarioRepository.save(new Usuario("João Silva", "joao@email.com", "123456", 
-            "https://api.dicebear.com/7.x/avataaars/svg?seed=Joao", "user"));
+            "https://api.dicebear.com/7.x/avataaars/svg?seed=Joao", Role.USER));
         usuarioRepository.save(new Usuario("Maria Santos", "maria@email.com", "123456", 
-            "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria", "user"));
+            "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria", Role.USER));
 
         // Criar cursos
         cursoRepository.save(new Curso("React Completo", "Curso completo de React do básico ao avançado", 

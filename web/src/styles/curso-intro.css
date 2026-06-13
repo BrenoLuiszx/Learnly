@@ -87,15 +87,27 @@
 .ci-category {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
-  background: var(--accent-color);
-  color: #000;
-  font-size: 0.68rem;
-  font-weight: 700;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(255, 215, 0, 0.08);
+  color: #e6c200;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  border-radius: 20px;
+  letter-spacing: 0.09em;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 215, 0, 0.22);
   width: fit-content;
+}
+
+.ci-category::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #e6c200;
+  flex-shrink: 0;
 }
 
 .ci-title {
@@ -116,19 +128,32 @@
 /* Stats */
 .ci-stats {
   display: flex;
-  gap: 1.25rem;
+  gap: 0;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  overflow: hidden;
+  width: fit-content;
 }
 
 .ci-stat {
   display: flex;
-  align-items: baseline;
-  gap: 5px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 14px 22px;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
 }
 
+.ci-stat:last-child { border-right: none; }
+
 .ci-stat-rating {
+  flex-direction: row;
   align-items: center;
+  gap: 6px;
 }
 
 .ci-stars {
@@ -137,14 +162,16 @@
 }
 
 .ci-star {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
 }
 
 .ci-stat-value {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .ci-gold { color: var(--accent-color); }
@@ -152,6 +179,7 @@
 .ci-stat-label {
   font-size: 0.78rem;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .ci-instructor-line {
@@ -454,13 +482,13 @@
 .ci-meta-row:last-child { border-bottom: none; }
 
 .ci-meta-label {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
 }
 
 .ci-meta-value {
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -616,6 +644,9 @@
   .ci-btn-primary, .ci-btn-secondary { width: 100%; justify-content: center; }
   .ci-bottom-inner { flex-direction: column; align-items: flex-start; }
   .ci-content-aside { grid-template-columns: 1fr; }
+  .ci-stats { width: 100%; }
+  .ci-stat { flex: 1; padding: 12px 14px; }
+  .ci-stat-value { font-size: 1.05rem; }
 }
 
 /* ── Locked resource items ───────────────────── */

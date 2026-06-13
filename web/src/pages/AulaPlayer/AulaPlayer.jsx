@@ -47,8 +47,7 @@ const AulaPlayer = () => {
       const aula = (aulasDados.data || []).find(a => a.id === Number(aulaId));
       setAulaAtual(aula);
 
-      // Record after data is loaded so we can include the lesson title
-      saveLastCourse(Number(cursoId), Number(aulaId), aula?.titulo ?? null);
+      saveLastCourse(Number(cursoId), Number(aulaId), aula?.titulo ?? null, user?.id ?? null);
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
     } finally {
@@ -63,6 +62,7 @@ const AulaPlayer = () => {
         await aulasAPI.desconcluir(aula.id);
       } else {
         await aulasAPI.concluir(aula.id);
+        saveLastCourse(Number(cursoId), aula.id, aula.titulo, user?.id ?? null);
       }
       const progressoDados = await aulasAPI.progresso(cursoId);
       setProgressoAulas(progressoDados.data || []);
@@ -72,7 +72,7 @@ const AulaPlayer = () => {
   };
 
   const irParaAula = (aula) => {
-    saveLastCourse(Number(cursoId), aula.id, aula.titulo);
+    saveLastCourse(Number(cursoId), aula.id, aula.titulo, user?.id ?? null);
     navigate(`/curso/${cursoId}/aula/${aula.id}`);
   };
 

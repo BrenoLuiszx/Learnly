@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import { useCourseActions } from '../../hooks/useCourseActions';
 import { formatDuration } from '../../utils/format';
 import '../../styles/cursos-bigtech.css';
-import './meus-cursos.css';
+import '../../styles/meus-cursos.css';
 
 const HeartIcon = ({ filled }) => (
   <svg viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">

@@ -19,6 +19,7 @@ import PlanoEstudo from './pages/PlanoEstudo/PlanoEstudo'
 import CursoIntro from './pages/CursoIntro/CursoIntro'
 import SobreNos from './pages/SobreNos/SobreNos'
 import Suporte from './pages/Suporte/Suporte'
+import CertificadoPage from './pages/Certificado/CertificadoPage'
 
 const Rotas = () => {
   return (
@@ -86,6 +87,12 @@ const Rotas = () => {
           <Admin />
         </ProtectedRoute>
       } />
+      <Route path="/certificado/:id" element={
+        <ProtectedRoute>
+          <CertificadoPage />
+        </ProtectedRoute>
+      } />
+
       {/* Redirect legacy /cadastro to /admin — course creation is now inside the Admin panel */}
       <Route path="/cadastro" element={<Navigate to="/admin" replace />} />
     </Routes>

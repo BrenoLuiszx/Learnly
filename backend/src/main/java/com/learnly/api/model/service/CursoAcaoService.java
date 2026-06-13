@@ -19,7 +19,6 @@ public class CursoAcaoService {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    // ── JSON helpers ──────────────────────────────────────────────
 
     private Set<Long> parseIds(String json) {
         try {
@@ -40,7 +39,7 @@ public class CursoAcaoService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
-    // ── Favorites ─────────────────────────────────────────────────
+    //  Favorites
 
     public boolean toggleFavorito(Long usuarioId, Long cursoId) {
         Usuario u = getUser(usuarioId);
@@ -60,7 +59,7 @@ public class CursoAcaoService {
         return parseIds(getUser(usuarioId).getFavoritos());
     }
 
-    /** Dashboard: all users who favorited a given course. */
+    /** Dashboard */
     public List<Map<String, Object>> favoritosPorCurso(Long cursoId) {
         return usuarioRepository.findAll().stream()
                 .filter(u -> parseIds(u.getFavoritos()).contains(cursoId))
@@ -68,7 +67,7 @@ public class CursoAcaoService {
                 .collect(Collectors.toList());
     }
 
-    /** Admin dashboard: every (user, course) favorite pair on the platform. */
+    /** Admin dashboard */
     public List<Map<String, Object>> todosFavoritos() {
         List<Map<String, Object>> result = new ArrayList<>();
         for (Usuario u : usuarioRepository.findAll()) {
@@ -79,7 +78,7 @@ public class CursoAcaoService {
         return result;
     }
 
-    // ── Watch Later ───────────────────────────────────────────────
+    //  Watch Later 
 
     public boolean toggleAssistirDepois(Long usuarioId, Long cursoId) {
         Usuario u = getUser(usuarioId);
@@ -116,7 +115,7 @@ public class CursoAcaoService {
         return result;
     }
 
-    // ── Helper ────────────────────────────────────────────────────
+    // Helper 
 
     private Map<String, Object> buildEntrada(Usuario u, Long cursoId, Object dataAcao) {
         String tituloCurso = cursoRepository.findById(cursoId)

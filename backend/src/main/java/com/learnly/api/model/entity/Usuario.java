@@ -1,5 +1,7 @@
 package com.learnly.api.model.entity;
 
+import com.learnly.api.enums.Role;
+import com.learnly.api.enums.StatusSolicitacao;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -23,13 +25,11 @@ public class Usuario {
     @Column(length = 500)
     private String foto;
     
-    // Roles: admin, colaborador, user
     @Column(nullable = false, length = 20)
-    private String role = "user";
+    private Role role = Role.USER;
 
-    // Status da solicitação de colaborador: nenhuma, pendente, aprovada, recusada
     @Column(name = "status_solicitacao", length = 20)
-    private String statusSolicitacao = "nenhuma";
+    private StatusSolicitacao statusSolicitacao = StatusSolicitacao.NENHUMA;
 
     @Column(name = "justificativa_colaborador", length = 500)
     private String justificativaColaborador;
@@ -56,7 +56,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(String nome, String email, String senha, String foto, String role) {
+    public Usuario(String nome, String email, String senha, String foto, Role role) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -79,11 +79,11 @@ public class Usuario {
     public String getFoto() { return foto; }
     public void setFoto(String foto) { this.foto = foto; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
-    public String getStatusSolicitacao() { return statusSolicitacao; }
-    public void setStatusSolicitacao(String statusSolicitacao) { this.statusSolicitacao = statusSolicitacao; }
+    public StatusSolicitacao getStatusSolicitacao() { return statusSolicitacao; }
+    public void setStatusSolicitacao(StatusSolicitacao statusSolicitacao) { this.statusSolicitacao = statusSolicitacao; }
 
     public String getJustificativaColaborador() { return justificativaColaborador; }
     public void setJustificativaColaborador(String justificativaColaborador) { this.justificativaColaborador = justificativaColaborador; }

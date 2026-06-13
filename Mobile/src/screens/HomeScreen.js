@@ -7,11 +7,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useNotifications } from '../contexts/NotificationsContext';
 import { usuarioDashboardAPI, certificadosAPI } from '../services/api';
 
 const HomeScreen = ({ navigation }) => {
   const { user } = useAuth();
   const { theme, isDark, toggleTheme } = useTheme();
+  const { unreadCount } = useNotifications();
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -86,6 +88,18 @@ const HomeScreen = ({ navigation }) => {
             activeOpacity={0.7}
           >
             <Ionicons name={isDark ? 'sunny' : 'moon'} size={18} color={theme.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.themeBtn, { backgroundColor: theme.inputBg, borderColor: theme.border, marginLeft: 8 }]}
+            onPress={() => navigation.navigate('Notifications')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="notifications-outline" size={18} color={theme.primary} />
+            {unreadCount > 0 && (
+              <View style={[styles.notifBadge, { backgroundColor: theme.primary }]}>
+                <Text style={styles.notifBadgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+              </View>
+            )}
           </TouchableOpacity>
         </View>
         <Text style={[styles.greeting, { color: theme.text }]}>Olá, {user?.nome?.split(' ')[0] || 'Estudante'}! 👋</Text>
@@ -256,7 +270,9 @@ const styles = StyleSheet.create({
   logoRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 24 },
   logoBox: { width: 40, height: 40, borderRadius: 8, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
   logoText: { fontSize: 16, fontWeight: '600', letterSpacing: 2, flex: 1 },
-  themeBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  themeBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' },
+  notifBadge: { position: 'absolute', top: -4, right: -4, minWidth: 16, height: 16, borderRadius: 8, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 },
+  notifBadgeText: { fontSize: 9, fontWeight: '700', color: '#000' },
   greeting: { fontSize: 24, fontWeight: '600', marginBottom: 4 },
   greetingSub: { fontSize: 16, marginBottom: 24 },
   metaCard: { padding: 20, borderRadius: 12, borderWidth: 1 },

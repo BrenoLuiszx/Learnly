@@ -5,8 +5,65 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="045df365-c898-4415-9bd3-bb0fc61f3f53" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/ServeFileController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/UploadController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/components/BottomNav.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/components/BottomNav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/config/environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/config/environment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/contexts/AuthContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/contexts/AuthContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/contexts/NotificationsContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/contexts/NotificationsContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/screens/HomeScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/screens/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/screens/LoginScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/screens/NotificationsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/screens/NotificationsScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/screens/ProfileScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/screens/ProfileScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mobile/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Mobile/src/services/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/CorsConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/CorsConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/config/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/CertificadoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/CertificadoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/CursoAcaoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/CursoAcaoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/MatriculaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/MatriculaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Curso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Curso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Instrutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Instrutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/entity/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/AvaliacaoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/AvaliacaoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/CursoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/CursoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/UsuarioRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/repository/UsuarioRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CertificadoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CertificadoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CursoAcaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CursoAcaoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CursoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/CursoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/MatriculaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/MatriculaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/learnly/api/model/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/config/CorsConfiguration.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/config/CorsConfiguration.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/controller/CertificadoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/controller/CertificadoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/model/entity/Aula.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/model/entity/Aula.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/model/entity/Curso.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/model/entity/Curso.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/model/repository/AulaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/model/repository/AulaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CertificadoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CertificadoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CursoAcaoService$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CursoAcaoService$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CursoAcaoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CursoAcaoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CursoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/model/service/CursoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/learnly/api/security/JwtFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/learnly/api/security/JwtFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sqllearnly.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../sqllearnly.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../web/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../web/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/components/DashboardTab.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/components/DashboardTab.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/Admin/Admin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/pages/Admin/Admin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/Cursos/Cursos.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/pages/Cursos/Cursos.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/Home/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/pages/Home/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/MeusCursos/MeusCursos.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/pages/MeusCursos/MeusCursos.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/MeusCursos/meus-cursos.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/Perfil/Perfil.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/pages/Perfil/Perfil.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/Planning/Planning.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/pages/Planning/Planning.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/Planning/planning.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/PlanoEstudo/PlanoEstudo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/pages/PlanoEstudo/PlanoEstudo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/pages/PlanoEstudo/plano-estudo.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/rotas.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/rotas.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/services/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/styles/curso-intro.css" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/styles/curso-intro.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/styles/cursos-bigtech.css" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/styles/cursos-bigtech.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/styles/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/styles/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/styles/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/styles/home.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

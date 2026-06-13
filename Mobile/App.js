@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,7 +7,7 @@ import { View, ActivityIndicator } from 'react-native';
 
 import { AuthProvider, useAuth } from './src/contexts/AuthContext';
 import { ThemeProvider } from './src/contexts/ThemeContext';
-import { NotificationsProvider } from './src/contexts/NotificationsContext';
+import { NotificationsProvider, useNotifications } from './src/contexts/NotificationsContext';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import HomeScreen from './src/screens/HomeScreen';
@@ -19,6 +19,7 @@ import CourseDetailsScreen from './src/screens/CourseDetailsScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import BottomNav from './src/components/BottomNav';
+import NotificationsScreen from './src/screens/NotificationsScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,6 +50,12 @@ const MainTabs = () => (
 
 const AppNavigator = () => {
   const { user, loading } = useAuth();
+  const { setUserId } = useNotifications();
+
+  // Sync logged-in user id into notifications context
+  useEffect(() => {
+    setUserId(user?.id ?? null);
+  }, [user?.id]);
 
   if (loading) {
     return (
@@ -72,6 +79,7 @@ const AppNavigator = () => {
             <Stack.Screen name="CourseDetails" component={CourseDetailsScreen} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Notifications" component={NotificationsScreen} options={{ headerShown: false }} />
           </>
         )}
       </Stack.Navigator>

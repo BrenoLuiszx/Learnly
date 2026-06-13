@@ -1,30 +1,32 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// ============================================
-// CONFIGURAÇÃO DA API
-// ============================================
-// Ajuste o IP conforme sua máquina:
-// - Windows: ipconfig  |  Mac/Linux: ifconfig
-// ============================================
-
-const API_URL = 'http://192.168.0.2:8080/Learnly/api'; // ← AJUSTE ESTE IP
+import { API_URL } from '../config/environment';
 
 const api = axios.create({
   baseURL: API_URL,
-  headers: { 'Content-Type': 'application/json' },
+  timeout: 300000,
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity,
 });
 
+console.log(' Mobile API configurada:', API_URL);
+
+// Interceptor - adiciona token JWT em todas as requisições
 api.interceptors.request.use(async (config) => {
   const token = await AsyncStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
+// Interceptor - trata expiração de token
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    const requestHadToken = !!error.config?.headers?.Authorization;
+    const status = error.response?.status;
+    if (requestHadToken && status === 401) {
       await AsyncStorage.multiRemove(['token', 'user']);
     }
     return Promise.reject(error);
@@ -36,43 +38,31 @@ export const cursosAPI = {
   buscarPorId: (id) => api.get(`/cursos/${id}`),
   buscarPorCategoria: (categoria) => api.get(`/cursos/categoria/${categoria}`),
   buscarPorTitulo: (titulo) => api.get(`/cursos/buscar?titulo=${titulo}`),
+  criar: (curso) => api.post('/cursos', curso),
+  atualizar: (id, curso) => api.put(`/cursos/${id}`, curso),
+  deletar: (id) => api.delete(`/cursos/${id}`),
+  meusCursos: () => api.get('/cursos/meus'),
+  listarPendentes: () => api.get('/cursos/pendentes'),
+  aprovar: (id) => api.put(`/cursos/${id}/aprovar`),
+  rejeitar: (id) => api.put(`/cursos/${id}/rejeitar`),
 };
 
 export const usuariosAPI = {
-  login: (email, senha) => api.post('/usuarios/login', { email, senha }),
-  registrar: (dados) => api.post('/usuarios/registrar', dados),
-  atualizarFoto: (id, foto) => api.put(`/usuarios/${id}/foto`, { foto }),
-  atualizarPerfil: (id, dados) => api.put(`/usuarios/${id}/perfil`, dados),
-  dashboard: () => api.get('/usuarios/dashboard'),
+  listarTodos: () => api.get('/usuarios'),
+  registrar: (usuario) => api.post('/usuarios/registrar', usuario),
+  login: (credenciais) => api.post('/usuarios/login', credenciais),
+  solicitarColaborador: (id, justificativa) => api.post(`/usuarios/${id}/solicitar-colaborador`, { justificativa }),
+  listarSolicitacoesPendentes: () => api.get('/usuarios/solicitacoes/pendentes'),
+  aprovarColaborador: (id) => api.put(`/usuarios/solicitacoes/${id}/aprovar`),
+  recusarColaborador: (id) => api.put(`/usuarios/solicitacoes/${id}/recusar`),
 };
 
-// Single endpoint that returns everything: stats + cursosDetalhes (sorted by ultimaAtividade)
-export const usuarioDashboardAPI = {
-  dashboard: () => api.get('/usuarios/dashboard'),
-};
-
-export const matriculasAPI = {
-  matricular: (cursoId) => api.post(`/matriculas/cursos/${cursoId}`),
-  status: (cursoId) => api.get(`/matriculas/cursos/${cursoId}/status`),
-  minhasMatriculas: () => api.get('/matriculas/minhas'),
-  atualizarProgresso: (cursoId, progresso) =>
-    api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso }),
-};
-
-// Keep progressoAPI for backward compat with CourseDetailsScreen etc.
 export const progressoAPI = {
-  marcarConcluido: (cursoId) => api.post(`/progresso/cursos/${cursoId}/concluir`),
-  desmarcarConcluido: (cursoId) => api.post(`/progresso/cursos/${cursoId}/desconcluir`),
-  meuProgresso: () => api.get('/matriculas/minhas'),
-  statusCurso: (cursoId) => api.get(`/matriculas/cursos/${cursoId}/status`),
-};
-
-export const aulasAPI = {
-  listarPorCurso: (cursoId) => api.get(`/aulas/curso/${cursoId}`),
-  concluir: (aulaId) => api.post(`/aulas/${aulaId}/concluir`),
-  desconcluir: (aulaId) => api.post(`/aulas/${aulaId}/desconcluir`),
-  progresso: (cursoId) => api.get(`/aulas/curso/${cursoId}/progresso`),
-  percentual: (cursoId) => api.get(`/aulas/curso/${cursoId}/percentual`),
+  marcarConcluido:    (cursoId) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso: 100 }),
+  desmarcarConcluido: (cursoId) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso: 0 }),
+  meuProgresso:       ()        => api.get('/matriculas/minhas'),
+  meusConcluidos:     ()        => api.get('/matriculas/minhas'),
+  statusCurso:        (cursoId) => api.get(`/matriculas/cursos/${cursoId}/status`),
 };
 
 export const avaliacoesAPI = {
@@ -81,23 +71,93 @@ export const avaliacoesAPI = {
   minhaAvaliacao: (cursoId) => api.get(`/avaliacoes/cursos/${cursoId}/minha`),
 };
 
+export const aulasAPI = {
+  listarPorCurso: (cursoId) => api.get(`/aulas/curso/${cursoId}`),
+  salvarAulas: (cursoId, aulas) => api.post(`/aulas/curso/${cursoId}`, aulas),
+  concluir: (aulaId) => api.post(`/aulas/${aulaId}/concluir`),
+  desconcluir: (aulaId) => api.post(`/aulas/${aulaId}/desconcluir`),
+  progresso: (cursoId) => api.get(`/aulas/curso/${cursoId}/progresso`),
+  percentual: (cursoId) => api.get(`/aulas/curso/${cursoId}/percentual`),
+};
+
+export const matriculasAPI = {
+  matricular: (cursoId) => api.post(`/matriculas/cursos/${cursoId}`),
+  status: (cursoId) => api.get(`/matriculas/cursos/${cursoId}/status`),
+  minhasMatriculas: () => api.get('/matriculas/minhas'),
+  atualizarProgresso: (cursoId, progresso) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso }),
+};
+
+export const instrutorAPI = {
+  alunos: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/alunos`),
+  avaliacoes: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/avaliacoes`),
+};
+
+export const colaboradorAPI = {
+  alunos: (cursoId) => api.get(`/colaborador/cursos/${cursoId}/alunos`),
+  avaliacoes: (cursoId) => api.get(`/colaborador/cursos/${cursoId}/avaliacoes`),
+};
+
+export const adminCursoAPI = {
+  alunos: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/alunos`),
+  avaliacoes: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/avaliacoes`),
+};
+
 export const certificadosAPI = {
-  emitir: (cursoId) => api.post(`/certificados/cursos/${cursoId}`, {}),
+  emitir: (cursoId, dados) => api.post(`/certificados/cursos/${cursoId}`, dados || {}),
   meusCertificados: () => api.get('/certificados/meus'),
   disponiveis: () => api.get('/certificados/disponiveis'),
+  certificadosPublicos: (usuarioId) => api.get(`/certificados/usuario/${usuarioId}/publicos`),
   alternarVisibilidade: (id) => api.put(`/certificados/${id}/visibilidade`),
+};
+
+export const usuarioDashboardAPI = {
+  dashboard: () => api.get('/usuarios/dashboard'),
+  atualizarPerfil: (id, dados) => api.put(`/usuarios/${id}/perfil`, dados),
+  atualizarFoto: (id, foto) => api.put(`/usuarios/${id}/foto`, { foto }),
+  getPlanejamento: () => api.get('/usuarios/planejamento'),
+  savePlanejamento: (cards, cols) => api.put('/usuarios/planejamento', { cards, cols }),
+  getCurriculo: () => api.get('/usuarios/curriculo'),
+  saveCurriculo: (curriculo) => api.put('/usuarios/curriculo', { curriculo }),
+};
+
+export const jornadaRequestAPI = {
+  enviar: (usuarioId, payload) =>
+    api.post(`/usuarios/${usuarioId}/solicitar-jornada`, {
+      justificativa: 'JORNADA_REQUEST:' + JSON.stringify(payload),
+    }),
+  enviarEdicao: (usuarioId, slug, payload) =>
+    api.post(`/usuarios/${usuarioId}/solicitar-jornada`, {
+      justificativa: 'JORNADA_REQUEST:' + JSON.stringify({ ...payload, editSlug: slug }),
+    }),
 };
 
 export const acoesAPI = {
   toggleFavorito: (cursoId) => api.post(`/acoes/favoritos/${cursoId}`),
   meusFavoritos: () => api.get('/acoes/favoritos/meus'),
+  favoritosPorCurso: (cursoId) => api.get(`/acoes/favoritos/curso/${cursoId}`),
+  todosFavoritos: () => api.get('/acoes/favoritos/todos'),
   toggleAssistirDepois: (cursoId) => api.post(`/acoes/assistir-depois/${cursoId}`),
   meusAssistirDepois: () => api.get('/acoes/assistir-depois/meus'),
+  assistirDepoisPorCurso: (cursoId) => api.get(`/acoes/assistir-depois/curso/${cursoId}`),
+  todosAssistirDepois: () => api.get('/acoes/assistir-depois/todos'),
+};
+
+export const uploadAPI = {
+  imagem: (file) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.post('/upload/imagem', fd, { 
+      headers: { 'Content-Type': 'multipart/form-data' }, 
+      timeout: 300000 
+    });
+  },
 };
 
 export const planejamentoAPI = {
   get: () => api.get('/usuarios/planejamento'),
   save: (cards, cols) => api.put('/usuarios/planejamento', { cards, cols }),
 };
+
+console.log(' API mobile sincronizada com web');
 
 export default api;

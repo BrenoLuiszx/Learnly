@@ -1,5 +1,6 @@
 package com.learnly.api.model.entity;
 
+import com.learnly.api.enums.StatusCurso;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -31,9 +32,8 @@ public class Curso {
     @Column(nullable = false)
     private Integer duracao;
 
-    // Status do curso: pendente, aprovado, rejeitado
     @Column(nullable = false, length = 20)
-    private String status = "aprovado";
+    private StatusCurso status = StatusCurso.APROVADO;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String imagem;
@@ -41,11 +41,9 @@ public class Curso {
     @Column(name = "descricao_detalhada", columnDefinition = "NVARCHAR(MAX)")
     private String descricaoDetalhada;
 
-    // JSON string: [{"titulo":"...","url":"..."}]
     @Column(name = "links_externos", columnDefinition = "NVARCHAR(MAX)")
     private String linksExternos;
 
-    // JSON string: [{"nome":"...","url":"..."}]
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String anexos;
 
@@ -86,8 +84,8 @@ public class Curso {
     public Integer getDuracao() { return duracao; }
     public void setDuracao(Integer duracao) { this.duracao = duracao; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public StatusCurso getStatus() { return status; }
+    public void setStatus(StatusCurso status) { this.status = status; }
 
     public String getImagem() { return imagem; }
     public void setImagem(String imagem) { this.imagem = imagem; }

@@ -15,10 +15,7 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
 
     Optional<Avaliacao> findByUsuarioIdAndCursoId(Long usuarioId, Long cursoId);
 
-    /**
-     * Join Avaliacoes with Usuarios at query time so nomeUsuario and fotoUsuario
-     * always reflect the current user profile — no denormalized columns needed.
-     */
+   
     @Query("""
         SELECT new com.learnly.api.dto.AvaliacaoDTO(
             a.id, a.usuarioId, a.cursoId,

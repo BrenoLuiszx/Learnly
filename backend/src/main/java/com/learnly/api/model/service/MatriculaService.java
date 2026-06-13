@@ -16,7 +16,7 @@ public class MatriculaService {
     @Autowired
     private MatriculaRepository matriculaRepository;
 
-    /** Matricula o usuário no curso (idempotente — retorna existente se já matriculado). */
+    /** Matricula o usuário no curso (retorna existente se já matriculado). */
     public Map<String, Object> matricular(Long usuarioId, Long cursoId) {
         boolean jaMatriculado = matriculaRepository.existsByUsuarioIdAndCursoId(usuarioId, cursoId);
         if (jaMatriculado) {

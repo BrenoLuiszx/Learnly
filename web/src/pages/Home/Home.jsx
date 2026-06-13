@@ -269,15 +269,15 @@ const Home = () => {
             <div className="stat-label">Cursos disponíveis</div>
           </div>
           <div className="stat-item">
-            <div className="stat-number">5</div>
+            <div className="stat-number">{new Set(cursos.map(c => c.categoria).filter(Boolean)).size || 5}</div>
             <div className="stat-label">Categorias de ensino</div>
           </div>
           <div className="stat-item">
-            <div className="stat-number">4</div>
-            <div className="stat-label">Jornadas de aprendizado</div>
+            <div className="stat-number">50+</div>
+            <div className="stat-label">Alunos cadastrados</div>
           </div>
           <div className="stat-item">
-            <div className="stat-number">{new Set(cursos.map(c => c.instrutorId).filter(Boolean)).size || FEATURED_INSTRUCTORS.length}</div>
+            <div className="stat-number">{new Set(cursos.map(c => c.instrutor).filter(Boolean)).size || FEATURED_INSTRUCTORS.length}</div>
             <div className="stat-label">Instrutores ativos</div>
           </div>
         </div>

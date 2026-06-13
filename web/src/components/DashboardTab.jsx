@@ -35,16 +35,23 @@ const DashboardTab = ({ stats, usuario }) => {
   const emAndamento = cursos.filter(c => !c.concluido);
   const concluidos  = cursos.filter(c => c.concluido);
 
-  const lastAccessed = loadLastCourse();
+  const lastAccessed = loadLastCourse(usuario?.id ?? null);
 
   const ultimoAcessado = (() => {
     if (lastAccessed?.cursoId) {
       const match = cursos.find(c => c.cursoId === lastAccessed.cursoId);
-      if (match) return {
-        ...match,
-        _lastAulaId:    lastAccessed.aulaId,
-        _lastAulaTitle: lastAccessed.aulaTitle,
-      };
+      if (match) {
+        // Usa o ID do banco (ultima aula concluida) se for mais recente que o localStorage.
+        // Compara o timestamp do localStorage com a ultimaAtividade do banco.
+        const tsLocal = lastAccessed.ts || 0;
+        const tsServer = match.ultimaAtividade ? new Date(match.ultimaAtividade).getTime() : 0;
+        const localEhMaisRecente = tsLocal > tsServer;
+        return {
+          ...match,
+          _lastAulaId:    localEhMaisRecente ? lastAccessed.aulaId : (match.ultimaAulaId || lastAccessed.aulaId),
+          _lastAulaTitle: localEhMaisRecente ? lastAccessed.aulaTitle : (match.ultimaAulaTitulo || lastAccessed.aulaTitle),
+        };
+      }
     }
     // Fallback: most recently active course by ultimaAtividade
     const sorted = [...cursos].sort((a, b) => {
@@ -57,17 +64,20 @@ const DashboardTab = ({ stats, usuario }) => {
 
   const handleContinue = () => {
     if (!ultimoAcessado) return;
-    const aulaId = ultimoAcessado._lastAulaId;
+    // Quando _lastAulaId já foi resolvido contra o banco no cálculo acima,
+    // apenas precisamos garantir fallback para proximaAulaId (curso em andamento
+    // sem localStorage) ou ultimaAulaId (curso concluído).
+    const aulaId = ultimoAcessado._lastAulaId
+      || ultimoAcessado.proximaAulaId
+      || ultimoAcessado.ultimaAulaId;
     if (aulaId) {
-      // Go directly to the lesson in the dedicated player
       navigate(`/curso/${ultimoAcessado.cursoId}/aula/${aulaId}`);
     } else {
-      // No specific lesson known — open the course detail page
       navigate(`/curso/${ultimoAcessado.cursoId}`);
     }
   };
 
-  // Label for the "last lesson" line
+  // Label para a linha "última aula" — usa a mesma fonte resolvida no ultimoAcessado
   const lastLessonLabel = (() => {
     if (ultimoAcessado?._lastAulaTitle) return ultimoAcessado._lastAulaTitle;
     if (ultimoAcessado?.proximaAulaTitulo) return ultimoAcessado.proximaAulaTitulo;
