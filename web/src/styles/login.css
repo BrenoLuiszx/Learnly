@@ -1,4 +1,4 @@
-/* Login Page - Tema Profissional com cores do site */
+
 .login-page {
   min-height: 100vh;
   background: var(--bg-primary);
@@ -22,7 +22,7 @@
   margin: 20px;
 }
 
-/* Lado esquerdo - Branding */
+
 .login-left {
   flex: 1;
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
@@ -84,7 +84,7 @@
   font-weight: 300;
 }
 
-/* Lado direito - Formulário */
+
 .login-right {
   flex: 1;
   display: flex;
@@ -208,7 +208,7 @@
   text-decoration: underline;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .login-container {
     flex-direction: column;

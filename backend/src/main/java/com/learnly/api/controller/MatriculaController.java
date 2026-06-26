@@ -18,41 +18,29 @@ public class MatriculaController {
     @Autowired
     private MatriculaService matriculaService;
 
-    /**  matricula o usuário autenticado no curso */
     @PostMapping("/cursos/{cursoId}")
     public ResponseEntity<Map<String, Object>> matricular(@PathVariable Long cursoId, Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        return ResponseEntity.ok(matriculaService.matricular(usuarioId, cursoId));
+        return ResponseEntity.ok(matriculaService.matricular((Long) auth.getCredentials(), cursoId));
     }
 
-    /** verifica se o usuário está matriculado.
-     *  Público: retorna totalMatriculados para todos.
-     *  Autenticado: também retorna o flag pessoal 'matriculado'. */
     @GetMapping("/cursos/{cursoId}/status")
     public ResponseEntity<Map<String, Object>> status(@PathVariable Long cursoId, Authentication auth) {
         long total = matriculaService.totalMatriculadosCurso(cursoId);
-        boolean matriculado = false;
-        if (auth != null && auth.isAuthenticated()) {
-            Long usuarioId = (Long) auth.getCredentials();
-            matriculado = matriculaService.isMatriculado(usuarioId, cursoId);
-        }
+        boolean matriculado = auth != null && auth.isAuthenticated()
+                && matriculaService.isMatriculado((Long) auth.getCredentials(), cursoId);
         return ResponseEntity.ok(Map.of("matriculado", matriculado, "totalMatriculados", total));
     }
 
-    /**  lista todas as matrículas do usuário */
     @GetMapping("/minhas")
     public ResponseEntity<List<Matricula>> minhasMatriculas(Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        return ResponseEntity.ok(matriculaService.listarPorUsuario(usuarioId));
+        return ResponseEntity.ok(matriculaService.listarPorUsuario((Long) auth.getCredentials()));
     }
 
-    /**  atualiza progresso */
     @PutMapping("/cursos/{cursoId}/progresso")
     public ResponseEntity<Matricula> atualizarProgresso(@PathVariable Long cursoId,
                                                          @RequestBody Map<String, Number> body,
                                                          Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
         BigDecimal progresso = new BigDecimal(body.get("progresso").toString());
-        return ResponseEntity.ok(matriculaService.atualizarProgresso(usuarioId, cursoId, progresso));
+        return ResponseEntity.ok(matriculaService.atualizarProgresso((Long) auth.getCredentials(), cursoId, progresso));
     }
 }

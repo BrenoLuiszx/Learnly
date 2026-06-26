@@ -23,7 +23,6 @@ const ProfileScreen = ({ navigation }) => {
   const [dashboard, setDashboard] = useState(null);
   const [certificados, setCertificados] = useState([]);
   
-  // Recarrega sempre que a tela ganha foco (volta de outra tela)
   useFocusEffect(
     React.useCallback(() => {
       carregarDados();
@@ -39,8 +38,7 @@ const ProfileScreen = ({ navigation }) => {
       ]);
       setDashboard(dashRes.data || {});
       setCertificados(certRes.data || []);
-    } catch (error) {
-      console.error('Erro ao carregar dados do perfil:', error);
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -80,11 +78,10 @@ const ProfileScreen = ({ navigation }) => {
 
   const renderStats = () => {
     const stats = [
-      { 
-        label: 'Cursos Concluídos', 
-        value: cursosConcluidos.length, 
-        total: 20, 
-        icon: 'trophy', 
+      {
+        label: 'Cursos Concluídos',
+        value: cursosConcluidos.length,
+        icon: 'trophy',
         color: theme.primary,
         onPress: () => {
           if (cursosConcluidos.length > 0) {
@@ -94,63 +91,48 @@ const ProfileScreen = ({ navigation }) => {
               [{ text: 'OK' }]
             );
           }
-        }
+        },
       },
-      { 
-        label: 'Horas de Estudo', 
-        value: totalHoras, 
-        total: 100, 
-        icon: 'time', 
+      {
+        label: 'Horas de Estudo',
+        value: totalHoras,
+        icon: 'time',
         color: '#3B82F6',
         onPress: () => {
           const mins = (dashboard?.totalMinutos || 0) % 60;
-          Alert.alert(
-            'Tempo de Estudo',
-            `Total: ${totalHoras}h ${mins}min\n\nBaseado em ${cursosConcluidos.length} curso(s) concluído(s)`,
-            [{ text: 'OK' }]
-          );
-        }
+          Alert.alert('Tempo de Estudo', `Total: ${totalHoras}h ${mins}min`, [{ text: 'OK' }]);
+        },
       },
-      { 
-        label: 'Certificados', 
-        value: certificados.length, 
-        total: 20, 
-        icon: 'ribbon', 
+      {
+        label: 'Certificados',
+        value: certificados.length,
+        icon: 'ribbon',
         color: '#10B981',
-        onPress: () => setTab(1)
+        onPress: () => setTab(1),
       },
     ];
-    
+
     return (
       <View style={styles.tabContent}>
-        {stats.map((s) => {
-          const percent = s.total > 0 ? Math.round((s.value / s.total) * 100) : 0;
-          return (
-            <TouchableOpacity 
-              key={s.label} 
-              style={[styles.statCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
-              onPress={s.onPress}
-              activeOpacity={0.7}
-            >
-              <View style={styles.statRow}>
-                <View style={[styles.statIcon, { backgroundColor: s.color + '33' }]}>
-                  <Ionicons name={s.icon} size={24} color={s.color} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.statLabel, { color: theme.text }]}>{s.label}</Text>
-                  <Text style={[styles.statSub, { color: theme.textSecondary }]}>{s.value} de {s.total}</Text>
-                </View>
-                <View style={{ alignItems: 'flex-end' }}>
-                  <Text style={[styles.statPercent, { color: theme.text }]}>{percent}%</Text>
-                  <Ionicons name="chevron-forward" size={16} color={theme.textTertiary} style={{ marginTop: 4 }} />
-                </View>
+        {stats.map((s) => (
+          <TouchableOpacity
+            key={s.label}
+            style={[styles.statCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
+            onPress={s.onPress}
+            activeOpacity={0.7}
+          >
+            <View style={styles.statRow}>
+              <View style={[styles.statIcon, { backgroundColor: s.color + '33' }]}>
+                <Ionicons name={s.icon} size={24} color={s.color} />
               </View>
-              <View style={[styles.progressBg, { backgroundColor: theme.border }]}>
-                <View style={[styles.progressFill, { width: `${percent}%`, backgroundColor: s.color }]} />
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.statLabel, { color: theme.text }]}>{s.label}</Text>
+                <Text style={[styles.statSub, { color: theme.textSecondary }]}>{s.value}</Text>
               </View>
-            </TouchableOpacity>
-          );
-        })}
+              <Ionicons name="chevron-forward" size={16} color={theme.textTertiary} />
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
     );
   };
@@ -313,7 +295,6 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]} showsVerticalScrollIndicator={false}>
-      {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <View style={styles.logoRow}>
           <View style={[styles.logoBox, { backgroundColor: theme.primary }]}>
@@ -341,7 +322,6 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Profile Card */}
         <View style={[styles.profileCard, { backgroundColor: theme.cardBg + '80', borderColor: theme.border }]}>
           <View style={styles.profileTop}>
             <View style={styles.avatarContainer}>
@@ -391,7 +371,7 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Tabs */}
+     
       <View style={[styles.tabsContainer, { backgroundColor: theme.surface, borderColor: theme.border }]}>
         {TABS.map((t, i) => (
           <TouchableOpacity
@@ -416,7 +396,7 @@ const ProfileScreen = ({ navigation }) => {
         </>
       )}
 
-      {/* Menu */}
+     
       <View style={styles.menu}>
         <Text style={[styles.menuTitle, { color: theme.text }]}>Configurações</Text>
         <View style={[styles.menuCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
@@ -515,7 +495,6 @@ const styles = StyleSheet.create({
   statIcon: { width: 48, height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   statLabel: { fontSize: 16, fontWeight: '600' },
   statSub: { fontSize: 14 },
-  statPercent: { fontSize: 16, fontWeight: '600' },
   progressBg: { height: 8, borderRadius: 4 },
   progressFill: { height: 8, borderRadius: 4 },
   loadingTab: { padding: 40, alignItems: 'center' },
@@ -554,9 +533,6 @@ const styles = StyleSheet.create({
   },
   activityTitle: { fontSize: 15, fontWeight: '600', marginBottom: 4 },
   activityInstrutor: { fontSize: 13, marginBottom: 6 },
-  activityMeta: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 8 },
-  activityMetaText: { fontSize: 12 },
-  activityDot: { width: 3, height: 3, borderRadius: 1.5, marginHorizontal: 4 },
   activityProgress: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   activityPercent: { fontSize: 13, fontWeight: '600', minWidth: 40 },
   menu: { padding: 16, marginTop: 16 },

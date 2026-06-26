@@ -11,7 +11,7 @@ public class CursoDetalhadoDTO {
     private String instrutorBio;
     private Integer duracao;
     private String formaAplicacao;
-    // Campos enriquecidos
+    
     private String imagem;
     private String descricaoDetalhada;
     private String linksExternos;

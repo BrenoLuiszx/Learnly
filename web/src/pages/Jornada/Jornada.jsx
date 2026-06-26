@@ -69,7 +69,7 @@ const Jornada = () => {
     }
   };
 
-  // Derive completion state from real matricula data
+
   const getMatricula = (cursoId) =>
     matriculas.find((m) => m.cursoId === cursoId || m.curso_id === cursoId);
 
@@ -83,7 +83,7 @@ const Jornada = () => {
     return m ? parseFloat(m.progresso || 0) : 0;
   };
 
-  // A step is unlocked if all previous steps are concluded
+
   const isUnlocked = (index) => {
     if (index === 0) return true;
     return isConcluido(cursos[index - 1]?.id);
@@ -94,7 +94,7 @@ const Jornada = () => {
   const jornadaConcluida = totalCount > 0 && concludedCount === totalCount;
   const overallProgress = totalCount > 0 ? (concludedCount / totalCount) * 100 : 0;
 
-  // ── Error states ──────────────────────────────────────────────
+
 
   if (!jornadaDef) {
     return (
@@ -124,13 +124,13 @@ const Jornada = () => {
     );
   }
 
-  // ── Main render ───────────────────────────────────────────────
+
 
   return (
     <div className="jornada-page">
       <Header />
 
-      {/* Hero */}
+    
       <div className="jornada-hero">
         <div className="jornada-hero-inner">
           <button className="btn-jornada-back" onClick={() => navigate("/cursos")}>
@@ -169,7 +169,7 @@ const Jornada = () => {
         </div>
       </div>
 
-      {/* Timeline */}
+
       <div className="jornada-body">
         <div className="jornada-timeline">
           {cursos.map((curso, index) => {
@@ -184,17 +184,17 @@ const Jornada = () => {
                 key={curso.id}
                 className={`jt-item ${concluido ? "jt-done" : ""} ${isCurrent ? "jt-current" : ""} ${!unlocked ? "jt-locked" : ""}`}
               >
-                {/* Connector line */}
+   
                 {index < cursos.length - 1 && (
                   <div className={`jt-connector ${concluido ? "jt-connector-done" : ""}`} />
                 )}
 
-                {/* Step marker */}
+
                 <div className="jt-marker">
                   {concluido ? <CheckIcon /> : !unlocked ? <LockIcon /> : <span>{index + 1}</span>}
                 </div>
 
-                {/* Card */}
+  
                 <div className="jt-card">
                   <div className="jt-card-top">
                     <div className="jt-card-info">
@@ -214,7 +214,7 @@ const Jornada = () => {
                     )}
                   </div>
 
-                  {/* Progress bar — only when enrolled and not yet done */}
+           
                   {matricula && !concluido && (
                     <div className="jt-progress-row">
                       <div className="jt-progress-track">
@@ -227,7 +227,7 @@ const Jornada = () => {
                     </div>
                   )}
 
-                  {/* Actions */}
+          
                   <div className="jt-actions">
                     {!unlocked ? (
                       <div className="jt-locked-msg">
@@ -256,7 +256,7 @@ const Jornada = () => {
             );
           })}
 
-          {/* Completion trophy */}
+  
           {totalCount > 0 && (
             <div className={`jt-finish ${jornadaConcluida ? "jt-finish-done" : ""}`}>
               <div className="jt-finish-marker">

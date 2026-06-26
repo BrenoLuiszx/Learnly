@@ -40,7 +40,7 @@ const SettingsScreen = ({ navigation }) => {
       style={[styles.container, { backgroundColor: theme.background }]}
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
+      
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={20} color={theme.textSecondary} />
@@ -54,7 +54,7 @@ const SettingsScreen = ({ navigation }) => {
 
       <View style={styles.content}>
 
-        {/* ── Aparência ── */}
+       
         <View style={[styles.card, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
           <Text style={[styles.cardTitle, { color: theme.text }]}>Aparência</Text>
 
@@ -79,11 +79,11 @@ const SettingsScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* ── Minha Conta ── */}
+        
         <View style={[styles.card, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
           <Text style={[styles.cardTitle, { color: theme.text }]}>Minha Conta</Text>
 
-          {/* Session info */}
+          
           <View style={[styles.sessionBox, { backgroundColor: theme.background, borderColor: theme.border }]}>
             <View style={[styles.sessionAvatar, { backgroundColor: theme.primary }]}>
               <Text style={[styles.sessionInitials, { color: isDark ? '#000' : '#FFF' }]}>
@@ -99,7 +99,7 @@ const SettingsScreen = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Activity stats */}
+        
           {loadingStats ? (
             <ActivityIndicator size="small" color={theme.primary} style={{ marginVertical: 12 }} />
           ) : stats ? (
@@ -117,7 +117,7 @@ const SettingsScreen = ({ navigation }) => {
             </View>
           ) : null}
 
-          {/* Edit profile shortcut */}
+         
           <TouchableOpacity
             style={[styles.row, styles.rowBorder, { borderTopColor: theme.border }]}
             onPress={() => navigation.navigate('EditProfile')}
@@ -133,7 +133,7 @@ const SettingsScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {/* ── Sessão ── */}
+       
         <View style={[styles.card, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
           <Text style={[styles.cardTitle, { color: theme.text }]}>Sessão</Text>
 

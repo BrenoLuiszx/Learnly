@@ -5,7 +5,6 @@ import '../styles/userDropdown-bigtech.css';
 
 const ROLE_LABEL = { admin: 'Administrador', colaborador: 'Instrutor' };
 
-/* ── shared hook: close on outside click ── */
 const useOutsideClose = (ref, onClose) => {
   useEffect(() => {
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
@@ -14,9 +13,7 @@ const useOutsideClose = (ref, onClose) => {
   }, [ref, onClose]);
 };
 
-/* ─────────────────────────────────────────
-   ProfileDropdown — photo + info only
-───────────────────────────────────────── */
+
 const ProfileDropdown = ({ usuario }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -59,9 +56,7 @@ const ProfileDropdown = ({ usuario }) => {
   );
 };
 
-/* ─────────────────────────────────────────
-   AccountDropdown — all actions
-───────────────────────────────────────── */
+
 const AccountDropdown = ({ usuario }) => {
   const { logout, syncUserData } = useAuth();
   const navigate = useNavigate();
@@ -88,12 +83,12 @@ const AccountDropdown = ({ usuario }) => {
 
       {open && (
         <div className="ud-panel ud-account-panel">
-          {/* Header */}
+
           <div className="ud-account-header">
             <span className="ud-account-header-label">Minha Conta</span>
           </div>
 
-          {/* Navigation group */}
+
           <div className="ud-group">
             <span className="ud-group-label">Navegação</span>
             <Link to="/perfil" className="ud-item" onClick={close}>
@@ -114,7 +109,7 @@ const AccountDropdown = ({ usuario }) => {
             </Link>
           </div>
 
-          {/* Workspace group — role-gated */}
+
           {(usuario.role === 'admin' || usuario.role === 'colaborador') && (
             <>
               <div className="ud-divider" />
@@ -136,7 +131,7 @@ const AccountDropdown = ({ usuario }) => {
             </>
           )}
 
-          {/* Session group */}
+
           <div className="ud-divider" />
           <div className="ud-group">
             <span className="ud-group-label">Sessão</span>
@@ -155,9 +150,7 @@ const AccountDropdown = ({ usuario }) => {
   );
 };
 
-/* ─────────────────────────────────────────
-   UserDropdown — unauthenticated fallback
-───────────────────────────────────────── */
+
 const GuestDropdown = () => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -180,9 +173,7 @@ const GuestDropdown = () => {
   );
 };
 
-/* ─────────────────────────────────────────
-   Main export — header widget
-───────────────────────────────────────── */
+
 const UserDropdown = () => {
   const { usuario, isAuthenticated } = useAuth();
 

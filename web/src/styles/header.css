@@ -1,4 +1,4 @@
-/* HEADER STYLES */
+
 body:not(.courses-page) {
   padding-top: 72px;
 }
@@ -27,7 +27,7 @@ header .começo {
   gap: 0;
 }
 
-/* ── Logo ── */
+
 .header-logo-wrap {
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@ header .começo {
   border-radius: 7px;
 }
 
-/* ── Center zone: nav + search placeholder ── */
+
 .header-center {
   display: flex;
   align-items: center;
@@ -79,9 +79,7 @@ header .começo {
   background: rgba(255,255,255,0.07);
 }
 
-/* ── Global search (gs-container handles its own styles) ── */
 
-/* ── Right side ── */
 .header-right {
   display: flex;
   align-items: center;
@@ -89,7 +87,7 @@ header .começo {
   margin-left: 20px;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   header .começo {
     padding: 0 20px;

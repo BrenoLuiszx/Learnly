@@ -74,7 +74,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
       setIsFav((favRes.data?.favoritos || []).includes(Number(id)));
       setIsWL((wlRes.data?.assistirDepois || []).includes(Number(id)));
 
-      // Pre-select lesson from "Continue Learning" deep-link, else first lesson
       const aulaIdParam = route.params?.aulaId;
       const target = aulaIdParam ? aulasData.find(a => a.id === Number(aulaIdParam)) : null;
       if (target || aulasData.length > 0) setAulaAtual(target || aulasData[0]);
@@ -128,7 +127,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
               await matriculasAPI.matricular(id);
               setMatriculado(true);
               setTotalMatriculados(prev => prev + 1);
-              // Reload user-specific data now that enrollment is confirmed
               const [progRes, percRes, statusRes] = await Promise.all([
                 aulasAPI.progresso(id).catch(() => ({ data: [] })),
                 aulasAPI.percentual(id).catch(() => ({ data: { percentual: 0 } })),
@@ -175,8 +173,8 @@ const CourseDetailsScreen = ({ route, navigation }) => {
       }
     }
     try {
-      if (concluido) await progressoAPI.desmarcarConcluido(id);
-      else await progressoAPI.marcarConcluido(id);
+      if (concluido) await progressoAPI.atualizarProgresso(id, 0);
+      else await progressoAPI.atualizarProgresso(id, 100);
       setConcluido(!concluido);
     } catch {
       showMsg('Erro ao atualizar progresso.');
@@ -242,7 +240,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]} showsVerticalScrollIndicator={false}>
-      {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={20} color={theme.textSecondary} />
@@ -257,7 +254,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Cover image */}
         {curso.imagem ? (
           <View style={styles.coverWrap}>
             <Image source={{ uri: curso.imagem }} style={styles.coverImg} resizeMode="cover" />
@@ -286,7 +282,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
         </View>
       </View>
 
-      {/* Player */}
       {aulaAtual ? (
         <View style={[styles.playerContainer, { backgroundColor: theme.surface }]}>
           <View style={styles.playerHeader}>
@@ -323,7 +318,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
         </View>
       ) : null}
 
-      {/* Ações */}
       {!user ? (
         <View style={styles.acoes}>
           <TouchableOpacity style={[styles.btnLogin, { backgroundColor: theme.primary }]} onPress={() => navigation.navigate('Login')}>
@@ -386,12 +380,10 @@ const CourseDetailsScreen = ({ route, navigation }) => {
         </View>
       )}
 
-      {/* Lista de Aulas */}
       {aulas.length > 0 && (
         <View style={[styles.section, { borderTopColor: theme.surface }]}>
           <Text style={[styles.sectionTitle, { color: theme.text }]}>Aulas do Curso</Text>
 
-          {/* Lock banner for non-enrolled users */}
           {user && !matriculado && aulas.length > 1 && (
             <TouchableOpacity
               style={[styles.lockBanner, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
@@ -467,7 +459,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
         </View>
       )}
 
-      {/* Sobre o Curso */}
       <View style={[styles.section, { borderTopColor: theme.surface }]}>
         <Text style={[styles.sectionTitle, { color: theme.text }]}>Sobre o Curso</Text>
         <Text style={[styles.sobreText, { color: theme.textSecondary }]}>{curso.descricaoDetalhada || curso.descricao}</Text>
@@ -485,7 +476,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
         </View>
       </View>
 
-      {/* Avaliações */}
       <View style={[styles.section, { borderTopColor: theme.surface }]}>
         <Text style={[styles.sectionTitle, { color: theme.text }]}>Avaliações</Text>
         {user && (

@@ -23,16 +23,8 @@ const LoginScreen = ({ navigation }) => {
     setLoading(true);
     
     try {
-      console.log('🚀 Iniciando processo de login...');
-      console.log('📧 Email:', email.trim());
-      
-      // Chama login passando email e senha como parâmetros separados
-      // O AuthContext vai montar o objeto { email, senha }
       await login(email.trim(), senha);
-      
-      console.log('🎉 Login realizado com sucesso!');
     } catch (error) {
-      console.error('🚫 Erro capturado na tela:', error);
       
       let mensagem = 'Email ou senha incorretos';
       

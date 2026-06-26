@@ -90,7 +90,7 @@ const s = {
   },
   body: { display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' },
 
-  // Left panel
+
   leftPanel: {
     width: '380px', flexShrink: 0,
     borderRight: '1px solid rgba(255,255,255,0.07)',
@@ -156,7 +156,7 @@ const s = {
     transition: 'all 0.15s',
   }),
 
-  // Right panel
+
   rightPanel: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' },
   placeholder: {
     flex: 1, display: 'flex', flexDirection: 'column',
@@ -226,7 +226,7 @@ const s = {
     cursor: disabled ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
   }),
 
-  // Footer
+
   footer: {
     display: 'flex', gap: '12px', padding: '20px 32px',
     borderTop: '1px solid rgba(255,255,255,0.07)',
@@ -276,7 +276,7 @@ const LessonManager = ({
     <div style={s.overlay}>
       <div style={s.modal} onClick={e => e.stopPropagation()}>
 
-        {/* ── Header ── */}
+
         <div style={s.header}>
           <div>
             <h2 style={s.headerTitle}>Gerenciar Aulas</h2>
@@ -292,10 +292,10 @@ const LessonManager = ({
           </div>
         </div>
 
-        {/* ── Body ── */}
+
         <div style={s.body}>
 
-          {/* Left: lesson list */}
+
           <div style={s.leftPanel}>
             <div style={s.leftScroll}>
               {!hasAulas ? (
@@ -312,7 +312,7 @@ const LessonManager = ({
                     return (
                       <div key={idx} onClick={stop(() => setActiveIdx(isActive ? null : idx))} style={s.lessonItem(isActive)}>
 
-                        {/* Order controls */}
+
                         <div style={s.orderCol} onClick={e => e.stopPropagation()}>
                           <button type="button" onClick={stop(() => onMove(idx, -1))} disabled={idx === 0} style={s.orderBtn(idx === 0)}>
                             <IconChevronUp disabled={idx === 0} />
@@ -323,12 +323,12 @@ const LessonManager = ({
                           </button>
                         </div>
 
-                        {/* Thumbnail */}
+
                         <div style={s.thumb(t)}>
                           {!t && <span style={s.thumbIcon}><IconPlay /></span>}
                         </div>
 
-                        {/* Meta */}
+
                         <div style={s.lessonMeta}>
                           <p style={s.lessonTitle(!!aula.titulo)}>{aula.titulo || 'Sem título'}</p>
                           {aula.descricao && <p style={s.lessonDesc}>{aula.descricao}</p>}
@@ -339,7 +339,7 @@ const LessonManager = ({
                           )}
                         </div>
 
-                        {/* Remove */}
+
                         <button
                           type="button"
                           onClick={stop(() => { onRemove(idx); if (activeIdx === idx) setActiveIdx(null); })}
@@ -359,7 +359,7 @@ const LessonManager = ({
             </div>
           </div>
 
-          {/* Right: editor */}
+
           <div style={s.rightPanel}>
             {activeAula === null ? (
               <div style={s.placeholder}>
@@ -370,7 +370,7 @@ const LessonManager = ({
             ) : (
               <div style={s.editorScroll}>
 
-                {/* Preview */}
+
                 <div style={s.previewArea}>
                   {videoId ? (
                     <div style={s.previewRatio}>
@@ -391,10 +391,9 @@ const LessonManager = ({
                   )}
                 </div>
 
-                {/* Fields */}
+
                 <div style={s.fields}>
 
-                  {/* Badge + position */}
                   <div style={s.badgeRow}>
                     <span style={s.badge}>Aula {activeAula.ordem || activeIdx + 1}</span>
                     <span style={s.posLabel}>Posição:</span>
@@ -407,7 +406,7 @@ const LessonManager = ({
                     />
                   </div>
 
-                  {/* Title */}
+
                   <div style={s.fieldGroup}>
                     <label style={s.label}>Título da Aula *</label>
                     <input
@@ -421,7 +420,7 @@ const LessonManager = ({
                     />
                   </div>
 
-                  {/* URL */}
+
                   <div style={s.fieldGroup}>
                     <label style={s.label}>URL do YouTube *</label>
                     <input
@@ -437,11 +436,11 @@ const LessonManager = ({
                       <span style={s.urlOk}><IconCheck /> URL do YouTube reconhecida</span>
                     )}
                     {activeAula.url && !getYouTubeId(activeAula.url) && (
-                      <span style={s.urlWarn}>ℹ URL não é do YouTube</span>
+                      <span style={s.urlWarn}> URL não é do YouTube</span>
                     )}
                   </div>
 
-                  {/* Description */}
+
                   <div style={s.fieldGroup}>
                     <label style={s.label}>Descrição da Aula</label>
                     <textarea
@@ -456,7 +455,7 @@ const LessonManager = ({
                     />
                   </div>
 
-                  {/* Navigation */}
+
                   <div style={s.navRow}>
                     <button type="button" onClick={stop(() => setActiveIdx(Math.max(0, activeIdx - 1)))} disabled={activeIdx === 0} style={s.navBtn(activeIdx === 0)}>← Aula anterior</button>
                     <button type="button" onClick={stop(() => setActiveIdx(Math.min(aulas.length - 1, activeIdx + 1)))} disabled={activeIdx === aulas.length - 1} style={s.navBtn(activeIdx === aulas.length - 1)}>Próxima aula →</button>
@@ -467,7 +466,7 @@ const LessonManager = ({
           </div>
         </div>
 
-        {/* ── Footer ── */}
+
         <div style={s.footer}>
           {msg
             ? <p style={s.footerMsg(isError)}>{msg}</p>

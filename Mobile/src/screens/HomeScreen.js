@@ -38,7 +38,6 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const cursos = dashboard?.cursosDetalhes || [];
-  // Sort by most recently active, matching the web DashboardTab logic
   const emAndamento = [...cursos.filter(c => !c.concluido)].sort((a, b) => {
     const ta = a.ultimaAtividade ? new Date(a.ultimaAtividade).getTime() : 0;
     const tb = b.ultimaAtividade ? new Date(b.ultimaAtividade).getTime() : 0;
@@ -46,7 +45,6 @@ const HomeScreen = ({ navigation }) => {
   });
   const totalHoras = Math.floor((dashboard?.totalMinutos || 0) / 60);
 
-  // Most recently active enrolled course for "Continue Learning"
   const ultimoCurso = emAndamento.length > 0 ? emAndamento[0] : null;
 
   const handleContinue = (curso) => {
@@ -75,7 +73,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]} showsVerticalScrollIndicator={false}>
-      {/* Header */}
+
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <View style={styles.logoRow}>
           <View style={[styles.logoBox, { backgroundColor: theme.primary }]}>
@@ -102,10 +100,10 @@ const HomeScreen = ({ navigation }) => {
             )}
           </TouchableOpacity>
         </View>
-        <Text style={[styles.greeting, { color: theme.text }]}>Olá, {user?.nome?.split(' ')[0] || 'Estudante'}! 👋</Text>
-        <Text style={[styles.greetingSub, { color: theme.textSecondary }]}>Que bom ter você de volta</Text>
+        <Text style={[styles.greeting, { color: theme.text }]}>Olá, {user?.nome?.split(' ')[0] || 'Estudante'}</Text>
+        <Text style={[styles.greetingSub, { color: theme.textSecondary }]}>Bem-vindo de volta</Text>
 
-        {/* Overall progress */}
+
         {dashboard && (dashboard.matriculas ?? 0) > 0 && (() => {
           const total = dashboard.matriculas ?? 0;
           const done = dashboard.concluidos ?? 0;
@@ -130,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
         })()}
       </View>
 
-      {/* Stats */}
+
       <View style={styles.statsRow}>
         {statsDisplay.map((s) => (
           <View key={s.label} style={[styles.statCard, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
@@ -143,7 +141,7 @@ const HomeScreen = ({ navigation }) => {
         ))}
       </View>
 
-      {/* Continue Learning */}
+
       {ultimoCurso && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -158,7 +156,7 @@ const HomeScreen = ({ navigation }) => {
             onPress={() => handleContinue(ultimoCurso)}
             activeOpacity={0.8}
           >
-            {/* Thumbnail */}
+
             <View style={[styles.continueThumbnail, { backgroundColor: theme.border }]}>
               {ultimoCurso.imagem ? (
                 <Image source={{ uri: ultimoCurso.imagem }} style={styles.thumbnailImg} resizeMode="cover" />
@@ -190,7 +188,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          {/* Other in-progress courses */}
+
           {emAndamento.slice(1, 3).map((curso) => (
             <TouchableOpacity
               key={curso.cursoId}
@@ -218,7 +216,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
       )}
 
-      {/* Recommended / All courses */}
+
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: theme.text }]}>Explorar Cursos</Text>
@@ -240,7 +238,7 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Quick Actions */}
+
       <View style={[styles.statsRow, { marginBottom: 24 }]}>
         <TouchableOpacity
           style={[styles.quickCard, { backgroundColor: theme.cardBg, borderColor: '#7C3AED33' }]}

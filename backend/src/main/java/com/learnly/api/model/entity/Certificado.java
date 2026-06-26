@@ -23,14 +23,12 @@ public class Certificado {
     @Column(name = "titulo_curso", length = 200)
     private String tituloCurso;
 
-    // URL de upload externo ou null (gerado internamente)
     @Column(name = "url_certificado", length = 500)
     private String urlCertificado;
 
     @Column(name = "data_emissao")
     private LocalDateTime dataEmissao = LocalDateTime.now();
 
-    // visivel para empresas/colaboradores
     @Column(nullable = false)
     private Boolean publico = true;
 

@@ -26,13 +26,20 @@ public class UploadController {
             return ResponseEntity.badRequest().body(Map.of("error", "Tipo não permitido: " + contentType));
 
         try {
-            String ext = file.getOriginalFilename() != null && file.getOriginalFilename().contains(".")
-                    ? file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."))
-                    : "";
+            String originalFilename = file.getOriginalFilename() != null ? file.getOriginalFilename() : "";
+            String safeName = Paths.get(originalFilename).getFileName().toString();
+            String ext = safeName.contains(".") ? safeName.substring(safeName.lastIndexOf(".")) : "";
             String nome = UUID.randomUUID().toString() + ext;
-            Path dir = Paths.get(uploadDir, "imagens");
+
+            Path dir = Paths.get(uploadDir, "imagens").toAbsolutePath().normalize();
             Files.createDirectories(dir);
-            Files.copy(file.getInputStream(), dir.resolve(nome), StandardCopyOption.REPLACE_EXISTING);
+            Path dest = dir.resolve(nome).normalize();
+
+            if (!dest.startsWith(dir)) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Nome de arquivo inválido"));
+            }
+
+            Files.copy(file.getInputStream(), dest, StandardCopyOption.REPLACE_EXISTING);
             return ResponseEntity.ok(Map.of("url", "/uploads/imagens/" + nome));
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body(Map.of("error", "Erro ao salvar arquivo: " + e.getMessage()));

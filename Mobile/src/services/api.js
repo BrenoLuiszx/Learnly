@@ -9,18 +9,12 @@ const api = axios.create({
   maxBodyLength: Infinity,
 });
 
-console.log(' Mobile API configurada:', API_URL);
-
-// Interceptor - adiciona token JWT em todas as requisições
 api.interceptors.request.use(async (config) => {
   const token = await AsyncStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Interceptor - trata expiração de token
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -58,11 +52,9 @@ export const usuariosAPI = {
 };
 
 export const progressoAPI = {
-  marcarConcluido:    (cursoId) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso: 100 }),
-  desmarcarConcluido: (cursoId) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso: 0 }),
-  meuProgresso:       ()        => api.get('/matriculas/minhas'),
-  meusConcluidos:     ()        => api.get('/matriculas/minhas'),
-  statusCurso:        (cursoId) => api.get(`/matriculas/cursos/${cursoId}/status`),
+  atualizarProgresso: (cursoId, progresso) => api.put(`/matriculas/cursos/${cursoId}/progresso`, { progresso }),
+  meuProgresso: () => api.get('/matriculas/minhas'),
+  statusCurso: (cursoId) => api.get(`/matriculas/cursos/${cursoId}/status`),
 };
 
 export const avaliacoesAPI = {
@@ -88,16 +80,6 @@ export const matriculasAPI = {
 };
 
 export const instrutorAPI = {
-  alunos: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/alunos`),
-  avaliacoes: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/avaliacoes`),
-};
-
-export const colaboradorAPI = {
-  alunos: (cursoId) => api.get(`/colaborador/cursos/${cursoId}/alunos`),
-  avaliacoes: (cursoId) => api.get(`/colaborador/cursos/${cursoId}/avaliacoes`),
-};
-
-export const adminCursoAPI = {
   alunos: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/alunos`),
   avaliacoes: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/avaliacoes`),
 };
@@ -146,9 +128,9 @@ export const uploadAPI = {
   imagem: (file) => {
     const fd = new FormData();
     fd.append('file', file);
-    return api.post('/upload/imagem', fd, { 
-      headers: { 'Content-Type': 'multipart/form-data' }, 
-      timeout: 300000 
+    return api.post('/upload/imagem', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 300000,
     });
   },
 };
@@ -157,7 +139,5 @@ export const planejamentoAPI = {
   get: () => api.get('/usuarios/planejamento'),
   save: (cards, cols) => api.put('/usuarios/planejamento', { cards, cols }),
 };
-
-console.log(' API mobile sincronizada com web');
 
 export default api;

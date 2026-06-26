@@ -18,95 +18,67 @@ public class CursoAcaoController {
     private CursoAcaoService cursoAcaoService;
 
     private boolean isAdmin(Authentication auth) {
-        return auth.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        return auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 
     private boolean isColaborador(Authentication auth) {
-        return auth.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_COLABORADOR"));
+        return auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COLABORADOR"));
     }
 
-    //  Favorites
-
-    /**  toggle favorite for authenticated user */
     @PostMapping("/favoritos/{cursoId}")
-    public ResponseEntity<Map<String, Object>> toggleFavorito(
-            @PathVariable Long cursoId, Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        boolean ativo = cursoAcaoService.toggleFavorito(usuarioId, cursoId);
+    public ResponseEntity<Map<String, Object>> toggleFavorito(@PathVariable Long cursoId, Authentication auth) {
+        boolean ativo = cursoAcaoService.toggleFavorito((Long) auth.getCredentials(), cursoId);
         return ResponseEntity.ok(Map.of("favorito", ativo, "cursoId", cursoId));
     }
 
-    /** set of course IDs favorited by the user */
     @GetMapping("/favoritos/meus")
     public ResponseEntity<Map<String, Object>> meusFavoritos(Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        Set<Long> ids = cursoAcaoService.favoritosPorUsuario(usuarioId);
+        Set<Long> ids = cursoAcaoService.favoritosPorUsuario((Long) auth.getCredentials());
         return ResponseEntity.ok(Map.of("favoritos", ids));
     }
 
-    /** GET is this course favorited by the user? */
     @GetMapping("/favoritos/status/{cursoId}")
-    public ResponseEntity<Map<String, Object>> statusFavorito(
-            @PathVariable Long cursoId, Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        boolean ativo = cursoAcaoService.isFavorito(usuarioId, cursoId);
+    public ResponseEntity<Map<String, Object>> statusFavorito(@PathVariable Long cursoId, Authentication auth) {
+        boolean ativo = cursoAcaoService.isFavorito((Long) auth.getCredentials(), cursoId);
         return ResponseEntity.ok(Map.of("favorito", ativo, "cursoId", cursoId));
     }
 
-    /** who favorited this course (admin/colaborador) */
     @GetMapping("/favoritos/curso/{cursoId}")
-    public ResponseEntity<List<Map<String, Object>>> favoritosPorCurso(
-            @PathVariable Long cursoId, Authentication auth) {
+    public ResponseEntity<List<Map<String, Object>>> favoritosPorCurso(@PathVariable Long cursoId, Authentication auth) {
         if (!isAdmin(auth) && !isColaborador(auth)) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(cursoAcaoService.favoritosPorCurso(cursoId));
     }
 
-    /** all favorites on the platform (admin only) */
     @GetMapping("/favoritos/todos")
     public ResponseEntity<List<Map<String, Object>>> todosFavoritos(Authentication auth) {
         if (!isAdmin(auth)) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(cursoAcaoService.todosFavoritos());
     }
 
-    // Watch Later 
-
-    /**  toggle watch later */
     @PostMapping("/assistir-depois/{cursoId}")
-    public ResponseEntity<Map<String, Object>> toggleAssistirDepois(
-            @PathVariable Long cursoId, Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        boolean ativo = cursoAcaoService.toggleAssistirDepois(usuarioId, cursoId);
+    public ResponseEntity<Map<String, Object>> toggleAssistirDepois(@PathVariable Long cursoId, Authentication auth) {
+        boolean ativo = cursoAcaoService.toggleAssistirDepois((Long) auth.getCredentials(), cursoId);
         return ResponseEntity.ok(Map.of("assistirDepois", ativo, "cursoId", cursoId));
     }
 
-    /** set of course IDs saved for later */
     @GetMapping("/assistir-depois/meus")
     public ResponseEntity<Map<String, Object>> meusAssistirDepois(Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        Set<Long> ids = cursoAcaoService.assistirDepoisPorUsuario(usuarioId);
+        Set<Long> ids = cursoAcaoService.assistirDepoisPorUsuario((Long) auth.getCredentials());
         return ResponseEntity.ok(Map.of("assistirDepois", ids));
     }
 
-    /**  is this course saved for later? */
     @GetMapping("/assistir-depois/status/{cursoId}")
-    public ResponseEntity<Map<String, Object>> statusAssistirDepois(
-            @PathVariable Long cursoId, Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        boolean ativo = cursoAcaoService.isAssistirDepois(usuarioId, cursoId);
+    public ResponseEntity<Map<String, Object>> statusAssistirDepois(@PathVariable Long cursoId, Authentication auth) {
+        boolean ativo = cursoAcaoService.isAssistirDepois((Long) auth.getCredentials(), cursoId);
         return ResponseEntity.ok(Map.of("assistirDepois", ativo, "cursoId", cursoId));
     }
 
-    /** who saved this course (admin/colaborador) */
     @GetMapping("/assistir-depois/curso/{cursoId}")
-    public ResponseEntity<List<Map<String, Object>>> assistirDepoisPorCurso(
-            @PathVariable Long cursoId, Authentication auth) {
+    public ResponseEntity<List<Map<String, Object>>> assistirDepoisPorCurso(@PathVariable Long cursoId, Authentication auth) {
         if (!isAdmin(auth) && !isColaborador(auth)) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(cursoAcaoService.assistirDepoisPorCurso(cursoId));
     }
 
-    /**  all watch-later on the platform (admin only) */
     @GetMapping("/assistir-depois/todos")
     public ResponseEntity<List<Map<String, Object>>> todosAssistirDepois(Authentication auth) {
         if (!isAdmin(auth)) return ResponseEntity.status(403).build();

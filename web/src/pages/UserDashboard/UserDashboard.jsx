@@ -58,7 +58,7 @@ const UserDashboard = () => {
     <div className="ud-page">
       <Header />
 
-      {/* ── Page header ── */}
+      
       <div className="ud-header">
         <div className="ud-header-inner">
           <UserAvatar foto={usuario?.foto} nome={firstName} size={52} radius="14px" className="ud-avatar" />
@@ -72,18 +72,18 @@ const UserDashboard = () => {
         </div>
       </div>
 
-      {/* ── Body ── */}
+      
       <div className="ud-body">
 
-        {/* Main */}
+        
         <main className="ud-main">
           <DashboardTab stats={stats} usuario={usuario} />
         </main>
 
-        {/* Sidebar */}
+       
         <aside className="ud-sidebar">
 
-          {/* Stats */}
+       
           <div className="ud-sidebar-card">
             <p className="ud-sidebar-label">Resumo</p>
             {stats ? (
@@ -105,7 +105,7 @@ const UserDashboard = () => {
             )}
           </div>
 
-          {/* Completion ring */}
+         
           {stats && (
             <div className="ud-sidebar-card">
               <p className="ud-sidebar-label">Conclusão</p>
@@ -132,7 +132,7 @@ const UserDashboard = () => {
             </div>
           )}
 
-          {/* Quick links */}
+        
           <div className="ud-sidebar-card">
             <p className="ud-sidebar-label">Acesso rápido</p>
             <div className="ud-quick-links">

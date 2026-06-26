@@ -1,6 +1,6 @@
-/* LEARNLY - BIGTECH PROFESSIONAL DESIGN SYSTEM - CADASTRO */
 
-/* Container */
+
+
 .cadastro-page .cadastro-container {
   position: relative;
   min-height: 100vh;
@@ -25,7 +25,7 @@
   z-index: 0;
 }
 
-/* Header */
+
 .cadastro-page .cadastro-header {
   position: relative;
   z-index: 1;
@@ -54,7 +54,7 @@
   line-height: 1.7;
 }
 
-/* Progress Bar */
+
 .cadastro-page .progress-bar {
   position: relative;
   z-index: 1;
@@ -124,7 +124,7 @@
   color: var(--text-primary);
 }
 
-/* Messages */
+
 .cadastro-page .mensagem {
   position: relative;
   z-index: 1;
@@ -147,7 +147,7 @@
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-/* Form */
+
 .cadastro-page .cadastro-form {
   position: relative;
   z-index: 1;
@@ -229,7 +229,7 @@
   min-height: 100px;
 }
 
-/* Form Actions */
+
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -289,7 +289,7 @@
   box-shadow: none;
 }
 
-/* Course Preview */
+
 .course-preview {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px);
@@ -374,7 +374,7 @@
   text-decoration: underline;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .cadastro-container {
     padding: 1.5rem 0.75rem;
@@ -433,7 +433,7 @@
   }
 }
 
-/* Focus States */
+
 .btn-prev:focus,
 .btn-next:focus,
 .btn-submit:focus {
@@ -441,7 +441,7 @@
   outline-offset: 2px;
 }
 
-/* Animation */
+
 .form-step {
   animation: fadeInUp 0.4s ease-out;
 }
@@ -457,7 +457,7 @@
   }
 }
 
-/* Loading State */
+
 .btn-submit:disabled {
   position: relative;
 }

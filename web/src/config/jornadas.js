@@ -1,7 +1,3 @@
-// Central definition of all Jornadas.
-// Static seeds below are the defaults. Admin can override/extend via the Admin panel;
-// overrides are persisted in localStorage under JORNADAS_STORAGE_KEY and merged at runtime.
-
 const JORNADAS_STORAGE_KEY = 'learnly_jornadas_override';
 
 const JORNADAS_SEED = [
@@ -39,7 +35,6 @@ const JORNADAS_SEED = [
   },
 ];
 
-/** Returns the live list of jornadas (seed + admin overrides). */
 export const getJornadas = () => {
   try {
     const raw = localStorage.getItem(JORNADAS_STORAGE_KEY);
@@ -48,15 +43,12 @@ export const getJornadas = () => {
   return JORNADAS_SEED;
 };
 
-/** Persists the full jornada list (called by Admin panel). */
 export const saveJornadas = (list) => {
   try { localStorage.setItem(JORNADAS_STORAGE_KEY, JSON.stringify(list)); } catch {}
 };
 
-/** Returns jornadas owned by a specific instructor. */
 export const getMinhasJornadas = (instrutorId) =>
   getJornadas().filter(j => j.instrutorId != null && Number(j.instrutorId) === Number(instrutorId));
 
-// Static export kept for backward-compat (Jornada.jsx uses JORNADAS at import time).
-// Components that need live data should call getJornadas() instead.
+
 export const JORNADAS = getJornadas();

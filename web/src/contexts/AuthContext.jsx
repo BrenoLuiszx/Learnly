@@ -25,7 +25,6 @@ const readSession = () => {
   return { usuario: null, token: null };
 };
 
-// Shared cleanup so both manual logout and token-expiry use the same path
 const clearSession = (uid) => {
   localStorage.removeItem('usuario');
   localStorage.removeItem('token');
@@ -58,7 +57,6 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  // Axios interceptor fires 'auth:logout' when a token expires
   useEffect(() => {
     const handleExpiry = () => {
       const uid = usuario?.id ?? null;

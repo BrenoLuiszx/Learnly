@@ -1,7 +1,4 @@
-/* =============================================
-   JORNADA PAGE
-   Consistent with theme.css design tokens
-   ============================================= */
+
 
 .jornada-page {
   min-height: 100vh;
@@ -11,7 +8,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Back button ─────────────────────────────── */
+
 
 .btn-jornada-back {
   display: inline-flex;
@@ -35,7 +32,7 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* ── Hero ────────────────────────────────────── */
+
 
 .jornada-hero {
   background: linear-gradient(180deg, rgba(255, 215, 0, 0.04) 0%, transparent 100%);
@@ -165,7 +162,7 @@
   white-space: nowrap;
 }
 
-/* ── Body / Timeline ─────────────────────────── */
+
 
 .jornada-body {
   max-width: 860px;
@@ -180,7 +177,7 @@
   gap: 0;
 }
 
-/* ── Timeline item ───────────────────────────── */
+
 
 .jt-item {
   display: flex;
@@ -194,7 +191,7 @@
   padding-bottom: 1.5rem;
 }
 
-/* Vertical connector */
+
 .jt-connector {
   position: absolute;
   left: 1.375rem;
@@ -209,7 +206,7 @@
   background: linear-gradient(180deg, #34d399, var(--bg-tertiary));
 }
 
-/* ── Step marker ─────────────────────────────── */
+
 
 .jt-marker {
   width: 2.75rem;
@@ -251,7 +248,7 @@
   opacity: 0.6;
 }
 
-/* ── Card ────────────────────────────────────── */
+
 
 .jt-card {
   flex: 1;
@@ -339,7 +336,7 @@
   flex-shrink: 0;
 }
 
-/* ── Progress bar inside card ────────────────── */
+
 
 .jt-progress-row {
   display: flex;
@@ -370,7 +367,7 @@
   white-space: nowrap;
 }
 
-/* ── Actions ─────────────────────────────────── */
+
 
 .jt-actions {
   display: flex;
@@ -422,7 +419,7 @@
   color: var(--text-muted);
 }
 
-/* ── Finish marker ───────────────────────────── */
+
 
 .jt-finish {
   display: flex;
@@ -457,7 +454,7 @@
   color: #34d399;
 }
 
-/* ── Empty / loading states ──────────────────── */
+
 
 .jornada-empty-state {
   display: flex;
@@ -499,7 +496,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* ── Responsive ──────────────────────────────── */
+
 
 @media (max-width: 640px) {
   .jornada-hero {

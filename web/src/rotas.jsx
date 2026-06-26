@@ -63,7 +63,6 @@ const Rotas = () => {
           <UserDashboard />
         </ProtectedRoute>
       } />
-      {/* Redirect legacy /user-dashboard to /progresso */}
       <Route path="/user-dashboard" element={<Navigate to="/progresso" replace />} />
 
       <Route path="/configuracoes" element={
@@ -78,7 +77,6 @@ const Rotas = () => {
           <Colaborador />
         </ProtectedRoute>
       } />
-      {/* Redirect legacy /instrutor to /colaborador */}
       <Route path="/instrutor" element={<Navigate to="/colaborador" replace />} />
 
       {/* Rotas admin */}
@@ -93,7 +91,6 @@ const Rotas = () => {
         </ProtectedRoute>
       } />
 
-      {/* Redirect legacy /cadastro to /admin — course creation is now inside the Admin panel */}
       <Route path="/cadastro" element={<Navigate to="/admin" replace />} />
     </Routes>
   )

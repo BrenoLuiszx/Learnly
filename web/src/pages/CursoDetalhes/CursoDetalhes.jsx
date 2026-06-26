@@ -43,7 +43,7 @@ const CursoDetalhes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Matrícula
+
   const [matriculado, setMatriculado] = useState(false);
   const [totalMatriculados, setTotalMatriculados] = useState(0);
   const [modalMatricula, setModalMatricula] = useState(false);
@@ -51,20 +51,20 @@ const CursoDetalhes = () => {
   const [aulaParaIniciar, setAulaParaIniciar] = useState(null);
 
   const [videoAtual, setVideoAtual] = useState(null);
-  const [ultimaConclusaoEm, setUltimaConclusaoEm] = useState(null); // timestamp da última aula concluída
-  const COOLDOWN_MS = 60000; // 1 minuto de cooldown global entre conclusões
+  const [ultimaConclusaoEm, setUltimaConclusaoEm] = useState(null); 
+  const COOLDOWN_MS = 60000; 
 
-  // Aulas
+
   const [aulas, setAulas] = useState([]);
   const [aulaAtual, setAulaAtual] = useState(null);
   const [progressoAulas, setProgressoAulas] = useState([]);
   const [percentualAulas, setPercentualAulas] = useState(0);
 
-  // Progresso
+
   const [concluido, setConcluido] = useState(false);
   const [progressoLoading, setProgressoLoading] = useState(false);
 
-  // Avaliações
+
   const [avaliacoes, setAvaliacoes] = useState([]);
   const [minhaAvaliacao, setMinhaAvaliacao] = useState(null);
   const [nota, setNota] = useState(0);
@@ -72,7 +72,7 @@ const CursoDetalhes = () => {
   const [avaliacaoLoading, setAvaliacaoLoading] = useState(false);
   const [avaliacaoMsg, setAvaliacaoMsg] = useState("");
 
-  // Certificado
+
   const [temCertificado, setTemCertificado] = useState(false);
   const [certLoading, setCertLoading] = useState(false);
 
@@ -149,8 +149,7 @@ const CursoDetalhes = () => {
       const res = await aulasAPI.listarPorCurso(id);
       const aulasData = res.data || [];
       setAulas(aulasData);
-      // If a specific lesson was requested via ?aula=:id (e.g. from dashboard
-      // "Continue Course"), select it; otherwise default to the first lesson.
+
       const params = new URLSearchParams(location.search);
       const aulaParam = params.get('aula');
       const target = aulaParam
@@ -160,7 +159,7 @@ const CursoDetalhes = () => {
       if (initial) {
         setAulaAtual(initial);
         setVideoAtual(initial.url);
-        // Scroll to the video player when arriving from the dashboard
+
         if (target) {
           setTimeout(() => {
             document.querySelector('.video-preview')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -181,7 +180,7 @@ const CursoDetalhes = () => {
     } catch {}
   };
 
-  // Verifica se a aula anterior está concluída (progressão sequencial)
+
   const getAulaBloqueadaPor = (aula) => {
     const aulasAnteriores = aulas.filter(a => a.ordem < aula.ordem);
     return aulasAnteriores.find(a => !progressoAulas.some(p => p.aulaId === a.id && p.concluido)) || null;
@@ -194,7 +193,7 @@ const CursoDetalhes = () => {
     const jaConcluida = progressoAulas.some(p => p.aulaId === aula.id && p.concluido);
 
     if (!jaConcluida) {
-      // Verifica progressão sequencial
+
       const bloqueadaPor = getAulaBloqueadaPor(aula);
       if (bloqueadaPor) {
         setAvaliacaoMsg(`Você precisa concluir a Aula ${bloqueadaPor.ordem} "${bloqueadaPor.titulo}" antes de avançar para a Aula ${aula.ordem}.`);
@@ -202,7 +201,7 @@ const CursoDetalhes = () => {
         return;
       }
 
-      // Verifica cooldown global
+
       if (ultimaConclusaoEm) {
         const segundosRestantes = Math.ceil((COOLDOWN_MS - (Date.now() - ultimaConclusaoEm)) / 1000);
         if (segundosRestantes > 0) {
@@ -251,14 +250,13 @@ const CursoDetalhes = () => {
     }
   };
 
-  // A lesson is accessible when: enrolled, OR it's the first lesson (preview)
   const aulaAcessivel = (aula) => matriculado || aula.ordem === 1;
 
   const assistirAula = (aula) => {
     if (!user) return navigate(`/login?returnTo=/curso/${id}`);
     if (!aulaAcessivel(aula)) { setAulaParaIniciar(aula); setModalMatricula(true); return; }
 
-    // Bloqueia assistir aula se a anterior não foi concluída
+
     const bloqueadaPor = getAulaBloqueadaPor(aula);
     if (bloqueadaPor) {
       setAvaliacaoMsg(`Você precisa concluir a Aula ${bloqueadaPor.ordem} "${bloqueadaPor.titulo}" antes de assistir a Aula ${aula.ordem}.`);
@@ -275,7 +273,7 @@ const CursoDetalhes = () => {
   const toggleConcluido = async () => {
     if (!user) return navigate(`/login?returnTo=/curso/${id}`);
     
-    // Verificar se todas as aulas foram concluídas
+
     if (!concluido && aulas.length > 0) {
       const todasConcluidas = aulas.every(aula => 
         progressoAulas.some(p => p.aulaId === aula.id && p.concluido)
@@ -384,7 +382,7 @@ const CursoDetalhes = () => {
     <div>
       <Header />
 
-      {/* Toast flutuante */}
+
       {avaliacaoMsg && (
         <div className={`curso-toast ${avaliacaoMsg.includes('sucesso') || avaliacaoMsg.includes('emitido') || avaliacaoMsg.includes('marcada') || avaliacaoMsg.includes('desmarcada') ? 'sucesso' : 'erro'}`}>
           {avaliacaoMsg.includes('sucesso') || avaliacaoMsg.includes('emitido') || avaliacaoMsg.includes('marcada') || avaliacaoMsg.includes('desmarcada') ? (
@@ -396,7 +394,7 @@ const CursoDetalhes = () => {
         </div>
       )}
 
-      {/* Modal de Matrícula */}
+
       {modalMatricula && (
         <div className="matricula-modal-overlay" onClick={() => !matriculaLoading && setModalMatricula(false)}>
           <div className="matricula-modal" onClick={e => e.stopPropagation()}>
@@ -464,7 +462,7 @@ const CursoDetalhes = () => {
             </div>
           </div>
 
-          {/* Banner de imagem */}
+
           {curso.imagem && (
             <div className="curso-imagem-banner">
               <img src={curso.imagem} alt={curso.titulo} />
@@ -508,7 +506,7 @@ const CursoDetalhes = () => {
             </div>
           </div>
 
-          {/* Seção de vídeo + ações */}
+
           <div className="curso-video-section">
             <div className="video-preview">
               {aulaAtual ? (
@@ -577,7 +575,7 @@ const CursoDetalhes = () => {
             <div className="curso-detalhes-actions">
               {user ? (
                 <>
-                  {/* Not enrolled: show enroll prompt only */}
+
                   {!matriculado ? (
                     <div className="matricula-prompt">
                       <div className="matricula-prompt-icon">
@@ -604,7 +602,7 @@ const CursoDetalhes = () => {
                       </button>
                     </div>
                   ) : (
-                    /* Enrolled: show full progress/completion UI */
+
                     <>
                       {!aulaAtual && aulas.length > 0 && (
                         <button onClick={() => assistirAula(aulas[0])} className="btn-acessar-curso">
@@ -681,16 +679,16 @@ const CursoDetalhes = () => {
           </div>
         </div>
 
-        {/* Conteúdo principal */}
+
         <div className="curso-detalhes-content">
           <div className="curso-detalhes-main">
 
-            {/* Aulas */}
+
             {aulas.length > 0 && (
               <section className="curso-section">
                 <h2>Aulas do Curso</h2>
 
-                {/* Banner for non-enrolled users when course has more than 1 lesson */}
+
                 {user && !matriculado && aulas.length > 1 && (
                   <div className="aulas-lock-banner">
                     <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, flexShrink: 0 }}>
@@ -773,7 +771,7 @@ const CursoDetalhes = () => {
               </section>
             )}
 
-            {/* Sobre o curso */}
+
             <section className="curso-section">
               <h2>Sobre o Curso</h2>
               <div className="descricao-content">
@@ -795,7 +793,7 @@ const CursoDetalhes = () => {
               </div>
             </section>
 
-            {/* Links externos — only for enrolled users */}
+
             {matriculado && linksExternos.length > 0 && (
               <section className="curso-section">
                 <h2>Links Externos</h2>
@@ -818,7 +816,7 @@ const CursoDetalhes = () => {
               </section>
             )}
 
-            {/* Materiais — only for enrolled users */}
+
             {matriculado && anexos.length > 0 && (
               <section className="curso-section">
                 <h2>Materiais Complementares</h2>
@@ -842,7 +840,7 @@ const CursoDetalhes = () => {
               </section>
             )}
 
-            {/* Lock notice for non-enrolled users when resources exist */}
+
             {!matriculado && (linksExternos.length > 0 || anexos.length > 0) && (
               <section className="curso-section">
                 <div className="recursos-locked">
@@ -862,7 +860,7 @@ const CursoDetalhes = () => {
               </section>
             )}
 
-            {/* Avaliações */}
+
             <section className="curso-section">
               <h2>Avaliações</h2>
 
@@ -913,7 +911,7 @@ const CursoDetalhes = () => {
             </section>
           </div>
 
-          {/* Sidebar */}
+  
           <div className="curso-detalhes-sidebar">
             <div className="instrutor-card">
               <h3>Instrutor</h3>
@@ -931,7 +929,7 @@ const CursoDetalhes = () => {
                 </div>
                 <div className="instrutor-details">
                   <h4>{curso.instrutor}</h4>
-                  <p className="instrutor-bio">{curso.instrutorBio || "Instrutor especializado na área"}</p>
+  <p className="curso-detalhes__instructor-bio">{curso.instrutorBio}</p>
                 </div>
               </div>
             </div>

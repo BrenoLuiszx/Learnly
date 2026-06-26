@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <header>
       <div className="começo">
-        {/* Logo */}
+
         <div className="header-logo-wrap">
           <div className="logo">
             <Link to="/">
@@ -20,7 +20,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Center: nav + search placeholder */}
+  
         <div className="header-center">
           <nav className="menu-desktop">
             <ul>
@@ -44,7 +44,7 @@ const Header = () => {
           <GlobalSearch />
         </div>
 
-        {/* Right: account widget */}
+  
         <div className="header-right">
           <UserDropdown />
         </div>

@@ -1,4 +1,4 @@
-/* CURSO DETALHES */
+
 
 .curso-detalhes-container {
   min-height: 100vh;
@@ -7,7 +7,7 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Hero */
+
 .curso-detalhes-hero {
   max-width: 1200px;
   margin: 0 auto;
@@ -110,7 +110,7 @@
   }
 }
 
-/* Banner de imagem */
+
 .curso-imagem-banner {
   width: 100%;
   max-height: 320px;
@@ -179,7 +179,7 @@
 }
 .meta-icon { width: 17px; height: 17px; color: var(--accent-color); }
 
-/* Seção de vídeo */
+
 .curso-video-section {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -269,7 +269,7 @@
 .video-player-frame {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 */
+  padding-top: 56.25%; 
   background: #000;
 }
 
@@ -354,7 +354,7 @@
   z-index: 2;
 }
 
-/* Ações */
+
 .curso-detalhes-actions {
   display: flex;
   flex-direction: column;
@@ -382,7 +382,7 @@
 .btn-acessar-curso:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,215,0,0.3); }
 .btn-icon { width: 18px; height: 18px; }
 
-/* Barra de progresso */
+
 .progresso-container { padding: 4px 0; }
 .progresso-label {
   display: flex;
@@ -407,7 +407,7 @@
 }
 .progresso-bar-fill.completo { width: 100%; background: #34d399; }
 
-/* Botão progresso */
+
 .btn-progresso {
   display: flex;
   align-items: center;
@@ -438,7 +438,7 @@
   animation: spin 0.7s linear infinite;
 }
 
-/* Botão certificado */
+
 .btn-certificado {
   display: flex;
   align-items: center;
@@ -482,7 +482,7 @@
 .acao-msg.sucesso { color: #34d399; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); }
 .acao-msg.erro { color: #ef4444; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); }
 
-/* ===== TOAST FLUTUANTE ===== */
+
 .curso-toast {
   position: fixed;
   top: 88px;
@@ -526,7 +526,7 @@
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* Acesso restrito */
+
 .acesso-restrito {
   text-align: center;
   padding: var(--space-8);
@@ -554,7 +554,7 @@
 }
 .btn-fazer-login:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
-/* Conteúdo */
+
 .curso-detalhes-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -603,7 +603,7 @@
 .highlight-item h4 { font-size: 0.8rem; font-weight: 600; color: var(--accent-color); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 .highlight-item p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
 
-/* Links externos */
+
 .links-externos-list, .anexos-list { display: flex; flex-direction: column; gap: 10px; }
 .link-externo-item {
   display: flex;
@@ -634,7 +634,7 @@
 }
 .anexo-item:hover { border-color: #a78bfa; background: rgba(167,139,250,0.06); }
 
-/* Avaliações */
+
 .avaliacao-form {
   display: flex;
   flex-direction: column;
@@ -691,7 +691,7 @@
 .avaliacao-comentario { color: #ccc; font-size: 0.85rem; line-height: 1.5; margin: 6px 0 4px; }
 .avaliacao-data { color: #666; font-size: 0.75rem; }
 
-/* Sidebar */
+
 .curso-detalhes-sidebar { display: flex; flex-direction: column; gap: var(--space-6); }
 .instrutor-card, .curso-specs {
   background: var(--bg-secondary);
@@ -741,7 +741,7 @@
 .spec-label { font-size: 0.875rem; color: var(--text-secondary); }
 .spec-value { font-size: 0.875rem; color: var(--text-primary); font-weight: 600; }
 
-/* Loading / Error */
+
 .curso-detalhes-loading, .curso-detalhes-error {
   display: flex;
   flex-direction: column;
@@ -778,7 +778,7 @@
 }
 .btn-voltar:hover { filter: brightness(1.1); }
 
-/* ===== MODAL DE VÍDEO ===== */
+
 .video-modal-overlay {
   position: fixed;
   inset: 0;
@@ -1190,7 +1190,7 @@
   }
 }
 
-/* Responsivo */
+
 @media (max-width: 1024px) {
   .curso-detalhes-content { grid-template-columns: 1fr; }
   .curso-detalhes-sidebar { order: -1; }
@@ -1232,7 +1232,7 @@
   .video-modal-overlay { padding: 10px; }
 }
 
-/* ===== AULAS ===== */
+
 .aulas-lista {
   display: flex;
   flex-direction: column;
@@ -1359,7 +1359,7 @@
   }
 }
 
-/* ===== MODAL DE MATRÍCULA ===== */
+
 .matricula-modal-overlay {
   position: fixed;
   inset: 0;
@@ -1493,7 +1493,7 @@
   }
 }
 
-/* ===== ENROLLMENT PROMPT (not yet enrolled) ===== */
+
 .matricula-prompt {
   display: flex;
   flex-direction: column;
@@ -1570,7 +1570,7 @@
   cursor: not-allowed;
 }
 
-/* ===== LOCKED LESSONS ===== */
+
 .aula-item.bloqueada {
   opacity: 0.6;
   cursor: default;
@@ -1647,7 +1647,7 @@
   filter: brightness(1.2);
 }
 
-/* ── Links externos & Anexos ── */
+
 .link-externo-item {
   display: flex;
   align-items: center;
@@ -1688,7 +1688,7 @@
   border-color: rgba(52, 211, 153, 0.3);
 }
 
-/* Locked resources notice (non-enrolled) */
+
 .recursos-locked {
   display: flex;
   align-items: center;

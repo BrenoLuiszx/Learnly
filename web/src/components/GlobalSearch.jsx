@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useGlobalSearch } from '../search/useGlobalSearch';
 import '../styles/global-search.css';
 
-// ── Type metadata ─────────────────────────────────────────────────────────────
+
 const TYPE_META = {
   page:    { label: 'Página',       color: '#60a5fa' },
   section: { label: 'Seção',        color: '#a78bfa' },
@@ -14,7 +14,7 @@ const TYPE_META = {
   setting: { label: 'Configuração', color: '#f472b6' },
 };
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
+
 const SearchIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="gs-icon">
     <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -48,7 +48,7 @@ const ClockIcon = () => (
   </svg>
 );
 
-// ── Highlighted text ──────────────────────────────────────────────────────────
+
 const Highlighted = ({ text, highlight }) => {
   if (!highlight || typeof highlight !== 'object') return <>{text}</>;
   return (
@@ -60,7 +60,7 @@ const Highlighted = ({ text, highlight }) => {
   );
 };
 
-// ── Result row (no icon cell) ─────────────────────────────────────────────────
+
 const ResultRow = ({ result, isActive, itemRef, query, highlight: hl, onClick }) => {
   const meta   = TYPE_META[result.type] ?? { label: result.type, color: '#888' };
   const labelHL = hl(result.label, query);
@@ -86,7 +86,7 @@ const ResultRow = ({ result, isActive, itemRef, query, highlight: hl, onClick })
   );
 };
 
-// ── Main component ────────────────────────────────────────────────────────────
+
 const GlobalSearch = () => {
   const navigate     = useNavigate();
   const { usuario }  = useAuth();
@@ -105,7 +105,7 @@ const GlobalSearch = () => {
     highlight,
   } = useGlobalSearch(usuario);
 
-  // Close on outside click
+
   useEffect(() => {
     const handler = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target))
@@ -115,7 +115,7 @@ const GlobalSearch = () => {
     return () => document.removeEventListener('mousedown', handler);
   }, [setOpen]);
 
-  // Global shortcut: / or Ctrl+K
+
   useEffect(() => {
     const handler = (e) => {
       const tag = document.activeElement?.tagName;
@@ -159,7 +159,7 @@ const GlobalSearch = () => {
   return (
     <div className="gs-container" ref={containerRef}>
 
-      {/* ── Input bar — original design ── */}
+
       <div
         className={`gs-input-wrap${open ? ' gs-focused' : ''}`}
         onClick={() => { inputRef.current?.focus(); openWithRecent(); }}
@@ -195,11 +195,11 @@ const GlobalSearch = () => {
         )}
       </div>
 
-      {/* ── Results panel — refined design ── */}
+
       {showPanel && (
         <div className="gs-dropdown" role="listbox">
 
-          {/* Loading skeleton */}
+
           {showLoader && (
             <div className="gs-loading-rows">
               {[60, 80, 50].map((w, i) => (
@@ -213,7 +213,7 @@ const GlobalSearch = () => {
             </div>
           )}
 
-          {/* Grouped results */}
+
           {showResults && Object.entries(grouped).map(([groupName, items]) => (
             <div key={groupName} className="gs-group">
               <div className="gs-group-label">{groupName}</div>
@@ -234,14 +234,13 @@ const GlobalSearch = () => {
             </div>
           ))}
 
-          {/* Empty state */}
+
           {showEmpty && (
             <div className="gs-empty">
               <p className="gs-empty-title">Sem resultados para "{query}"</p>
             </div>
           )}
 
-          {/* Recent searches */}
           {showRecent && (
             <div className="gs-group">
               <div className="gs-group-label">Recentes</div>

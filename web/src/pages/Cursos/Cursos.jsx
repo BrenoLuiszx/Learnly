@@ -298,12 +298,12 @@ const Cursos = () => {
         ) : (
             <div className="jornadas-grid">
             {jornadas.map((jornada, index) => {
-              // Resolve real course names from loaded courses list
+    
               const jornadaCursos = jornada.cursoIds
                 .map((id) => cursos.find((c) => c.id === id))
                 .filter(Boolean);
 
-              // Real progress: count concluded courses
+       
               const concludedCount = jornada.cursoIds.filter((id) =>
                 matriculas.some(
                   (m) => (m.cursoId === id || m.curso_id === id) && (m.concluido === true || m.concluido === 1)
@@ -329,7 +329,7 @@ const Cursos = () => {
                     {jornadaDone && <span className="stat-item stat-done">✓ Concluída</span>}
                   </div>
 
-                  {/* Progress bar — only shown when user is logged in */}
+  
                   {usuario && (
                     <div className="jornada-card-progress">
                       <div className="jornada-card-track">

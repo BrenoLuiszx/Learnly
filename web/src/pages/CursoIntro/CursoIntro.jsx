@@ -23,7 +23,7 @@ const parseJSON = (str) => {
   try { return JSON.parse(str) || []; } catch { return []; }
 };
 
-// Platform-level benefits — always shown
+
 const PLATFORM_BENEFITS = [
   { icon: '📈', title: 'Progresso rastreado', desc: 'Acompanhe cada aula concluída e veja sua evolução em tempo real.' },
   { icon: '🏆', title: 'Certificado de conclusão', desc: 'Ao terminar, emita seu certificado e comprove seu aprendizado.' },
@@ -95,7 +95,7 @@ const CursoIntro = () => {
 
   if (!curso) return null;
 
-  // Derived data from the rich API response
+
   const ytId       = getYouTubeId(curso.url);
   const thumbUrl   = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null;
   const coverImg   = curso.imagem || thumbUrl;
@@ -110,7 +110,7 @@ const CursoIntro = () => {
     <div className="ci-page">
       <Header />
 
-      {/* ── Hero ── */}
+
       <section className="ci-hero" style={coverImg ? {
         '--ci-hero-bg': `url(${coverImg})`,
       } : {}}>
@@ -122,7 +122,7 @@ const CursoIntro = () => {
             <h1 className="ci-title">{curso.titulo}</h1>
             <p className="ci-desc">{curso.descricao}</p>
 
-            {/* Rating + stats */}
+
             <div className="ci-stats">
               {mediaAval > 0 && (
                 <div className="ci-stat ci-stat-rating">
@@ -195,7 +195,7 @@ const CursoIntro = () => {
             )}
           </div>
 
-          {/* Thumbnail card */}
+
           <div className="ci-hero-visual">
             <div
               className="ci-thumb"
@@ -216,7 +216,7 @@ const CursoIntro = () => {
               <span className="ci-thumb-duration">{formatDuration(curso.duracao)}</span>
             </div>
 
-            {/* Certificate teaser */}
+
             <div className="ci-cert-teaser">
               <span className="ci-cert-icon">🏆</span>
               <div className="ci-cert-text">
@@ -228,7 +228,7 @@ const CursoIntro = () => {
         </div>
       </section>
 
-      {/* ── Course-specific content (descricaoDetalhada) ── */}
+  
       {hasContent && (
         <section className="ci-content">
           <div className="ci-section-inner ci-content-inner">
@@ -241,10 +241,10 @@ const CursoIntro = () => {
               </div>
             </div>
 
-            {/* Sidebar: instructor + meta */}
+
             <aside className="ci-content-aside">
 
-              {/* Instructor card */}
+     
               <div className="ci-instructor-card">
                 <h3>Instrutor</h3>
                 <div className="ci-instructor-body">
@@ -264,7 +264,7 @@ const CursoIntro = () => {
                 </div>
               </div>
 
-              {/* Course meta */}
+        
               <div className="ci-meta-card">
                 {[
                   { label: 'Categoria',  value: curso.categoria },
@@ -285,7 +285,7 @@ const CursoIntro = () => {
         </section>
       )}
 
-      {/* ── Course image (if no descricaoDetalhada, show image prominently) ── */}
+
       {!hasContent && curso.imagem && (
         <section className="ci-image-section">
           <div className="ci-section-inner">
@@ -294,7 +294,7 @@ const CursoIntro = () => {
         </section>
       )}
 
-      {/* ── External links & attachments ── */}
+  
       {hasResources && (
         <section className="ci-resources">
           <div className="ci-section-inner">
@@ -345,7 +345,7 @@ const CursoIntro = () => {
         </section>
       )}
 
-      {/* ── Platform benefits ── */}
+
       <section className="ci-benefits">
         <div className="ci-section-inner">
           <h2 className="ci-section-title">O que você vai obter</h2>
@@ -363,7 +363,7 @@ const CursoIntro = () => {
         </div>
       </section>
 
-      {/* ── Bottom CTA ── */}
+
       <section className="ci-bottom-cta">
         <div className="ci-section-inner ci-bottom-inner">
           <div>

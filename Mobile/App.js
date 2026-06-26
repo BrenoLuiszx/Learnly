@@ -52,7 +52,6 @@ const AppNavigator = () => {
   const { user, loading } = useAuth();
   const { setUserId } = useNotifications();
 
-  // Sync logged-in user id into notifications context
   useEffect(() => {
     setUserId(user?.id ?? null);
   }, [user?.id]);

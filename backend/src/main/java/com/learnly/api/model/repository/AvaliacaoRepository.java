@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
 
     Optional<Avaliacao> findByUsuarioIdAndCursoId(Long usuarioId, Long cursoId);
-
-   
     @Query("""
         SELECT new com.learnly.api.dto.AvaliacaoDTO(
             a.id, a.usuarioId, a.cursoId,

@@ -20,10 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Backward-compatible alias for {@link InstrutorController}.
- * Collaborator role == Instructor role. Both paths are fully functional.
- */
 @RestController
 @RequestMapping("/api/colaborador")
 public class ColaboradorController {

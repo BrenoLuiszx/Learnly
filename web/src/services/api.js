@@ -7,7 +7,6 @@ const api = axios.create({
   maxBodyLength: Infinity,
 });
 
-// Interceptor - adiciona token JWT em todas as requisições
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -16,10 +15,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor - desloga automaticamente se o token expirar.
-// Only redirects when the failing request actually sent a token,
-// meaning the session expired. Unauthenticated requests (no Authorization
-// header) that get a 401 are silently rejected without touching the session.
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -28,9 +23,6 @@ api.interceptors.response.use(
     if (requestHadToken && status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('usuario');
-      // Only redirect to login if the request required authentication.
-      // Public routes (GET /cursos, etc.) should silently clear the expired
-      // token without bouncing the user away from the page they are on.
       const url = error.config?.url || '';
       const publicPrefixes = ['/cursos', '/avaliacoes', '/aulas/curso', '/certificados/usuario'];
       const isPublic = publicPrefixes.some(p => url.startsWith(p));
@@ -97,18 +89,15 @@ export const matriculasAPI = {
 };
 
 export const instrutorAPI = {
-  // Instructor-scoped: backend enforces ownership via criador_id
   alunos: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/alunos`),
   avaliacoes: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/avaliacoes`),
 };
 
-// Colaborador alias keeps backward compat
 export const colaboradorAPI = {
   alunos: (cursoId) => api.get(`/colaborador/cursos/${cursoId}/alunos`),
   avaliacoes: (cursoId) => api.get(`/colaborador/cursos/${cursoId}/avaliacoes`),
 };
 
-// Admin-scoped: same endpoints, admin role bypasses ownership check in backend
 export const adminCursoAPI = {
   alunos: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/alunos`),
   avaliacoes: (cursoId) => api.get(`/instrutor/cursos/${cursoId}/avaliacoes`),
@@ -134,13 +123,11 @@ export const usuarioDashboardAPI = {
   saveCurriculo: (curriculo) => api.put('/usuarios/curriculo', { curriculo }),
 };
 
-// Jornada request flow — dedicated endpoint that bypasses the role check.
 export const jornadaRequestAPI = {
   enviar: (usuarioId, payload) =>
     api.post(`/usuarios/${usuarioId}/solicitar-jornada`, {
       justificativa: 'JORNADA_REQUEST:' + JSON.stringify(payload),
     }),
-  // Edit request: same flow but payload includes editSlug so Admin knows it's an update
   enviarEdicao: (usuarioId, slug, payload) =>
     api.post(`/usuarios/${usuarioId}/solicitar-jornada`, {
       justificativa: 'JORNADA_REQUEST:' + JSON.stringify({ ...payload, editSlug: slug }),
@@ -148,12 +135,10 @@ export const jornadaRequestAPI = {
 };
 
 export const acoesAPI = {
-  // Favorites
   toggleFavorito: (cursoId) => api.post(`/acoes/favoritos/${cursoId}`),
   meusFavoritos: () => api.get('/acoes/favoritos/meus'),
   favoritosPorCurso: (cursoId) => api.get(`/acoes/favoritos/curso/${cursoId}`),
   todosFavoritos: () => api.get('/acoes/favoritos/todos'),
-  // Watch Later
   toggleAssistirDepois: (cursoId) => api.post(`/acoes/assistir-depois/${cursoId}`),
   meusAssistirDepois: () => api.get('/acoes/assistir-depois/meus'),
   assistirDepoisPorCurso: (cursoId) => api.get(`/acoes/assistir-depois/curso/${cursoId}`),

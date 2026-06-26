@@ -2,23 +2,25 @@ package com.learnly.api.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 @Service
 public class JwtService {
 
-    // Chave secreta - em produção usar variável de ambiente
-    private static final String SECRET = "learnly-secret-key-2024-muito-segura-256bits!!";
-    private static final long EXPIRATION = 86400000; // 24 horas em ms
+    @Value("${jwt.secret:learnly-secret-key-2024-muito-segura-256bits!!}")
+    private String secret;
+
+    private static final long EXPIRATION = 86400000L; 
 
     private Key getKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // Gera token com id, email e role do usuário
     public String gerarToken(Long id, String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
@@ -30,17 +32,14 @@ public class JwtService {
                 .compact();
     }
 
-    // Extrai email do token
     public String getEmail(String token) {
         return getClaims(token).getSubject();
     }
 
-    // Extrai role do token
     public String getRole(String token) {
         return getClaims(token).get("role", String.class);
     }
 
-    // Extrai id do token - garante Long mesmo se JWT deserializar como Integer
     public Long getId(String token) {
         Object idObj = getClaims(token).get("id");
         if (idObj instanceof Integer) return ((Integer) idObj).longValue();
@@ -48,7 +47,6 @@ public class JwtService {
         return Long.valueOf(String.valueOf(idObj));
     }
 
-    // Valida se o token é válido
     public boolean validar(String token) {
         try {
             getClaims(token);

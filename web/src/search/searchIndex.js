@@ -1,30 +1,6 @@
-/**
- * LEARNLY — Global Search Index
- *
- * HOW TO ADD NEW ENTRIES:
- *   1. Static pages/sections → add to STATIC_INDEX below.
- *   2. Dynamic content (courses, lessons, etc.) → add a loader to DYNAMIC_LOADERS.
- *
- * Result shape:
- *   {
- *     id:       string          — unique key
- *     type:     string          — 'page' | 'section' | 'course' | 'jornada' | 'lesson' | 'setting'
- *     label:    string          — primary display text
- *     sublabel: string          — secondary line (description / path hint)
- *     route:    string          — where to navigate on select
- *     keywords: string[]        — extra terms that trigger this result
- *     icon:     string          — emoji or short text badge
- *     auth:     null|'user'|'admin'|'colaborador'  — null = public
- *   }
- */
-
 import { JORNADAS } from '../config/jornadas';
 
-// ─── Static index ────────────────────────────────────────────────────────────
-
 export const STATIC_INDEX = [
-
-  // ── Pages ──────────────────────────────────────────────────────────────────
   {
     id: 'page-home',
     type: 'page',
@@ -176,7 +152,6 @@ export const STATIC_INDEX = [
     auth: null,
   },
 
-  // ── Sections inside pages ──────────────────────────────────────────────────
   {
     id: 'section-favoritos',
     type: 'section',
@@ -258,7 +233,6 @@ export const STATIC_INDEX = [
     auth: 'only-user',
   },
 
-  // ── Future pages (pre-indexed, routes TBD) ────────────────────────────────
   {
     id: 'page-suporte',
     type: 'page',
@@ -273,14 +247,13 @@ export const STATIC_INDEX = [
     id: 'future-sobre',
     type: 'page',
     label: 'Sobre Nós',
-    sublabel: 'Conheça a Learnly — em breve',
-    route: '/',
+    sublabel: 'Conheça a Learnly',
+    route: '/sobre',
     keywords: ['sobre', 'about', 'empresa', 'missao', 'equipe', 'learnly'],
     icon: 'ℹ️',
     auth: null,
   },
 
-  // ── Jornadas (generated from config) ──────────────────────────────────────
   ...JORNADAS.map((j) => ({
     id: `jornada-${j.slug}`,
     type: 'jornada',
@@ -293,16 +266,11 @@ export const STATIC_INDEX = [
   })),
 ];
 
-// ─── Dynamic loaders ─────────────────────────────────────────────────────────
-// Each loader receives the raw query string and returns an array of result objects.
-// Add new loaders here to support future dynamic content (lessons, users, etc.)
-
 import { cursosAPI } from '../services/api';
 
 export const DYNAMIC_LOADERS = [
   {
     id: 'courses',
-    // Called once per search session; results are cached for the session
     load: async () => {
       try {
         const res = await cursosAPI.listarTodos();

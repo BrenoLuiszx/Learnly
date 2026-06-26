@@ -85,7 +85,7 @@ const NotificationsScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* Header */}
+
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <View style={styles.logoRow}>
           <View style={[styles.logoBox, { backgroundColor: theme.primary }]}>

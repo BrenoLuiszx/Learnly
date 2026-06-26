@@ -8,7 +8,7 @@ import Header from '../Header/Header';
 import { formatDuration } from '../../utils/format';
 import '../../styles/perfil.css';
 
-/* ── SVG icons ── */
+
 const IconUser = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
@@ -136,7 +136,7 @@ const IconPreview = () => (
   </svg>
 );
 
-/* ── CV helpers ── */
+
 const CvSection = ({ title, icon, children, onEdit, editing }) => (
   <div className="cv-section">
     <div className="cv-section-header">
@@ -159,7 +159,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
   const [pdfToast, setPdfToast] = useState(false);
   const saveTimer = React.useRef(null);
 
-  // draft states per section
+  
   const [dResumo, setDResumo] = useState('');
   const [dSkills, setDSkills] = useState('');
   const [dExpForm, setDExpForm] = useState({ titulo: '', empresa: '', periodo: '', descricao: '' });
@@ -170,7 +170,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
     setTimeout(() => setPdfToast(false), 3000);
   };
 
-  // Load CV from backend on mount (user-specific)
+  
   useEffect(() => {
     if (!usuario) return;
     setCvLoaded(false);
@@ -256,7 +256,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
       </div>
 
       <div className="cv-preview-doc" id="cv-pdf-target">
-        {/* Header */}
+        
         <div className="cv-preview-header">
           <div className="cv-preview-avatar">
             <UserAvatar foto={usuario?.foto} nome={usuario?.nome ?? ''} size={60} />
@@ -364,7 +364,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-      {/* Toolbar */}
+     
       <div className="pf-card" style={{ padding: '14px 20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <div>
@@ -382,7 +382,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
         </div>
       </div>
 
-      {/* Resumo Pessoal */}
+   
       <div className="pf-card">
         <CvSection title="Resumo Pessoal" icon={<IconUser />} editing={editSec === 'resumo'} onEdit={() => openEdit('resumo')}>
           {editSec === 'resumo' ? (
@@ -412,7 +412,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
         </CvSection>
       </div>
 
-      {/* Habilidades */}
+    
       <div className="pf-card">
         <CvSection title="Habilidades" icon={<IconTag />} editing={editSec === 'skills'} onEdit={() => openEdit('skills')}>
           {editSec === 'skills' ? (
@@ -440,7 +440,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
         </CvSection>
       </div>
 
-      {/* Formação / Cursos */}
+     
       <div className="pf-card">
         <CvSection title="Formação — Cursos" icon={<IconBook />} editing={false} onEdit={() => {}}>
           <p style={{ fontSize: '0.75rem', color: '#555', margin: '0 0 12px' }}>Populado automaticamente com seus cursos concluídos na plataforma.</p>
@@ -471,7 +471,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
         </CvSection>
       </div>
 
-      {/* Certificados */}
+      
       <div className="pf-card">
         <CvSection title="Certificados" icon={<IconAward />} editing={false} onEdit={() => {}}>
           <p style={{ fontSize: '0.75rem', color: '#555', margin: '0 0 12px' }}>Sincronizado com seus certificados emitidos.</p>
@@ -496,7 +496,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
         </CvSection>
       </div>
 
-      {/* Experiências */}
+      
       <div className="pf-card">
         <CvSection title="Experiências" icon={<IconBriefcase />} editing={editSec === 'exp'} onEdit={() => openEdit('exp')}>
           {(cv.experiencias || []).length > 0 && (
@@ -534,7 +534,7 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
         </CvSection>
       </div>
 
-      {/* Projetos */}
+    
       <div className="pf-card">
         <CvSection title="Projetos" icon={<IconLink />} editing={editSec === 'proj'} onEdit={() => openEdit('proj')}>
           {(cv.projetos || []).length > 0 && (
@@ -576,14 +576,14 @@ const CurriculoTab = ({ usuario, certificados, stats }) => {
   );
 };
 
-/* ── CertificadosTab ── */
+
 const CertificadosTab = ({ usuario }) => {
   const navigate = useNavigate();
   const [emitidos, setEmitidos] = useState([]);
   const [disponiveis, setDisponiveis] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [emitindo, setEmitindo] = useState(null);   // cursoId being issued
-  const [modal, setModal] = useState(null);          // cert object for detail modal
+  const [emitindo, setEmitindo] = useState(null);   
+  const [modal, setModal] = useState(null);          
   const [toastMsg, setToastMsg] = useState('');
 
   const toast = (msg) => { setToastMsg(msg); setTimeout(() => setToastMsg(''), 3000); };
@@ -608,7 +608,7 @@ const CertificadosTab = ({ usuario }) => {
     setEmitindo(cursoId);
     try {
       const res = await certificadosAPI.emitirDetalhes(cursoId);
-      // After issuing, navigate directly to the certificate page
+     
       navigate(`/certificado/${res.data.id}`);
     } catch (e) {
       const msg = e?.response?.data?.erro;
@@ -646,12 +646,12 @@ const CertificadosTab = ({ usuario }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-      {/* Toast */}
+    
       {toastMsg && (
         <div className="ct-toast">{toastMsg}</div>
       )}
 
-      {/* Modal */}
+   
       {modal && (
         <div className="ct-overlay" onClick={() => setModal(null)}>
           <div className="ct-modal" onClick={e => e.stopPropagation()}>
@@ -689,7 +689,7 @@ const CertificadosTab = ({ usuario }) => {
         </div>
       )}
 
-      {/* Disponíveis para emitir */}
+    
       {disponiveis.length > 0 && (
         <div className="pf-card">
           <h3 className="pf-card-title"><IconAward /> Disponíveis para Emitir
@@ -724,7 +724,7 @@ const CertificadosTab = ({ usuario }) => {
         </div>
       )}
 
-      {/* Certificados emitidos */}
+     
       <div className="pf-card">
         <h3 className="pf-card-title"><IconShield /> Meus Certificados
           {emitidos.length > 0 && <span className="ct-count-badge">{emitidos.length}</span>}
@@ -763,7 +763,7 @@ const CertificadosTab = ({ usuario }) => {
   );
 };
 
-/* ── PlanejamentoTab ── */
+
 const DEFAULT_PLAN_COLS = [
   { id: 'todo',  label: 'A Estudar',    color: '#5b8dd9' },
   { id: 'doing', label: 'Em Progresso', color: '#c9a84c' },
@@ -786,7 +786,7 @@ const PlanejamentoTab = () => {
   const dragOver = React.useRef(null);
   const saveTimer = React.useRef(null);
 
-  // Load from API (same source as Planning page)
+
   useEffect(() => {
     setLoaded(false);
     if (!usuario) { setLoaded(true); return; }
@@ -801,7 +801,7 @@ const PlanejamentoTab = () => {
       .finally(() => setLoaded(true));
   }, [uid]);
 
-  // Debounced API save — mirrors Planning page persist logic
+ 
   const persist = (nextCards, nextCols) => {
     setCards(nextCards);
     clearTimeout(saveTimer.current);
@@ -839,7 +839,7 @@ const PlanejamentoTab = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-      {/* Header bar */}
+   
       <div className="pf-card" style={{ padding: '16px 20px' }}>
         <div className="pl-header">
           <div>
@@ -853,14 +853,14 @@ const PlanejamentoTab = () => {
           </button>
         </div>
 
-        {/* Progress bar */}
+       
         {total > 0 && (
           <div className="pf-progress-track" style={{ marginTop: '12px' }}>
             <div className="pf-progress-fill" style={{ width: `${Math.round((done / total) * 100)}%` }} />
           </div>
         )}
 
-        {/* Add form */}
+        
         {adding && (
           <div className="pl-form">
             <div className="pl-form-row">
@@ -895,7 +895,7 @@ const PlanejamentoTab = () => {
         )}
       </div>
 
-      {/* Board */}
+    
       {!loaded ? (
         <div style={{ color: '#555', fontSize: '0.82rem', padding: '16px 0' }}>Carregando planejamento...</div>
       ) : (
@@ -950,7 +950,7 @@ const PlanejamentoTab = () => {
                       </p>
                     )}
 
-                    {/* Move buttons */}
+                   
                     <div className="pl-move-row">
                       {cols.filter(c => c.id !== col.id).map(c => (
                         <button key={c.id} className="pl-move-btn" style={{ borderColor: c.color + '55', color: c.color }} onClick={() => moveCard(card.id, c.id)}>
@@ -1074,7 +1074,7 @@ const Perfil = () => {
       <Header />
       <div className="pf-layout">
 
-        {/* ── Hero ── */}
+     
         <div className="pf-hero">
           <div className="pf-hero-top">
             <div className="pf-avatar">
@@ -1130,10 +1130,10 @@ const Perfil = () => {
           {mensagem && <div className={`pf-msg ${msgOk ? 'ok' : 'err'}`}>{mensagem}</div>}
         </div>
 
-        {/* ── Body ── */}
+      
         <div className="pf-body">
 
-          {/* Sidebar */}
+       
           <nav className="pf-sidenav">
             {NAV_GROUPS.map(group => (
               <div key={group.label} className="pf-nav-group">
@@ -1153,28 +1153,28 @@ const Perfil = () => {
             ))}
           </nav>
 
-          {/* Main */}
+     
           <main className="pf-main">
 
-            {/* ── Dashboard ── */}
+           
             {aba === 'dashboard' && (
               <div className="pf-tab-fade">
                 <DashboardTab stats={stats} usuario={usuario} />
               </div>
             )}
 
-            {/* ── Planejamento ── */}
+         
             {aba === 'planejamento' && (
               <div className="pf-tab-fade">
                 <PlanejamentoTab />
               </div>
             )}
 
-            {/* ── Perfil ── */}
+        
             {aba === 'perfil' && (
               <div className="pf-tab-fade" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-                {/* Account info */}
+             
                 <div className="pf-card">
                   <h3 className="pf-card-title"><IconUser /> Informações da Conta</h3>
                   <div className="pf-account-grid">
@@ -1204,7 +1204,7 @@ const Perfil = () => {
                   </div>
                 </div>
 
-                {/* Collaborator request */}
+            
                 <div className="pf-card">
                   <h3 className="pf-card-title"><IconBriefcase /> Acesso de Colaborador</h3>
 
@@ -1249,7 +1249,7 @@ const Perfil = () => {
               </div>
             )}
 
-            {/* ── Progresso ── */}
+          
             {aba === 'progresso' && (
               <div className="pf-tab-fade">
               <div className="pf-card">
@@ -1312,14 +1312,14 @@ const Perfil = () => {
               </div>
             )}
 
-            {/* ── Certificados ── */}
+         
             {aba === 'certificados' && (
               <div className="pf-tab-fade">
                 <CertificadosTab usuario={usuario} />
               </div>
             )}
 
-            {/* ── Currículo ── */}
+        
             {aba === 'curriculo' && (
               <div className="pf-tab-fade">
                 <CurriculoTab usuario={usuario} certificados={certificados} stats={stats} />

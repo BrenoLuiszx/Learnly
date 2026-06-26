@@ -1,5 +1,6 @@
 package com.learnly.api.model.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learnly.api.model.entity.Usuario;
@@ -19,27 +20,28 @@ public class CursoAcaoService {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-
     private Set<Long> parseIds(String json) {
+        if (json == null || json.isBlank()) return new LinkedHashSet<>();
         try {
             List<Long> list = MAPPER.readValue(json, new TypeReference<List<Long>>() {});
             return new LinkedHashSet<>(list);
-        } catch (Exception e) {
-            return new LinkedHashSet<>();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Erro ao processar lista de IDs: " + e.getMessage(), e);
         }
     }
 
     private String toJson(Set<Long> ids) {
-        try { return MAPPER.writeValueAsString(new ArrayList<>(ids)); }
-        catch (Exception e) { return "[]"; }
+        try {
+            return MAPPER.writeValueAsString(new ArrayList<>(ids));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Erro ao serializar lista de IDs: " + e.getMessage(), e);
+        }
     }
 
     private Usuario getUser(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
-
-    //  Favorites
 
     public boolean toggleFavorito(Long usuarioId, Long cursoId) {
         Usuario u = getUser(usuarioId);
@@ -59,26 +61,22 @@ public class CursoAcaoService {
         return parseIds(getUser(usuarioId).getFavoritos());
     }
 
-    /** Dashboard */
     public List<Map<String, Object>> favoritosPorCurso(Long cursoId) {
         return usuarioRepository.findAll().stream()
                 .filter(u -> parseIds(u.getFavoritos()).contains(cursoId))
-                .map(u -> buildEntrada(u, cursoId, null))
+                .map(u -> buildEntrada(u, cursoId))
                 .collect(Collectors.toList());
     }
 
-    /** Admin dashboard */
     public List<Map<String, Object>> todosFavoritos() {
         List<Map<String, Object>> result = new ArrayList<>();
         for (Usuario u : usuarioRepository.findAll()) {
             for (Long cursoId : parseIds(u.getFavoritos())) {
-                result.add(buildEntrada(u, cursoId, null));
+                result.add(buildEntrada(u, cursoId));
             }
         }
         return result;
     }
-
-    //  Watch Later 
 
     public boolean toggleAssistirDepois(Long usuarioId, Long cursoId) {
         Usuario u = getUser(usuarioId);
@@ -101,7 +99,7 @@ public class CursoAcaoService {
     public List<Map<String, Object>> assistirDepoisPorCurso(Long cursoId) {
         return usuarioRepository.findAll().stream()
                 .filter(u -> parseIds(u.getAssistirDepois()).contains(cursoId))
-                .map(u -> buildEntrada(u, cursoId, null))
+                .map(u -> buildEntrada(u, cursoId))
                 .collect(Collectors.toList());
     }
 
@@ -109,15 +107,13 @@ public class CursoAcaoService {
         List<Map<String, Object>> result = new ArrayList<>();
         for (Usuario u : usuarioRepository.findAll()) {
             for (Long cursoId : parseIds(u.getAssistirDepois())) {
-                result.add(buildEntrada(u, cursoId, null));
+                result.add(buildEntrada(u, cursoId));
             }
         }
         return result;
     }
 
-    // Helper 
-
-    private Map<String, Object> buildEntrada(Usuario u, Long cursoId, Object dataAcao) {
+    private Map<String, Object> buildEntrada(Usuario u, Long cursoId) {
         String tituloCurso = cursoRepository.findById(cursoId)
                 .map(c -> c.getTitulo()).orElse("Curso #" + cursoId);
         Map<String, Object> entry = new LinkedHashMap<>();
@@ -126,7 +122,6 @@ public class CursoAcaoService {
         entry.put("fotoUsuario", u.getFoto() != null ? u.getFoto() : "");
         entry.put("cursoId",     cursoId);
         entry.put("tituloCurso", tituloCurso);
-        entry.put("dataAcao",    dataAcao != null ? dataAcao.toString() : "");
         return entry;
     }
 }

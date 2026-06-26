@@ -5,7 +5,7 @@ import { cursosAPI, aulasAPI, usuarioDashboardAPI } from '../../services/api'
 import { useAuth } from '../../contexts/AuthContext'
 import '../../styles/planning.css'
 
-/* ── Icons ── */
+
 const IconKanban = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/>
@@ -85,7 +85,7 @@ const IconSpinner = () => (
   </svg>
 )
 
-/* ── Config ── */
+
 const DEFAULT_COLS = [
   { id: 'todo',  label: 'A Estudar',    color: '#5b8dd9' },
   { id: 'doing', label: 'Em Progresso', color: '#c9a84c' },
@@ -105,7 +105,7 @@ const EMPTY_FORM = {
   dueDate: '', dueTime: '', status: 'pending',
 }
 
-/* ── Status helpers ── */
+
 const isOverdue = (card) => {
   if (!card.dueDate || card.status === 'completed') return false
   const today = new Date(); today.setHours(0,0,0,0)
@@ -121,11 +121,11 @@ const isUpcoming = (card) => {
 const STATUS_LABEL = { pending: 'Pendente', completed: 'Concluído' }
 const STATUS_COLOR = { pending: '#c9a84c', completed: '#4aab7e' }
 
-// Module-level refs kept in sync with Planning state so CardForm/PlanningCard can read them
+
 let COLS    = DEFAULT_COLS
 let COL_IDS = DEFAULT_COLS.map(c => c.id)
 
-/* ── Storage helpers ── */
+
 const LS_CARDS = (uid) => `learnly_planner_cards_${uid}`
 const LS_COLS  = (uid) => `learnly_planner_cols_${uid}`
 
@@ -136,9 +136,7 @@ const lsSave      = (uid, cards, cols) => {
   localStorage.setItem(LS_COLS(uid),  JSON.stringify(cols))
 }
 
-/* Derive a stable, non-guessable key for unauthenticated visitors.
-   Each anonymous browser gets its own slot so guest data never
-   bleeds into a real account that later logs in on the same device. */
+
 const getAnonKey = () => {
   const k = 'learnly_anon_id'
   let id = localStorage.getItem(k)
@@ -147,9 +145,7 @@ const getAnonKey = () => {
 }
 const resolveUid = (usuario) => usuario?.id ? String(usuario.id) : getAnonKey()
 
-/* ─────────────────────────────────────────
-   AddColumn
-───────────────────────────────────────── */
+
 const COL_COLORS = ['#5b8dd9','#c9a84c','#4aab7e','#8b72c8','#d97b5b','#5bbdd9','#c84c7a']
 const AddColumn = ({ colCount, onAdd }) => {
   const [active, setActive] = useState(false)
@@ -189,9 +185,7 @@ const AddColumn = ({ colCount, onAdd }) => {
   )
 }
 
-/* ─────────────────────────────────────────
-   ColumnHeader — rename + delete
-───────────────────────────────────────── */
+
 const ColumnHeader = ({ col, cardCount, onRename, onDelete }) => {
   const [editing, setEditing] = useState(false)
   const [draft,   setDraft]   = useState(col.label)
@@ -238,18 +232,16 @@ const ColumnHeader = ({ col, cardCount, onRename, onDelete }) => {
   )
 }
 
-/* ─────────────────────────────────────────
-   CourseSelect — searchable course picker
-───────────────────────────────────────── */
+
 const CourseSelect = ({ value, cursoId, onChange, courses, placeholder = 'Buscar curso...' }) => {
   const [query,  setQuery]  = useState(value || '')
   const [open,   setOpen]   = useState(false)
   const ref = useRef(null)
 
-  // Sync external value reset
+ 
   useEffect(() => { setQuery(value || '') }, [value])
 
-  // Close on outside click
+
   useEffect(() => {
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
     document.addEventListener('mousedown', handler)
@@ -269,7 +261,7 @@ const CourseSelect = ({ value, cursoId, onChange, courses, placeholder = 'Buscar
   const handleInput = (e) => {
     setQuery(e.target.value)
     setOpen(true)
-    // Clear selection if user edits after picking
+   
     if (cursoId) onChange({ cursoId: null, cursoNome: e.target.value, categoria: '' })
   }
 
@@ -309,9 +301,7 @@ const CourseSelect = ({ value, cursoId, onChange, courses, placeholder = 'Buscar
   )
 }
 
-/* ─────────────────────────────────────────
-   LessonSelect — lesson list for a course
-───────────────────────────────────────── */
+
 const LessonSelect = ({ cursoId, aulaId, onChange }) => {
   const [aulas,   setAulas]   = useState([])
   const [loading, setLoading] = useState(false)
@@ -354,9 +344,7 @@ const LessonSelect = ({ cursoId, aulaId, onChange }) => {
   )
 }
 
-/* ─────────────────────────────────────────
-   CardForm — shared between add + edit
-───────────────────────────────────────── */
+
 const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel }) => {
   const tipo = TIPO_MAP[value.tipo] || TIPO_MAP['Meta']
 
@@ -364,7 +352,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
 
   return (
     <div className="planning-form">
-      {/* Type tabs */}
+  
       <div className="planning-tipo-tabs">
         {TIPOS.map(t => (
           <button
@@ -379,7 +367,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
         ))}
       </div>
 
-      {/* ── Curso type ── */}
+     
       {value.tipo === 'Curso' && (
         <>
           <div className="planning-modal-field">
@@ -402,7 +390,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
         </>
       )}
 
-      {/* ── Aula type ── */}
+    
       {value.tipo === 'Aula' && (
         <>
           <div className="planning-modal-field">
@@ -430,7 +418,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
         </>
       )}
 
-      {/* ── Meta type ── */}
+    
       {value.tipo === 'Meta' && (
         <>
           <div className="planning-modal-field">
@@ -456,7 +444,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
         </>
       )}
 
-      {/* Column + Status */}
+   
       <div className="planning-form-row">
         <div className="planning-modal-field" style={{ flex: 1 }}>
           <label className="planning-modal-label">Coluna</label>
@@ -472,7 +460,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
           </select>
         </div>
       </div>
-      {/* Date + Time */}
+   
       <div className="planning-form-row">
         <div className="planning-modal-field" style={{ flex: 1 }}>
           <label className="planning-modal-label">Data</label>
@@ -488,7 +476,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
         <input className="planning-input" placeholder="Nota opcional..." value={value.nota || ''} onChange={e => set({ nota: e.target.value })} />
       </div>
 
-      {/* Actions */}
+      
       <div className="planning-form-row">
         <button
           className="planning-confirm-btn"
@@ -504,9 +492,7 @@ const CardForm = ({ value, onChange, courses, onSubmit, onCancel, submitLabel })
   )
 }
 
-/* ─────────────────────────────────────────
-   ScheduleInline — compact date+time picker
-───────────────────────────────────────── */
+
 const ScheduleInline = ({ cardId, dueDate, dueTime, onSchedule, onClear }) => {
   const [open, setOpen] = useState(false)
   const [date, setDate] = useState(dueDate || '')
@@ -563,9 +549,7 @@ const ScheduleInline = ({ cardId, dueDate, dueTime, onSchedule, onClear }) => {
   )
 }
 
-/* ─────────────────────────────────────────
-   PlanningCard
-───────────────────────────────────────── */
+
 const PlanningCard = ({ card, highlighted, flashing, dimmed, onDelete, onMove, onEditCard, onToggleStatus, onScheduleCard }) => {
   const tipo     = TIPO_MAP[card.tipo] || TIPO_MAP['Meta']
   const isDone   = card.status === 'completed'
@@ -585,7 +569,7 @@ const PlanningCard = ({ card, highlighted, flashing, dimmed, onDelete, onMove, o
       <span className="pc-accent" style={{ background: tipo.color }} />
       <div className="pc-body">
 
-        {/* Header */}
+        
         <div className="pc-top">
           <span className="pc-icon" style={{ color: tipo.color, background: tipo.color + '18' }}>
             {tipo.icon}
@@ -610,12 +594,12 @@ const PlanningCard = ({ card, highlighted, flashing, dimmed, onDelete, onMove, o
           </div>
         </div>
 
-        {/* Title */}
+      
         <p className="pc-title" style={{ textDecoration: isDone ? 'line-through' : 'none', opacity: isDone ? 0.45 : 1 }}>
           {card.titulo}
         </p>
 
-        {/* Metadata */}
+       
         {card.tipo === 'Curso' && card.categoria && (
           <span className="pc-meta-badge">{card.categoria}</span>
         )}
@@ -650,7 +634,7 @@ const PlanningCard = ({ card, highlighted, flashing, dimmed, onDelete, onMove, o
         </div>
         {card.nota && <p className="pc-nota">{card.nota}</p>}
 
-        {/* Move */}
+        
         <div className="pc-move-row">
           {prevCol && (
             <button
@@ -678,9 +662,7 @@ const PlanningCard = ({ card, highlighted, flashing, dimmed, onDelete, onMove, o
   )
 }
 
-/* ─────────────────────────────────────────
-   InlineAdd — quick add card inside a column
-───────────────────────────────────────── */
+
 const InlineAdd = ({ colId, onAdd }) => {
   const [active, setActive] = useState(false)
   const [title,  setTitle]  = useState('')
@@ -718,13 +700,11 @@ const InlineAdd = ({ colId, onAdd }) => {
   )
 }
 
-/* ─────────────────────────────────────────
-   CalendarView
-───────────────────────────────────────── */
+
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 const MONTHS_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
 
-/* ── state pill helper ── */
+
 const cardStatePill = (card) => {
   if (card.status === 'completed') return { label: 'Concluído', cls: 'cal-state--done' }
   if (isOverdue(card))             return { label: 'Atrasado',  cls: 'cal-state--overdue' }
@@ -737,7 +717,7 @@ const CalendarView = ({ cards, selectedDate, onSelectDate, onEditCard, onAssignD
   const [cursor,   setCursor]   = useState({ year: today.getFullYear(), month: today.getMonth() })
   const [dragOver, setDragOver] = useState(null)
 
-  // When a date with cards is selected, auto-navigate the calendar to that month
+  
   useEffect(() => {
     if (!selectedDate) return
     const [y, m] = selectedDate.split('-').map(Number)
@@ -832,7 +812,7 @@ const CalendarView = ({ cards, selectedDate, onSelectDate, onEditCard, onAssignD
         </div>
       </div>
 
-      {/* ── Side panel ── */}
+      
       <div className="cal-side">
         {selectedDate ? (
           <>
@@ -973,9 +953,7 @@ const CalendarView = ({ cards, selectedDate, onSelectDate, onEditCard, onAssignD
   )
 }
 
-/* ─────────────────────────────────────────
-   PrefillModal — Study Plan import
-───────────────────────────────────────── */
+
 const IconCheck = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -1082,9 +1060,7 @@ const PrefillModal = ({ suggestions, onConfirm, onClose }) => {
   )
 }
 
-/* ─────────────────────────────────────────
-   EditModal
-───────────────────────────────────────── */
+
 const EditModal = ({ card, courses, onSave, onClose }) => {
   const [draft, setDraft] = useState({ ...card })
   const tipo = TIPO_MAP[draft.tipo] || TIPO_MAP['Meta']
@@ -1119,18 +1095,15 @@ const EditModal = ({ card, courses, onSave, onClose }) => {
   )
 }
 
-/* ─────────────────────────────────────────
-   Planning (main)
-───────────────────────────────────────── */
+
 const Planning = () => {
   const { usuario } = useAuth()
   const location = useLocation()
 
-  // uid is derived reactively — changes when user logs in/out
+  
   const uid = resolveUid(usuario)
 
-  // Hard-reset all board state whenever the identity changes so
-  // User B never sees User A's in-memory data after a same-tab login swap.
+  
   const [cards, setCards] = useState(() => lsLoadCards(uid))
   const [cols,  setCols]  = useState(() => { const c = lsLoadCols(uid); COLS = c; COL_IDS = c.map(x => x.id); return c })
 
@@ -1138,7 +1111,7 @@ const Planning = () => {
   useEffect(() => {
     if (prevUidRef.current === uid) return
     prevUidRef.current = uid
-    // Identity changed: wipe in-memory state and reload from the new user's slot
+  
     const c = lsLoadCols(uid); COLS = c; COL_IDS = c.map(x => x.id)
     setCards(lsLoadCards(uid))
     setCols(c)
@@ -1149,13 +1122,13 @@ const Planning = () => {
   const [courses,        setCourses]        = useState([])
   const [loaded,         setLoaded]         = useState(false)
   const [prefillModal,   setPrefillModal]   = useState(null)
-  const [selectedDate,   setSelectedDate]   = useState(null)  // shared calendar ↔ board signal
-  const [flashIds,       setFlashIds]       = useState(new Set()) // ids of newly created cards
+  const [selectedDate,   setSelectedDate]   = useState(null)  
+  const [flashIds,       setFlashIds]       = useState(new Set()) 
 
-  // Debounce ref for API saves
+ 
   const saveTimer = useRef(null)
 
-  // Load from API on mount and whenever uid changes (login/logout)
+  
   useEffect(() => {
     setLoaded(false)
     if (!usuario) {
@@ -1173,12 +1146,12 @@ const Planning = () => {
         lsSave(uid, remoteCards, resolvedCols)
       })
       .catch(() => {
-        // API failed — localStorage copy already loaded by useState / uid-change effect
+        
       })
       .finally(() => setLoaded(true))
   }, [uid])
 
-  // Persist to API (debounced 600ms) + localStorage immediately
+ 
   const persist = useCallback((nextCards, nextCols) => {
     lsSave(uid, nextCards, nextCols)
     clearTimeout(saveTimer.current)
@@ -1203,7 +1176,7 @@ const Planning = () => {
     setCols(nextCols); setCards(nextCards); persist(nextCards, nextCols)
   }
 
-  // Load all courses once
+  
   useEffect(() => {
     cursosAPI.listarTodos()
       .then(r => setCourses(r.data || []))
@@ -1227,8 +1200,7 @@ const Planning = () => {
   }
   const addInlineCard = (colId, titulo) => {
     const id = Date.now()
-    // Pre-fill dueDate from the active calendar selection so the new card
-    // immediately appears on the selected day in both sections
+    
     const dueDate = selectedDate || ''
     const next = [...cards, { id, ...EMPTY_FORM, col: colId, titulo, dueDate }]
     persistCards(next)
@@ -1243,7 +1215,7 @@ const Planning = () => {
   const deleteCard = (id) => {
     const next = cards.filter(c => c.id !== id)
     persistCards(next)
-    // If the deleted card was the last one on the selected date, clear the selection
+   
     if (selectedDate && !next.some(c => c.dueDate === selectedDate)) {
       setSelectedDate(null)
     }
@@ -1252,7 +1224,7 @@ const Planning = () => {
   const saveCard = (updated) => {
     persistCards(cards.map(c => c.id === updated.id ? updated : c))
     setEditingCard(null)
-    // Follow the card to its new date if it changed
+
     if (updated.dueDate) {
       setSelectedDate(updated.dueDate)
     } else if (selectedDate) {
@@ -1271,7 +1243,7 @@ const Planning = () => {
     }
   }
 
-  // Bulk-add confirmed courses from PrefillModal — each becomes its own card
+ 
   const confirmPrefill = (chosen, col) => {
     const now = Date.now()
     const newCards = chosen.map((c, i) => ({
@@ -1290,14 +1262,12 @@ const Planning = () => {
     setPrefillModal(null)
   }
 
-  // Open the prefill modal as soon as location.state carries suggestions.
-  // Using a key derived from the state object means re-navigation always
-  // triggers the modal without needing a page refresh.
+  
   useEffect(() => {
     const suggestions = location.state?.prefillCards
     if (!suggestions?.length) return
     setPrefillModal(suggestions)
-    // Clear the state so back-navigation doesn't re-open the modal
+    
     window.history.replaceState({}, '')
   }, [location.state])
 
@@ -1312,7 +1282,7 @@ const Planning = () => {
     <div className="planning-page">
       <Header />
 
-      {/* ── Workspace header ── */}
+      
       <div className="planning-workspace-header">
         <div className="planning-workspace-title-row">
           <div className="planning-workspace-icon"><IconKanban /></div>
@@ -1352,7 +1322,7 @@ const Planning = () => {
         </button>
       </div>
 
-      {/* Progress */}
+     
       {total > 0 && (
         <div className="planning-progress-wrap">
           <div className="planning-progress-track">
@@ -1362,7 +1332,7 @@ const Planning = () => {
         </div>
       )}
 
-      {/* Add form */}
+   
       {adding && (
         <div className="planning-form-wrap">
           <CardForm
@@ -1376,7 +1346,7 @@ const Planning = () => {
         </div>
       )}
 
-      {/* Edit modal */}
+     
       {editingCard && (
         <EditModal
           card={editingCard}
@@ -1386,7 +1356,7 @@ const Planning = () => {
         />
       )}
 
-      {/* Prefill modal */}
+   
       {prefillModal && (
         <PrefillModal
           suggestions={prefillModal}
@@ -1395,10 +1365,10 @@ const Planning = () => {
         />
       )}
 
-      {/* ── Unified workspace body ── */}
+     
       <div className="planning-workspace-body">
 
-        {/* Calendar zone */}
+     
         <section className="planning-zone planning-zone--calendar">
           <div className="planning-zone-header">
             <span className="planning-zone-icon"><IconCalendar /></span>
@@ -1418,7 +1388,7 @@ const Planning = () => {
           )}
         </section>
 
-        {/* Connector bridge */}
+      
         <div className="planning-bridge">
           <div className="planning-bridge-line" />
           <div className="planning-bridge-node">
@@ -1427,7 +1397,7 @@ const Planning = () => {
           <div className="planning-bridge-line" />
         </div>
 
-        {/* Board zone */}
+   
         <section className="planning-zone planning-zone--board">
           <div className="planning-zone-header">
             <span className="planning-zone-icon"><IconKanban /></span>

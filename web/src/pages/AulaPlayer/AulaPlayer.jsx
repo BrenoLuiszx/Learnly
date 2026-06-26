@@ -128,7 +128,7 @@ const AulaPlayer = () => {
       <Header />
       
       <div className="aula-player-container">
-        {/* Player Principal */}
+       
         <div className="aula-player-main">
           <div className="player-wrapper">
             {videoId ? (
@@ -149,7 +149,7 @@ const AulaPlayer = () => {
             )}
           </div>
 
-          {/* Informações da Aula */}
+
           <div className="aula-info-section">
             <div className="aula-header">
               <div>
@@ -176,7 +176,7 @@ const AulaPlayer = () => {
               </button>
             </div>
 
-            {/* Navegação entre aulas */}
+
             <div className="aula-navegacao">
               <button
                 onClick={() => navigate(`/curso/${cursoId}`)}
@@ -211,7 +211,7 @@ const AulaPlayer = () => {
           </div>
         </div>
 
-        {/* Sidebar com lista de aulas */}
+
         <div className="aula-player-sidebar">
           <div className="sidebar-header">
             <h3>Conteúdo do Curso</h3>

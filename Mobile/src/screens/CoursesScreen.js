@@ -57,7 +57,6 @@ const CoursesScreen = ({ navigation }) => {
       style={[styles.card, { backgroundColor: theme.cardBg, borderColor: theme.border }]}
       onPress={() => navigation.navigate('CourseDetails', { id: item.id })}
     >
-      {/* Cover image */}
       <View style={[styles.cover, { backgroundColor: theme.border }]}>
         {item.imagem ? (
           <Image source={{ uri: item.imagem }} style={styles.coverImg} resizeMode="cover" />
@@ -69,7 +68,6 @@ const CoursesScreen = ({ navigation }) => {
         <View style={[styles.coverBadge, { backgroundColor: theme.primary }]}>
           <Text style={[styles.badgeText, { color: isDark ? '#000' : '#FFF' }]}>{item.categoria}</Text>
         </View>
-        {/* Action buttons overlay */}
         <View style={styles.coverActions}>
           <TouchableOpacity
             style={[styles.actionBtn, { backgroundColor: 'rgba(0,0,0,0.55)' }]}
@@ -107,7 +105,6 @@ const CoursesScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* Header */}
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <View style={styles.logoRow}>
           <View style={[styles.logoBox, { backgroundColor: theme.primary }]}>
@@ -117,7 +114,7 @@ const CoursesScreen = ({ navigation }) => {
         </View>
         <Text style={[styles.pageTitle, { color: theme.text }]}>Catálogo de Cursos</Text>
         <Text style={[styles.pageSub, { color: theme.textSecondary }]}>
-          A plataforma de cursos mais avançada do Brasil.
+          Encontre seu próximo curso
         </Text>
         <View style={[styles.searchBox, { backgroundColor: theme.inputBg, borderColor: theme.border }]}>
           <Ionicons name="search" size={18} color={theme.textTertiary} style={{ marginRight: 8 }} />
@@ -131,7 +128,6 @@ const CoursesScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Filtros */}
       <View style={[styles.filtros, { borderBottomColor: theme.border }]}>
         <Ionicons name="filter" size={16} color={theme.textSecondary} style={{ marginRight: 8 }} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>

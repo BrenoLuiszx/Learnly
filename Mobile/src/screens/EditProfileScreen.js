@@ -66,7 +66,7 @@ const EditProfileScreen = ({ navigation }) => {
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
+
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={20} color={theme.textSecondary} />
@@ -78,7 +78,7 @@ const EditProfileScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      {/* Avatar preview */}
+
       <View style={[styles.avatarSection, { backgroundColor: theme.surface }]}>
         <View style={styles.avatarWrap}>
           {fotoUrl ? (
@@ -93,10 +93,10 @@ const EditProfileScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Form */}
+
       <View style={styles.form}>
 
-        {/* Nome */}
+  
         <View style={[styles.card, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
           <Text style={[styles.cardTitle, { color: theme.text }]}>Informações da Conta</Text>
 
@@ -132,7 +132,7 @@ const EditProfileScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Foto */}
+
         <View style={[styles.card, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
           <Text style={[styles.cardTitle, { color: theme.text }]}>Foto de Perfil</Text>
           <Text style={[styles.cardDesc, { color: theme.textSecondary }]}>
@@ -157,7 +157,7 @@ const EditProfileScreen = ({ navigation }) => {
           ) : null}
         </View>
 
-        {/* Feedback */}
+
         {msg ? (
           <Text style={[
             styles.msg,
@@ -167,7 +167,7 @@ const EditProfileScreen = ({ navigation }) => {
           </Text>
         ) : null}
 
-        {/* Save button */}
+       
         <TouchableOpacity
           style={[styles.btnSave, { backgroundColor: theme.primary }, saving && { opacity: 0.7 }]}
           onPress={salvar}

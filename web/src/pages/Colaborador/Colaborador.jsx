@@ -59,7 +59,7 @@ const Colaborador = () => {
   const [cursos, setCursos] = useState([]);
   const [loadingCursos, setLoadingCursos] = useState(true);
 
-  // Course form
+
   const [showCursoForm, setShowCursoForm] = useState(false);
   const [editandoCursoId, setEditandoCursoId] = useState(null);
   const [cursoForm, setCursoForm] = useState(CURSO_VAZIO);
@@ -67,28 +67,28 @@ const Colaborador = () => {
   const [cursoMsg, setCursoMsg] = useState('');
   const [showFormPreview, setShowFormPreview] = useState(false);
 
-  // Lesson manager modal
+
   const [aulasModal, setAulasModal] = useState(null);
   const [aulas, setAulas] = useState([]);
   const [savingAulas, setSavingAulas] = useState(false);
   const [aulasMsg, setAulasMsg] = useState('');
 
-  // Tabs
+
   const [activeTab, setActiveTab] = useState('cursos');
 
-  // Dashboard
+
   const [dashboardData, setDashboardData] = useState({});
   const [loadingDash, setLoadingDash] = useState(false);
   const [dashExpanded, setDashExpanded] = useState({});
   const [dashSection, setDashSection] = useState({});
   const [favStats, setFavStats] = useState({ myFavs: 0, myWL: 0, favLog: [], wlLog: [] });
 
-  // Preview modal
+
   const [previewCurso, setPreviewCurso] = useState(null);
   const [previewAulas, setPreviewAulas] = useState([]);
   const [previewAulaAtual, setPreviewAulaAtual] = useState(null);
 
-  // Jornada request
+
   const [savingJornada, setSavingJornada] = useState(false);
   const NIVEIS_JR = ['Iniciante', 'Intermediário', 'Avançado'];
 
@@ -96,15 +96,15 @@ const Colaborador = () => {
   const podesolicitarJornada = cursosAprovados.length >= 3;
   const [minhasJornadas, setMinhasJornadas] = useState([]);
 
-  // Refresh owned jornadas whenever the tab becomes active or cursos load
+
   useEffect(() => {
     if (activeTab === 'jornada' && usuario) {
       setMinhasJornadas(getMinhasJornadas(usuario.id));
     }
   }, [activeTab, usuario]);
 
-  // Edit request state
-  const [editandoJornada, setEditandoJornada] = useState(null); // jornada being edited
+
+  const [editandoJornada, setEditandoJornada] = useState(null); 
   const [jornadaEditForm, setJornadaEditForm] = useState(null);
   const [jornadaEditMsg, setJornadaEditMsg] = useState('');
   const [savingJornadaEdit, setSavingJornadaEdit] = useState(false);
@@ -143,7 +143,7 @@ const Colaborador = () => {
     setSavingJornadaEdit(false);
   };
 
-  const toggleCursoJR = (_id) => {}; // kept for compat, no longer used directly
+  const toggleCursoJR = (_id) => {}; 
 
   const handleJornadaReqSubmit = async (e) => {
     e.preventDefault();
@@ -174,11 +174,11 @@ const Colaborador = () => {
     setLoadingCursos(false);
   };
 
-  // ── Dashboard ────────────────────────────────────────────────
+
   const carregarDashboard = async () => {
     setLoadingDash(true);
     const aprovados = cursos.filter(c => c.status === 'aprovado');
-    // Load course stats + per-course favorites/watch-later in parallel
+
     const [entries, ...acoesPorCurso] = await Promise.all([
       Promise.all(aprovados.map(async (c) => {
         try {
@@ -197,7 +197,7 @@ const Colaborador = () => {
       ),
     ]);
     setDashboardData(Object.fromEntries(entries));
-    // Flatten all per-course logs
+
     const favLog = acoesPorCurso.flatMap(([f]) => Array.isArray(f.data) ? f.data : []);
     const wlLog  = acoesPorCurso.flatMap(([, w]) => Array.isArray(w.data) ? w.data : []);
     setFavStats({ myFavs: favLog.length, myWL: wlLog.length, favLog, wlLog });
@@ -228,7 +228,7 @@ const Colaborador = () => {
     ? new Date(s).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
     : '—';
 
-  // backend returns nomeUsuario / tituloCurso / dataAcao
+
   const TrackingTable = ({ entries, emptyMsg }) => {
     if (entries.length === 0) return <p className="cd-empty">{emptyMsg}</p>;
     return (
@@ -252,7 +252,7 @@ const Colaborador = () => {
     );
   };
 
-  // ── Course form ──────────────────────────────────────────────
+
   const abrirNovoCurso = () => {
     setCursoForm(CURSO_VAZIO);
     setEditandoCursoId(null);
@@ -310,7 +310,7 @@ const Colaborador = () => {
     setSavingCurso(false);
   };
 
-  // ── Lesson manager ───────────────────────────────────────────
+
   const abrirAulas = async (curso) => {
     setAulasModal(curso);
     setAulasMsg('');
@@ -356,7 +356,7 @@ const Colaborador = () => {
     });
   };
 
-  // ── Preview
+
 
   const salvarAulas = async () => {
     const invalidas = aulas.filter(a => !a.titulo.trim() || !a.url.trim());
@@ -378,7 +378,7 @@ const Colaborador = () => {
     setSavingAulas(false);
   };
 
-  // ── Preview ──────────────────────────────────────────────────
+
   const abrirPreview = async (curso) => {
     setPreviewCurso(curso);
     setPreviewAulaAtual(null);
@@ -397,7 +397,7 @@ const Colaborador = () => {
       <Header />
       <div className="admin-container">
 
-        {/* Header */}
+
         <div className="admin-header">
           <div className="admin-title">
             <h1>Instrutor</h1>
@@ -419,12 +419,12 @@ const Colaborador = () => {
           </div>
         </div>
 
-        {/* Actions */}
+  
         <div className="admin-actions">
           <button className="btn-new-course" onClick={abrirNovoCurso}>+ Novo Curso</button>
         </div>
 
-        {/* Tab nav */}
+
         <div style={{ display: 'flex', gap: '8px', margin: '0 0 24px', borderBottom: '1px solid #2c2c2e', paddingBottom: '0' }}>
           {['cursos', 'dashboard', 'jornada'].map(tab => (
             <button
@@ -530,7 +530,7 @@ const Colaborador = () => {
                   </div>
                 </div>
 
-                {/* ── Intro Page Section ── */}
+
                 <div className="cf-section cf-section-intro">
                   <div className="cf-section-header">
                     <span className="cf-section-title">Página de Introdução</span>
@@ -568,7 +568,7 @@ const Colaborador = () => {
                   </div>
                 </div>
 
-                {/* ── Course Details Resources ── */}
+
                 <div className="cf-section">
                   <div className="cf-section-header">
                     <span className="cf-section-title">Links Externos</span>
@@ -625,14 +625,14 @@ const Colaborador = () => {
           />
         )}
 
-        {/* Dashboard tab */}
+
         {activeTab === 'dashboard' && (() => {
           const aprovados = cursos.filter(c => c.status === 'aprovado');
           const kpis = dashKPIs();
           return (
             <div className="cd-dash">
 
-              {/* KPI bar */}
+   
               <div className="cd-kpis">
                 <div className="cd-kpi">
                   <span className="cd-kpi-val" style={{ color: '#ffd700' }}>{aprovados.length}</span>
@@ -683,7 +683,7 @@ const Colaborador = () => {
                     return (
                       <div key={curso.id} className={`cd-card${expanded ? ' expanded' : ''}`}>
 
-                        {/* Header row — click to expand */}
+
                         <div className="cd-card-header" onClick={() => toggleDashCurso(curso.id)}>
                           <div className="cd-card-left">
                             <span className="cd-chevron">{expanded ? '▾' : '▸'}</span>
@@ -708,7 +708,7 @@ const Colaborador = () => {
                           </div>
                         </div>
 
-                        {/* Expanded detail */}
+
                         {expanded && (
                           <div className="cd-detail">
                             <div className="cd-subtabs">
@@ -726,7 +726,7 @@ const Colaborador = () => {
                               </button>
                             </div>
 
-                            {/* Alunos */}
+
                             {section === 'alunos' && (
                               <div className="cd-alunos">
                                 {alunos.length === 0 ? (
@@ -782,7 +782,7 @@ const Colaborador = () => {
                               </div>
                             )}
 
-                            {/* Avaliações */}
+
                             {section === 'avaliacoes' && (
                               <div className="cd-avaliacoes">
                                 {avaliacoes.length === 0 ? (
@@ -834,7 +834,7 @@ const Colaborador = () => {
                 </div>
               )}
 
-              {/* ── User-level tracking for instructor's courses ── */}
+
               {(favStats.favLog.length > 0 || favStats.wlLog.length > 0) && (
                 <div className="adm-tracking-section">
                   <div className="adm-tracking-tabs">
@@ -865,7 +865,7 @@ const Colaborador = () => {
           );
         })()}
 
-        {/* Jornada tab — same UI as Admin, scoped to instructor-owned jornadas */}
+
         {activeTab === 'jornada' && (
           <div className="courses-management">
             <div className="management-header">
@@ -879,7 +879,7 @@ const Colaborador = () => {
               )}
             </div>
 
-            {/* Eligibility notice */}
+
             {!podesolicitarJornada && (
               <div style={{ background: 'rgba(255,215,0,0.05)', border: '1px solid rgba(255,215,0,0.15)', borderRadius: '10px', padding: '12px 16px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '1.1rem' }}>🔒</span>
@@ -887,7 +887,7 @@ const Colaborador = () => {
               </div>
             )}
 
-            {/* ── Inline form (new request OR edit request) ── */}
+
             {jornadaEditForm && (
               <div className="course-form-container">
                 <form onSubmit={editandoJornada ? handleJornadaEditSubmit : handleJornadaReqSubmit} className="course-form">
@@ -921,7 +921,7 @@ const Colaborador = () => {
                     </div>
                   </div>
 
-                  {/* Course picker — same as Admin: selected list with reorder + available tiles */}
+
                   <div className="cf-section">
                     <div className="cf-section-header">
                       <span className="cf-section-title">Cursos da Jornada ({jornadaEditForm.cursoIds.length} selecionados)</span>
@@ -971,7 +971,7 @@ const Colaborador = () => {
               </div>
             )}
 
-            {/* ── Owned jornada list — same card layout as Admin ── */}
+
             <div className="courses-grid">
               {minhasJornadas.map(j => (
                 <div key={j.slug} className="course-card">
@@ -1014,7 +1014,7 @@ const Colaborador = () => {
           </div>
         )}
 
-        {/* Course list */}
+
         {activeTab === 'cursos' && <div className="courses-management">
           <div className="management-header">
             <h2>Meus Cursos</h2>
@@ -1059,7 +1059,7 @@ const Colaborador = () => {
         </div>}
       </div>
 
-      {/* ── Lesson manager modal ── */}
+
       {aulasModal && (
         <LessonManager
           curso={aulasModal}
@@ -1076,12 +1076,12 @@ const Colaborador = () => {
         />
       )}
 
-      {/* ── Preview modal ── */}
+
       {previewCurso && (
         <div className="modal-overlay" onClick={() => setPreviewCurso(null)}>
           <div className="colab-preview-modal" onClick={e => e.stopPropagation()}>
 
-            {/* Preview header */}
+
             <div className="colab-preview-header">
               <div>
                 <span className="colab-preview-badge">PRÉ-VISUALIZAÇÃO</span>
@@ -1094,7 +1094,7 @@ const Colaborador = () => {
             </div>
 
             <div className="colab-preview-body">
-              {/* Video player */}
+
               <div className="colab-preview-player">
                 {previewAulaAtual ? (
                   getYouTubeId(previewAulaAtual.url) ? (
@@ -1120,7 +1120,7 @@ const Colaborador = () => {
                   </div>
                 )}
 
-                {/* Current lesson info */}
+
                 {previewAulaAtual && (
                   <div className="colab-preview-aula-info">
                     <span className="colab-preview-aula-badge">Aula {previewAulaAtual.ordem}</span>
@@ -1132,7 +1132,7 @@ const Colaborador = () => {
                 )}
               </div>
 
-              {/* Sidebar: course info + lesson list */}
+
               <div className="colab-preview-sidebar">
                 <div className="colab-preview-curso-info">
                   <span className="course-category" style={{ fontSize: '0.7rem' }}>{previewCurso.categoria}</span>

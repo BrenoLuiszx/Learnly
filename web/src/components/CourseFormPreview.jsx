@@ -8,16 +8,6 @@ const parseLinks = (val) => {
 
 const formatDuracao = (min) => formatDuration(min);
 
-/**
- * Full-page live preview of a course, mirroring CursoDetalhes layout.
- * Props:
- *   form        – course form state object
- *   aulas       – array of lesson objects (optional)
- *   onClose     – callback to close the preview
- *   role        – 'admin' | 'colaborador' (cosmetic label only)
- *   onAprovar   – (optional) admin approval callback
- *   onRejeitar  – (optional) admin rejection callback
- */
 const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprovar, onRejeitar }) => {
   const [aulaAtual, setAulaAtual] = useState(aulas[0] || null);
 
@@ -32,7 +22,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
       background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(6px)',
       overflowY: 'auto', display: 'flex', flexDirection: 'column',
     }}>
-      {/* Preview top bar */}
+     
       <div style={{
         position: 'sticky', top: 0, zIndex: 1,
         background: '#0a0a0b', borderBottom: '1px solid #2c2c2e',
@@ -84,20 +74,20 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
         </div>
       </div>
 
-      {/* Simulated course page */}
+
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px', width: '100%' }}>
 
-        {/* Hero */}
+    
         <div style={{ marginBottom: '32px' }}>
 
-          {/* Cover image */}
+
           {form.imagem && (
             <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '24px', maxHeight: '320px' }}>
               <img src={form.imagem} alt="capa" style={{ width: '100%', objectFit: 'cover', maxHeight: '320px', display: 'block' }} />
             </div>
           )}
 
-          {/* Category + title */}
+
           <div style={{ marginBottom: '16px' }}>
             {form.categoria && (
               <span style={{
@@ -118,7 +108,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               {form.descricao || <span style={{ color: '#444', fontStyle: 'italic' }}>Descrição curta aparecerá aqui</span>}
             </p>
 
-            {/* Meta row */}
+
             <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'center' }}>
               {form.instrutor && (
                 <span style={{ color: '#ffd700', fontSize: '0.9rem', fontWeight: 600 }}>
@@ -132,20 +122,20 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               )}
               {aulas.length > 0 && (
                 <span style={{ color: '#888', fontSize: '0.9rem' }}>
-                  🎬 {aulas.length} {aulas.length === 1 ? 'aula' : 'aulas'}
+                   {aulas.length} {aulas.length === 1 ? 'aula' : 'aulas'}
                 </span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Two-column layout */}
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '32px', alignItems: 'start' }}>
 
-          {/* Main column */}
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
-            {/* Video player */}
+
             <section>
               <div style={{
                 background: '#1c1c1e', borderRadius: '12px', overflow: 'hidden',
@@ -193,7 +183,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               </div>
             </section>
 
-            {/* Lessons list */}
+
             {aulas.length > 0 && (
               <section>
                 <h2 style={{ color: '#f2f2f7', fontSize: '1.25rem', fontWeight: 700, margin: '0 0 16px' }}>
@@ -238,7 +228,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               </section>
             )}
 
-            {/* About */}
+
             <section>
               <h2 style={{ color: '#f2f2f7', fontSize: '1.25rem', fontWeight: 700, margin: '0 0 16px' }}>
                 Sobre o Curso
@@ -262,7 +252,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               </div>
             </section>
 
-            {/* External links */}
+
             {linksExternos.length > 0 && (
               <section>
                 <h2 style={{ color: '#f2f2f7', fontSize: '1.25rem', fontWeight: 700, margin: '0 0 16px' }}>
@@ -285,7 +275,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               </section>
             )}
 
-            {/* Attachments */}
+
             {anexos.length > 0 && (
               <section>
                 <h2 style={{ color: '#f2f2f7', fontSize: '1.25rem', fontWeight: 700, margin: '0 0 16px' }}>
@@ -309,10 +299,8 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
             )}
           </div>
 
-          {/* Sidebar */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: '72px' }}>
 
-            {/* Instructor card */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: '72px' }}>
             <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #2c2c2e', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#f2f2f7', fontSize: '1rem', fontWeight: 700, margin: '0 0 16px' }}>Instrutor</h3>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -332,7 +320,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               </div>
             </div>
 
-            {/* Course specs */}
+
             <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid #2c2c2e', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ color: '#f2f2f7', fontSize: '1rem', fontWeight: 700, margin: '0 0 16px' }}>Detalhes do Curso</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -352,7 +340,7 @@ const CourseFormPreview = ({ form, aulas = [], onClose, role = 'admin', onAprova
               </div>
             </div>
 
-            {/* Enroll CTA (cosmetic) */}
+
             <div style={{ background: 'rgba(255,215,0,0.06)', border: '1px solid rgba(255,215,0,0.15)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
               <p style={{ color: '#ffd700', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 12px' }}>
                 Botão de matrícula

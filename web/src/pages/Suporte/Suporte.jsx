@@ -78,7 +78,7 @@ const Suporte = () => {
       <Header />
 
       <main className="suporte-main">
-        {/* Hero */}
+        
         <section className="suporte-hero">
           <div className="suporte-hero-inner">
             <span className="suporte-badge">Central de Ajuda</span>
@@ -89,7 +89,7 @@ const Suporte = () => {
           </div>
         </section>
 
-        {/* FAQ */}
+        
         <section className="suporte-faq-section">
           <div className="suporte-faq-container">
             <h2 className="suporte-faq-title">Dúvidas Frequentes</h2>

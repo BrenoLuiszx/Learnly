@@ -8,13 +8,13 @@ const LOGIN_ROUTES = ['/login', '/registro'];
 const ADMIN_ROUTES = ['/admin', '/cadastro'];
 
 const getRedirectDest = (returnTo, role) => {
-  // Never redirect back to login/registro pages
+
   if (!returnTo || LOGIN_ROUTES.some(r => returnTo.startsWith(r))) {
     if (role === 'admin') return '/admin';
     if (role === 'colaborador') return '/colaborador';
     return '/';
   }
-  // Non-admin users must not land on admin-only routes
+
   if (role !== 'admin' && ADMIN_ROUTES.some(r => returnTo.startsWith(r))) {
     return '/';
   }
@@ -31,10 +31,7 @@ const Login = () => {
   const [submitting, setSubmitting] = useState(false);
   const [mensagem, setMensagem] = useState('');
 
-  // Guard: already authenticated — redirect away from login page.
-  // Skip during submission: state may not have flushed yet even though
-  // localStorage is already written, so isAuthenticated could briefly be
-  // true from a previous session while the new login is in-flight.
+
   if (!loading && !submitting && isAuthenticated) {
     return <Navigate to={getRedirectDest(returnTo, usuario?.role)} replace />;
   }
@@ -46,9 +43,7 @@ const Login = () => {
     try {
       const response = await usuariosAPI.login(form);
       const { usuario: u, token } = response.data;
-      // Persist to localStorage BEFORE calling login() so that if the
-      // Navigate guard re-renders before React state flushes, readSession()
-      // already sees the valid session and won't redirect back to /login.
+    
       localStorage.setItem('token', token);
       localStorage.setItem('usuario', JSON.stringify(u));
       login(u, token);
@@ -68,7 +63,7 @@ const Login = () => {
         <div className="login-left">
           <div className="login-brand">
             <div className="logo-section">
-              <span className="logo-icon">📚</span>
+              <svg className="logo-icon" viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="none" stroke="currentColor" strokeWidth="2"/></svg>
               <h1>Learnly</h1>
             </div>
             <p className="brand-subtitle">Sua plataforma de cursos gratuitos</p>

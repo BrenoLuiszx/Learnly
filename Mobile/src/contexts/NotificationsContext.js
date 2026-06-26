@@ -22,7 +22,6 @@ export const NotificationsProvider = ({ children }) => {
   const appStateRef = useRef(AppState.currentState);
   const userIdRef = useRef(null);
 
-  // Keep ref in sync so callbacks always see latest userId
   useEffect(() => {
     userIdRef.current = userId;
   }, [userId]);
@@ -55,9 +54,8 @@ export const NotificationsProvider = ({ children }) => {
       const cursos = cursosRes.data || [];
 
       const newNotifications = [];
-
-      // — Course notifications —
       const newCourseIds = [];
+
       for (const c of cursos) {
         const isNew = !knownCourseIds.includes(c.id) && knownCourseIds.length > 0;
         newNotifications.push({
@@ -74,7 +72,6 @@ export const NotificationsProvider = ({ children }) => {
         newCourseIds.push(c.id);
       }
 
-      // — Lesson notifications —
       const newLessonIds = [...knownLessonIds];
       for (const curso of cursos) {
         try {
@@ -110,7 +107,6 @@ export const NotificationsProvider = ({ children }) => {
 
       setNotifications(sorted);
       setUnreadCount(sorted.filter(n => !n.read).length);
-
       await saveStored(uid, { readIds, knownCourseIds: newCourseIds, knownLessonIds: newLessonIds });
     } catch {}
   }, []);
@@ -139,7 +135,6 @@ export const NotificationsProvider = ({ children }) => {
     });
   }, []);
 
-  // Poll while app is active
   const startPolling = useCallback(() => {
     if (pollRef.current) return;
     pollRef.current = setInterval(load, POLL_INTERVAL);
@@ -152,7 +147,6 @@ export const NotificationsProvider = ({ children }) => {
     }
   }, []);
 
-  // Reset and reload when user changes (login/logout/switch account)
   useEffect(() => {
     setNotifications([]);
     setUnreadCount(0);

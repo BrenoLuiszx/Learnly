@@ -47,7 +47,7 @@ const MeusCursos = () => {
 
   const favoritados = cursos.filter(c => favorites.has(c.id));
   const assistirDepois = cursos.filter(c => watchLater.has(c.id));
-  // Union count: courses in either list, no double-counting
+
   const totalSalvos = new Set([...favorites, ...watchLater]).size;
 
   const CourseCard = ({ curso }) => {

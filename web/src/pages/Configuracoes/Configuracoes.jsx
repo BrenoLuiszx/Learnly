@@ -25,17 +25,17 @@ const Configuracoes = () => {
   const [activeSection, setActiveSection] = useState('perfil');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  // Perfil
+
   const [photoPreview, setPhotoPreview] = useState(usuario?.foto || '');
   const [nome, setNome] = useState(usuario?.nome || '');
   const [profileSaved, setProfileSaved] = useState(false);
 
-  // Acessibilidade
+
   const [fontSize, setFontSize] = useState(() => localStorage.getItem('fontSize') || 'Médio');
   const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('reducedMotion') === 'true');
   const [highContrast, setHighContrast] = useState(() => localStorage.getItem('highContrast') === 'true');
 
-  // Stats
+
   const [stats, setStats] = useState({ cursosAcessados: 0, concluidos: 0, totalMinutos: 0 });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const Configuracoes = () => {
     }
   }, [usuario]);
 
-  // Apply accessibility settings
+
   useEffect(() => {
     document.documentElement.style.fontSize = FONT_SIZE_VALUES[fontSize];
     localStorage.setItem('fontSize', fontSize);
@@ -89,14 +89,14 @@ const Configuracoes = () => {
 
       <div className="cfg-layout">
 
-        {/* ── Sidebar ── */}
+
         <aside className={`cfg-sidebar${mobileNavOpen ? ' open' : ''}`}>
           <div className="cfg-sidebar-header">
             <span className="cfg-sidebar-title">Configurações</span>
             <button className="cfg-mobile-close" onClick={() => setMobileNavOpen(false)}>×</button>
           </div>
 
-          {/* User card */}
+
           <div className="cfg-user-card">
             <div className="cfg-user-avatar">
               {photoPreview
@@ -131,7 +131,7 @@ const Configuracoes = () => {
           </div>
         </aside>
 
-        {/* Mobile nav toggle */}
+
         <button className="cfg-mobile-toggle" onClick={() => setMobileNavOpen(true)}>
           <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 20, height: 20 }}>
             <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
@@ -141,10 +141,10 @@ const Configuracoes = () => {
 
         {mobileNavOpen && <div className="cfg-overlay" onClick={() => setMobileNavOpen(false)} />}
 
-        {/* ── Main content ── */}
+
         <main className="cfg-main">
 
-          {/* ── PERFIL ── */}
+
           {activeSection === 'perfil' && (
             <section className="cfg-section">
               <div className="cfg-section-head">
@@ -152,7 +152,7 @@ const Configuracoes = () => {
                 <p>Gerencie sua foto e informações pessoais</p>
               </div>
 
-              {/* Photo */}
+
               <div className="cfg-card">
                 <h3 className="cfg-card-title">Foto de Perfil</h3>
                 <div className="cfg-photo-row">
@@ -182,7 +182,7 @@ const Configuracoes = () => {
                 </div>
               </div>
 
-              {/* Info */}
+
               <div className="cfg-card">
                 <h3 className="cfg-card-title">Informações da Conta</h3>
                 <div className="cfg-field-grid">
@@ -216,7 +216,7 @@ const Configuracoes = () => {
                 </div>
               </div>
 
-              {/* Stats */}
+
               <div className="cfg-card">
                 <h3 className="cfg-card-title">Atividade</h3>
                 <div className="cfg-stats-row">
@@ -235,7 +235,7 @@ const Configuracoes = () => {
             </section>
           )}
 
-          {/* ── APARÊNCIA ── */}
+
           {activeSection === 'aparencia' && (
             <section className="cfg-section">
               <div className="cfg-section-head">
@@ -294,7 +294,7 @@ const Configuracoes = () => {
             </section>
           )}
 
-          {/* ── ACESSIBILIDADE ── */}
+
           {activeSection === 'acessibilidade' && (
             <section className="cfg-section">
               <div className="cfg-section-head">
@@ -353,7 +353,7 @@ const Configuracoes = () => {
             </section>
           )}
 
-          {/* ── MINHA CONTA ── */}
+  
           {activeSection === 'conta' && (
             <section className="cfg-section">
               <div className="cfg-section-head">
@@ -361,7 +361,7 @@ const Configuracoes = () => {
                 <p>Acesse e gerencie todas as funções da sua conta</p>
               </div>
 
-              {/* Quick links */}
+
               <div className="cfg-card">
                 <h3 className="cfg-card-title">Navegação Rápida</h3>
                 <div className="cfg-account-links">
@@ -410,7 +410,7 @@ const Configuracoes = () => {
                 </div>
               </div>
 
-              {/* Session */}
+
               <div className="cfg-card">
                 <h3 className="cfg-card-title">Sessão Atual</h3>
                 <div className="cfg-session-info">
@@ -438,7 +438,7 @@ const Configuracoes = () => {
                 </div>
               </div>
 
-              {/* Danger */}
+  
               <div className="cfg-card cfg-danger-card">
                 <h3 className="cfg-card-title cfg-danger-title">Zona de Perigo</h3>
                 <p className="cfg-card-desc">Ações irreversíveis relacionadas à sua conta.</p>

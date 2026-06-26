@@ -12,70 +12,23 @@ export const AuthProvider = ({ children }) => {
     const restore = async () => {
       try {
         const stored = await AsyncStorage.getItem('user');
-        if (stored) {
-          setUser(JSON.parse(stored));
-          console.log(' Sessão restaurada do AsyncStorage');
-        }
-      } catch (error) {
-        console.error(' Erro ao restaurar sessão:', error);
-      }
+        if (stored) setUser(JSON.parse(stored));
+      } catch {}
       setLoading(false);
     };
     restore();
   }, []);
 
   const login = async (email, senha) => {
-    try {
-      console.log(' AuthContext - Iniciando login');
-      console.log(' Email:', email);
-      
-      // Envia credenciais no mesmo formato que o web: { email, senha }
-      const response = await usuariosAPI.login({ email, senha });
-      
-      console.log(' Resposta recebida');
-      console.log(' Status:', response.status);
-      
-      const { token, usuario } = response.data;
-      
-      if (!token) {
-        console.error(' Token não encontrado na resposta');
-        throw new Error('Token não retornado pelo servidor');
-      }
-      
-      if (!usuario) {
-        console.error(' Usuario não encontrado na resposta');
-        throw new Error('Usuário não retornado pelo servidor');
-      }
-      
-      console.log(' Salvando token e usuário no AsyncStorage');
-      console.log(' Usuário:', usuario.nome, '- Role:', usuario.role);
-      
-      await AsyncStorage.setItem('token', token);
-      await AsyncStorage.setItem('user', JSON.stringify(usuario));
-      
-      setUser(usuario);
-      console.log(' Login concluído com sucesso!');
-      
-      return usuario;
-    } catch (error) {
-      console.error(' Erro no login (AuthContext)');
-      console.error(' Message:', error.message);
-      
-      if (error.response) {
-        console.error(' Status HTTP:', error.response.status);
-        console.error(' Dados:', JSON.stringify(error.response.data));
-      } else if (error.request) {
-        console.error(' Request feito mas sem resposta do servidor');
-      } else {
-        console.error(' Erro ao configurar request');
-      }
-      
-      throw error;
-    }
+    const response = await usuariosAPI.login({ email, senha });
+    const { token, usuario } = response.data;
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('user', JSON.stringify(usuario));
+    setUser(usuario);
+    return usuario;
   };
 
   const logout = async () => {
-    console.log(' Fazendo logout');
     await AsyncStorage.multiRemove(['token', 'user']);
     setUser(null);
   };
@@ -87,15 +40,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      usuario: user, // Alias para compatibilidade com código que usa 'usuario'
-      loading, 
-      login, 
-      logout, 
-      updateUser,
-      isAuthenticated: !!user,
-    }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, updateUser, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

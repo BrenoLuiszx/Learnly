@@ -17,7 +17,6 @@ public class CertificadoController {
     @Autowired
     private CertificadoService certificadoService;
 
-    // Emite ou atualiza certificado (com ou sem upload de URL)
     @PostMapping("/cursos/{cursoId}")
     public ResponseEntity<Certificado> emitir(@PathVariable Long cursoId,
                                                @RequestBody(required = false) Map<String, String> body,
@@ -31,54 +30,43 @@ public class CertificadoController {
         }
     }
 
-    // Lista meus certificados
     @GetMapping("/meus")
     public ResponseEntity<List<Certificado>> meusCertificados(Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        return ResponseEntity.ok(certificadoService.listarPorUsuario(usuarioId));
+        return ResponseEntity.ok(certificadoService.listarPorUsuario((Long) auth.getCredentials()));
     }
 
-    // Cursos concluídos sem certificado emitido (disponíveis para emitir)
     @GetMapping("/disponiveis")
     public ResponseEntity<List<Map<String, Object>>> disponiveis(Authentication auth) {
-        Long usuarioId = (Long) auth.getCredentials();
-        return ResponseEntity.ok(certificadoService.cursosDisponiveisParaCertificado(usuarioId));
+        return ResponseEntity.ok(certificadoService.cursosDisponiveisParaCertificado((Long) auth.getCredentials()));
     }
 
-    // Certificados públicos de um usuário (para empresas visualizarem)
     @GetMapping("/usuario/{usuarioId}/publicos")
     public ResponseEntity<List<Certificado>> certificadosPublicos(@PathVariable Long usuarioId) {
         return ResponseEntity.ok(certificadoService.listarPublicosPorUsuario(usuarioId));
     }
 
-    // Alterna visibilidade pública do certificado
     @PutMapping("/{id}/visibilidade")
     public ResponseEntity<Certificado> alternarVisibilidade(@PathVariable Long id, Authentication auth) {
         try {
-            Long usuarioId = (Long) auth.getCredentials();
-            return ResponseEntity.ok(certificadoService.alternarVisibilidade(id, usuarioId));
+            return ResponseEntity.ok(certificadoService.alternarVisibilidade(id, (Long) auth.getCredentials()));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    // Detalhes enriquecidos de um certificado (para a página do certificado)
     @GetMapping("/{id}/detalhes")
     public ResponseEntity<Map<String, Object>> detalhes(@PathVariable Long id, Authentication auth) {
         try {
-            Long usuarioId = (Long) auth.getCredentials();
-            return ResponseEntity.ok(certificadoService.detalhesCertificado(id, usuarioId));
+            return ResponseEntity.ok(certificadoService.detalhesCertificado(id, (Long) auth.getCredentials()));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    // Emite e retorna detalhes do certificado (valida conclusão antes de emitir)
     @PostMapping("/cursos/{cursoId}/emitir-detalhes")
     public ResponseEntity<Map<String, Object>> emitirDetalhes(@PathVariable Long cursoId, Authentication auth) {
         try {
-            Long usuarioId = (Long) auth.getCredentials();
-            return ResponseEntity.ok(certificadoService.emitirERetornarDetalhes(usuarioId, cursoId));
+            return ResponseEntity.ok(certificadoService.emitirERetornarDetalhes((Long) auth.getCredentials(), cursoId));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));
         }

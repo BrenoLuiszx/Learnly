@@ -41,8 +41,6 @@ const DashboardTab = ({ stats, usuario }) => {
     if (lastAccessed?.cursoId) {
       const match = cursos.find(c => c.cursoId === lastAccessed.cursoId);
       if (match) {
-        // Usa o ID do banco (ultima aula concluida) se for mais recente que o localStorage.
-        // Compara o timestamp do localStorage com a ultimaAtividade do banco.
         const tsLocal = lastAccessed.ts || 0;
         const tsServer = match.ultimaAtividade ? new Date(match.ultimaAtividade).getTime() : 0;
         const localEhMaisRecente = tsLocal > tsServer;
@@ -53,7 +51,7 @@ const DashboardTab = ({ stats, usuario }) => {
         };
       }
     }
-    // Fallback: most recently active course by ultimaAtividade
+
     const sorted = [...cursos].sort((a, b) => {
       const ta = a.ultimaAtividade ? new Date(a.ultimaAtividade).getTime() : 0;
       const tb = b.ultimaAtividade ? new Date(b.ultimaAtividade).getTime() : 0;
@@ -64,9 +62,6 @@ const DashboardTab = ({ stats, usuario }) => {
 
   const handleContinue = () => {
     if (!ultimoAcessado) return;
-    // Quando _lastAulaId já foi resolvido contra o banco no cálculo acima,
-    // apenas precisamos garantir fallback para proximaAulaId (curso em andamento
-    // sem localStorage) ou ultimaAulaId (curso concluído).
     const aulaId = ultimoAcessado._lastAulaId
       || ultimoAcessado.proximaAulaId
       || ultimoAcessado.ultimaAulaId;
@@ -77,7 +72,6 @@ const DashboardTab = ({ stats, usuario }) => {
     }
   };
 
-  // Label para a linha "última aula" — usa a mesma fonte resolvida no ultimoAcessado
   const lastLessonLabel = (() => {
     if (ultimoAcessado?._lastAulaTitle) return ultimoAcessado._lastAulaTitle;
     if (ultimoAcessado?.proximaAulaTitulo) return ultimoAcessado.proximaAulaTitulo;
@@ -97,7 +91,7 @@ const DashboardTab = ({ stats, usuario }) => {
   return (
     <div className="ud-content-grid">
 
-      {/* ── Continue ── */}
+   
       {ultimoAcessado && (
         <div className="ud-full">
           <Section label="Continuar aprendendo">
@@ -156,7 +150,6 @@ const DashboardTab = ({ stats, usuario }) => {
         </div>
       )}
 
-      {/* ── Em andamento ── */}
       {emAndamento.length > 0 && (
         <div>
           <Section label="Em andamento" count={emAndamento.length}>
@@ -189,7 +182,6 @@ const DashboardTab = ({ stats, usuario }) => {
         </div>
       )}
 
-      {/* ── Concluídos ── */}
       {concluidos.length > 0 && (
         <div>
           <Section label="Concluídos" count={concluidos.length}>
@@ -218,7 +210,6 @@ const DashboardTab = ({ stats, usuario }) => {
         </div>
       )}
 
-      {/* ── Histórico ── */}
       {cursos.length > 0 && (
         <div className="ud-full">
           <Section label="Histórico" count={cursos.length}>
@@ -259,7 +250,6 @@ const DashboardTab = ({ stats, usuario }) => {
         </div>
       )}
 
-      {/* ── Empty ── */}
       {cursos.length === 0 && (
         <div className="ud-full">
           <div className="ud-card">

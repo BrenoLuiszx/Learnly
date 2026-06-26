@@ -1,11 +1,4 @@
-/* =============================================
-   PLANO DE ESTUDO
-   Follows the same surface hierarchy as user-dashboard:
-     L0  #0a0a0b  — page bg
-     L1  #111113  — hero / banners
-     L2  #1c1c1e  — cards
-     L3  #242426  — inset rows
-   ============================================= */
+
 
 .pe-page {
   min-height: 100vh;
@@ -14,7 +7,7 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ── Hero ── */
+
 .pe-hero {
   background: #111113;
   border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -58,14 +51,14 @@
   max-width: 560px;
 }
 
-/* ── Body ── */
+
 .pe-body {
   max-width: 860px;
   margin: 0 auto;
   padding: 36px 40px 80px;
 }
 
-/* ── Form card ── */
+
 .pe-form-card {
   background: #1c1c1e;
   border: 1px solid rgba(255,255,255,0.07);
@@ -76,7 +69,7 @@
   gap: 32px;
 }
 
-/* ── Field ── */
+
 .pe-field {
   display: flex;
   flex-direction: column;
@@ -102,7 +95,7 @@
 
 .pe-label-req { color: #ffd700; margin-left: 2px; }
 
-/* ── Radio buttons ── */
+
 .pe-radio-group {
   display: flex;
   flex-wrap: wrap;
@@ -131,7 +124,7 @@
   font-weight: 700;
 }
 
-/* ── Chips ── */
+
 .pe-chips {
   display: flex;
   flex-wrap: wrap;
@@ -166,7 +159,7 @@
   color: #ffd700;
 }
 
-/* ── Generate button ── */
+
 .pe-generate-btn {
   display: inline-flex;
   align-items: center;
@@ -189,18 +182,18 @@
 .pe-generate-btn:hover:not(:disabled) { background: #ffe033; transform: translateY(-1px); }
 .pe-generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ── Spinner ── */
+
 @keyframes pe-spin { to { transform: rotate(360deg); } }
 .pe-spinner { animation: pe-spin 0.9s linear infinite; width: 17px; height: 17px; }
 
-/* ── Result ── */
+
 .pe-result {
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
 
-/* Banner */
+
 .pe-result-banner {
   background: linear-gradient(135deg, #161200 0%, #1c1c1e 60%);
   border: 1px solid rgba(255,215,0,0.18);
@@ -228,7 +221,7 @@
 
 .pe-result-banner-sub strong { color: #ffd700; font-weight: 700; }
 
-/* Reset button */
+
 .pe-reset-btn {
   display: inline-flex;
   align-items: center;
@@ -249,7 +242,7 @@
 .pe-reset-btn svg { width: 13px; height: 13px; }
 .pe-reset-btn:hover { background: rgba(255,255,255,0.09); color: #d1d1d6; }
 
-/* ── Section ── */
+
 .pe-section {
   display: flex;
   flex-direction: column;
@@ -269,7 +262,7 @@
   margin: -8px 0 0;
 }
 
-/* ── Jornadas grid ── */
+
 .pe-jornadas-grid {
   display: flex;
   flex-direction: column;
@@ -324,7 +317,7 @@
 
 .pe-jornada-meta { display: flex; gap: 6px; flex-wrap: wrap; }
 
-/* ── Badge ── */
+
 .pe-badge {
   display: inline-block;
   padding: 3px 10px;
@@ -342,7 +335,7 @@
   color: #555;
 }
 
-/* ── Card button ── */
+
 .pe-card-btn {
   display: inline-flex;
   align-items: center;
@@ -366,7 +359,7 @@
 
 .pe-card-btn--sm { padding: 8px 14px; font-size: 0.75rem; }
 
-/* ── Courses list ── */
+
 .pe-courses-list {
   display: flex;
   flex-direction: column;
@@ -435,7 +428,7 @@
   white-space: nowrap;
 }
 
-/* ── Empty state ── */
+
 .pe-empty {
   display: flex;
   flex-direction: column;
@@ -453,7 +446,7 @@
 .pe-empty p   { margin: 0; font-size: 0.9rem; color: #555; }
 .pe-empty span { font-size: 0.78rem; color: #3a3a3c; }
 
-/* ── CTA ── */
+
 .pe-cta {
   background: #111113;
   border: 1px solid rgba(255,255,255,0.06);
@@ -492,7 +485,7 @@
 .pe-cta-btn svg { width: 13px; height: 13px; }
 .pe-cta-btn:hover { background: rgba(255,215,0,0.16); transform: translateY(-1px); }
 
-/* ── Course row actions ── */
+
 .pe-course-actions {
   display: flex;
   flex-direction: column;
@@ -501,7 +494,7 @@
   flex-shrink: 0;
 }
 
-/* ── Save button ── */
+
 .pe-save-btn {
   display: inline-flex;
   align-items: center;

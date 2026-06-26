@@ -6,7 +6,7 @@ import { getYouTubeId } from "../../utils/format";
 import Header from '../Header/Header';
 import "../../styles/home.css";
 
-// 4 curated featured instructors
+
 const FEATURED_INSTRUCTORS = [
   {
     nome: "Gustavo Guanabara",
@@ -74,7 +74,7 @@ const Home = () => {
       const response = await cursosAPI.listarTodos();
       const lista = Array.isArray(response.data) ? response.data : [];
       setCursos(lista);
-      // Fetch real ratings for the 6 featured courses in parallel
+   
       const featured = lista.slice(0, 6);
       const results = await Promise.allSettled(
         featured.map(c => avaliacoesAPI.listarPorCurso(c.id))
@@ -99,7 +99,7 @@ const Home = () => {
     }
   };
 
-  // Keep currentInstructor in bounds (FEATURED_INSTRUCTORS is static, but guard anyway)
+
   useEffect(() => {
     if (currentInstructor >= FEATURED_INSTRUCTORS.length) {
       setCurrentInstructor(0);
@@ -220,7 +220,7 @@ const Home = () => {
                 <svg className="btn-icon" viewBox="0 0 24 24">
                   <path d="M5 12l5 5L20 7" stroke="currentColor" strokeWidth="2" fill="none"/>
                 </svg>
-                {isAuthenticated ? 'Começar agora' : 'Começar agora'}
+                {isAuthenticated ? 'Ver cursos' : 'Começar agora'}
               </button>
               <button className="btn-secondary" onClick={() => navigate('/cursos')}>
                 Ver cursos gratuitos
@@ -274,7 +274,7 @@ const Home = () => {
           </div>
           <div className="stat-item">
             <div className="stat-number">50+</div>
-            <div className="stat-label">Alunos cadastrados</div>
+            <div className="stat-label">Alunos ativos</div>
           </div>
           <div className="stat-item">
             <div className="stat-number">{new Set(cursos.map(c => c.instrutor).filter(Boolean)).size || FEATURED_INSTRUCTORS.length}</div>
@@ -328,7 +328,7 @@ const Home = () => {
         <div className="home-courses-container">
           <div className="section-header">
             <h2>Cursos em Destaque</h2>
-            <p>Explore nossa seleção de cursos mais populares</p>
+            <p>Explore nossa seleção de cursos</p>
           </div>
           
           <div className="home-courses-grid">

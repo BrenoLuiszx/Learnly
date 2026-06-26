@@ -13,9 +13,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 @Component
-public class    JwtFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtService jwtService;
@@ -32,17 +33,13 @@ public class    JwtFilter extends OncePerRequestFilter {
 
             if (jwtService.validar(token)) {
                 String email = jwtService.getEmail(token);
-                String role = jwtService.getRole(token);
-                Long id = jwtService.getId(token);
+                String role  = jwtService.getRole(token);
+                Long id      = jwtService.getId(token);
 
-                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase(Locale.ROOT)));
                 var auth = new UsernamePasswordAuthenticationToken(email, id, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
-                // Token present but invalid/expired — respond 401 immediately.
-                // Without this, Spring's ExceptionTranslationFilter calls the
-                // AuthenticationEntryPoint even on permitAll() routes when the
-                // SecurityContext has no authentication object.
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"error\":\"Token inválido ou expirado\"}");

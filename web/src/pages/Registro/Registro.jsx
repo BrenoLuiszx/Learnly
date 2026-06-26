@@ -62,7 +62,7 @@ const Registro = () => {
         <div className="login-left">
           <div className="login-brand">
             <div className="logo-section">
-              <span className="logo-icon">📚</span>
+              <svg className="logo-icon" viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="none" stroke="currentColor" strokeWidth="2"/></svg>
               <h1>Learnly</h1>
             </div>
             <p className="brand-subtitle">Junte-se à nossa comunidade de aprendizado</p>

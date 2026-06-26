@@ -28,23 +28,23 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
 
-  // Aulas
+ 
   const [cursoAulasId, setCursoAulasId] = useState(null);
   const [cursoAulasTitulo, setCursoAulasTitulo] = useState('');
   const [aulas, setAulas] = useState([]);
   const [showAulasForm, setShowAulasForm] = useState(false);
   const [aulasMsg, setAulasMsg] = useState('');
 
-  // Dashboard
+
   const [dashData, setDashData] = useState({});
   const [loadingDash, setLoadingDash] = useState(false);
   const [dashExpanded, setDashExpanded] = useState({});
   const [dashSection, setDashSection] = useState({});
   const [favStats, setFavStats] = useState({ totalFav: 0, totalWL: 0, favLog: [], wlLog: [] });
 
-  // Jornadas
+
   const [jornadas, setJornadas] = useState(getJornadas);
-  const [jornadaForm, setJornadaForm] = useState(null); // null = closed, {} = new, {...} = editing
+  const [jornadaForm, setJornadaForm] = useState(null); 
   const NIVEIS = ['Iniciante', 'Intermediário', 'Avançado'];
 
   const slugify = (str) => str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -62,7 +62,7 @@ const Admin = () => {
     const isEdit = !!jornadaForm.slug;
     const slug = isEdit ? jornadaForm.slug : slugify(jornadaForm.titulo) || ('jornada-' + Date.now());
     const nova = { slug, titulo: jornadaForm.titulo, descricao: jornadaForm.descricao, icon: jornadaForm.icon, nivel: jornadaForm.nivel, cursoIds: jornadaForm.cursoIds };
-    // Preserve instrutorId if editing an instructor-owned jornada
+
     if (isEdit) {
       const existing = jornadas.find(j => j.slug === slug);
       if (existing?.instrutorId) nova.instrutorId = existing.instrutorId;
@@ -99,7 +99,7 @@ const Admin = () => {
     setJornadaForm(f => ({ ...f, cursoIds: ids }));
   };
 
-  // ── Jornada requests (reuse solicitacoes flow) ──
+
 
   const jornadaRequests = solicitacoes.filter(
     s => s.justificativaColaborador?.startsWith('JORNADA_REQUEST:')
@@ -119,14 +119,14 @@ const Admin = () => {
 
     let lista;
     if (payload.editSlug) {
-      // This is an edit request — apply changes to the existing jornada
+
       lista = jornadas.map(j =>
         j.slug === payload.editSlug
           ? { ...j, titulo: payload.titulo, descricao: payload.descricao, icon: payload.icon || j.icon, nivel: payload.nivel || j.nivel, cursoIds: payload.cursoIds || j.cursoIds }
           : j
       );
     } else {
-      // Nova jornada 
+
       const slug = 'jornada-' + payload.titulo.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
       const nova = { slug, titulo: payload.titulo, descricao: payload.descricao, icon: payload.icon || 'JR', nivel: payload.nivel || 'Intermediário', cursoIds: payload.cursoIds || [], instrutorId: Number(usuario.id) };
       lista = [...jornadas, nova];
@@ -145,7 +145,7 @@ const Admin = () => {
     carregarSolicitacoes();
   };
 
-  // Cursos pendentes
+
   const [previewPendente, setPreviewPendente] = useState(null);
   const [previewPendenteAulas, setPreviewPendenteAulas] = useState([]);
 
@@ -253,7 +253,7 @@ const Admin = () => {
     }
   };
 
-  // Recarregar usuários a cada 5 segundos quando na aba usuários
+
   useEffect(() => {
     if (activeTab === 'usuarios') {
       const interval = setInterval(carregarUsuarios, 5000);
@@ -261,7 +261,7 @@ const Admin = () => {
     }
   }, [activeTab]);
 
-  // Dashboard
+
   useEffect(() => {
     if (activeTab === 'dashboard' && cursos.length > 0 && Object.keys(dashData).length === 0) {
       carregarDashboard();
@@ -481,7 +481,7 @@ const Admin = () => {
     try {
       await aulasAPI.salvarAulas(cursoAulasId, aulas.map((a, i) => ({
         titulo: a.titulo.trim(),
-        url: a.url, // não aplicar trim em base64
+        url: a.url, 
         descricao: a.descricao ? a.descricao.trim() : '',
         ordem: i + 1,
       })));
@@ -664,7 +664,7 @@ const Admin = () => {
                   </div>
                 </div>
 
-                {/* ── Intro Page Section ── */}
+
                 <div className="cf-section cf-section-intro">
                   <div className="cf-section-header">
                     <span className="cf-section-title">Página de Introdução</span>
@@ -702,7 +702,7 @@ const Admin = () => {
                   </div>
                 </div>
 
-                {/* Course Details  */}
+
                 <div className="cf-section">
                   <div className="cf-section-header">
                     <span className="cf-section-title">Links Externos</span>
@@ -1184,7 +1184,7 @@ const Admin = () => {
                   </div>
                 )}
 
-                {/* ── User-level Favorites & Watch Later tracking ── */}
+
                 {(favStats.favLog.length > 0 || favStats.wlLog.length > 0) && (
                   <div className="adm-tracking-section">
                     <div className="adm-tracking-tabs">
@@ -1221,7 +1221,7 @@ const Admin = () => {
                 <button className="btn-new-course" onClick={abrirNovaJornada}>+ Nova Jornada</button>
               </div>
 
-              {/* ── Jornada form ── */}
+             
               {jornadaForm && (
                 <div className="course-form-container">
                   <form onSubmit={handleJornadaSubmit} className="course-form">
@@ -1249,14 +1249,14 @@ const Admin = () => {
                       </div>
                     </div>
 
-                    {/* Course picker */}
+
                     <div className="cf-section">
                       <div className="cf-section-header">
                         <span className="cf-section-title">Cursos da Jornada ({jornadaForm.cursoIds.length} selecionados)</span>
                       </div>
                       <p className="cf-empty">Clique para adicionar/remover. Use as setas para reordenar.</p>
 
-                      {/* Selected courses with ordering */}
+                     
                       {jornadaForm.cursoIds.length > 0 && (
                         <div style={{ marginBottom: '12px' }}>
                           {jornadaForm.cursoIds.map((id, idx) => {
@@ -1274,7 +1274,7 @@ const Admin = () => {
                         </div>
                       )}
 
-                      {/* Available courses to add */}
+
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '8px', maxHeight: '260px', overflowY: 'auto', padding: '4px' }}>
                         {cursos.filter(c => c.status === 'aprovado' && !jornadaForm.cursoIds.includes(c.id)).map(c => (
                           <div key={c.id} onClick={() => toggleCursoNaJornada(c.id)}
@@ -1296,7 +1296,7 @@ const Admin = () => {
                 </div>
               )}
 
-              {/* ── Jornada list ── */}
+
               <div className="courses-grid">
                 {jornadas.map(j => (
                   <div key={j.slug} className="course-card">
@@ -1329,7 +1329,7 @@ const Admin = () => {
                 <div className="no-courses"><h3>Nenhuma jornada cadastrada</h3><p>Clique em "+ Nova Jornada" para criar a primeira.</p></div>
               )}
 
-              {/* ── Pending Jornada requests from Instructors ── */}
+
               {jornadaRequests.length > 0 && (
                 <div style={{ marginTop: '2.5rem' }}>
                   <div className="management-header">

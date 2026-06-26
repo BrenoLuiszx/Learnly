@@ -52,7 +52,7 @@ const PlanningScreen = ({ navigation }) => {
       setCards(remoteCards);
       setCols(remoteCols.length > 0 ? remoteCols : DEFAULT_COLS);
     } catch {
-      // keep defaults
+      
     } finally {
       setLoading(false);
     }
@@ -131,7 +131,7 @@ const PlanningScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* Header */}
+      
       <View style={[styles.header, { backgroundColor: theme.surface }]}>
         <View style={styles.logoRow}>
           <View style={[styles.logoBox, { backgroundColor: theme.primary }]}>
@@ -244,7 +244,7 @@ const PlanningScreen = ({ navigation }) => {
         </ScrollView>
       )}
 
-      {/* Add/Edit Modal */}
+     
       <Modal visible={modalVisible} animationType="slide" transparent onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={[styles.modalSheet, { backgroundColor: theme.surface }]}>
@@ -256,7 +256,7 @@ const PlanningScreen = ({ navigation }) => {
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-              {/* Tipo tabs */}
+              
               <View style={styles.tipoTabs}>
                 {TIPOS.map(t => (
                   <TouchableOpacity
@@ -270,7 +270,7 @@ const PlanningScreen = ({ navigation }) => {
                 ))}
               </View>
 
-              {/* Meta fields */}
+            
               {form.tipo === 'Meta' && (
                 <>
                   <Text style={[styles.fieldLabel, { color: theme.textSecondary }]}>Título</Text>
@@ -292,7 +292,7 @@ const PlanningScreen = ({ navigation }) => {
                 </>
               )}
 
-              {/* Curso / Aula fields */}
+          
               {(form.tipo === 'Curso' || form.tipo === 'Aula') && (
                 <>
                   <Text style={[styles.fieldLabel, { color: theme.textSecondary }]}>Curso</Text>
@@ -316,7 +316,7 @@ const PlanningScreen = ({ navigation }) => {
                 </>
               )}
 
-              {/* Aula picker */}
+          
               {form.tipo === 'Aula' && form.cursoId && (
                 <>
                   <Text style={[styles.fieldLabel, { color: theme.textSecondary }]}>Aula</Text>
@@ -340,7 +340,7 @@ const PlanningScreen = ({ navigation }) => {
                 </>
               )}
 
-              {/* Column */}
+        
               <Text style={[styles.fieldLabel, { color: theme.textSecondary }]}>Coluna</Text>
               <View style={styles.colPicker}>
                 {cols.map(c => (
@@ -354,7 +354,7 @@ const PlanningScreen = ({ navigation }) => {
                 ))}
               </View>
 
-              {/* Note */}
+
               <Text style={[styles.fieldLabel, { color: theme.textSecondary }]}>Nota</Text>
               <TextInput
                 style={[styles.input, { backgroundColor: theme.inputBg, borderColor: theme.border, color: theme.text }]}

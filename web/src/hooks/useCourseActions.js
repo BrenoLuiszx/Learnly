@@ -4,7 +4,7 @@ import { acoesAPI } from '../services/api';
 const favKey = (uid) => `learnly_favorites_${uid}`;
 const wlKey  = (uid) => `learnly_watch_later_${uid}`;
 
-// Legacy unscoped keys — cleared on first run to avoid stale cross-user data
+
 const LEGACY_FAV_KEY = 'learnly_favorites';
 const LEGACY_WL_KEY  = 'learnly_watch_later';
 
@@ -20,18 +20,16 @@ const writeSet = (key, set) => {
   window.dispatchEvent(new StorageEvent('storage', { key }));
 };
 
-/** Wipe cache for a specific user — called on logout. */
 export const clearActionsCache = (uid) => {
   if (uid) {
     localStorage.removeItem(favKey(uid));
     localStorage.removeItem(wlKey(uid));
   }
-  // Always clear legacy unscoped keys
+
   localStorage.removeItem(LEGACY_FAV_KEY);
   localStorage.removeItem(LEGACY_WL_KEY);
 };
 
-/** Fetch from backend and populate user-scoped cache — called on login. */
 export const loadUserActions = async (uid) => {
   try {
     const [favRes, wlRes] = await Promise.all([
@@ -57,7 +55,7 @@ export const useCourseActions = () => {
     try { return JSON.parse(localStorage.getItem('usuario'))?.id ?? null; } catch { return null; }
   });
 
-  // Sync when another component or tab writes to localStorage
+
   useEffect(() => {
     const onStorage = (e) => {
       if (!uid) return;
@@ -68,7 +66,7 @@ export const useCourseActions = () => {
     return () => window.removeEventListener('storage', onStorage);
   }, [uid]);
 
-  // Load from backend when the user logs in; clear when they log out
+
   useEffect(() => {
     const onLogin = () => {
       const newUid = (() => {
@@ -95,11 +93,10 @@ export const useCourseActions = () => {
     };
   }, []);
 
-  // Initial load: if a token already exists (page refresh), fetch from backend
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token && uid) {
-      // Clear legacy unscoped keys on first load
       localStorage.removeItem(LEGACY_FAV_KEY);
       localStorage.removeItem(LEGACY_WL_KEY);
       loadUserActions(uid).then(({ favorites: f, watchLater: w }) => {

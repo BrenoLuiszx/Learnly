@@ -6,7 +6,6 @@ const MAX_RESULTS = 10;
 const RECENT_KEY = 'gs_recent';
 const MAX_RECENT = 5;
 
-// Module-level cache — courses fetched once per page load
 const dynamicCache = {};
 
 const normalize = (str) =>
@@ -47,12 +46,12 @@ const scoreEntry = (entry, query) => {
 
 const filterByAuth = (entries, usuario) =>
   entries.filter((e) => {
-    if (!e.auth) return true;                                          // public
-    if (!usuario) return false;                                        // must be logged in
-    if (e.auth === 'user') return true;                                // any authenticated user
-    if (e.auth === 'only-user') return usuario.role === 'user';        // plain users only
-    if (e.auth === 'admin') return usuario.role === 'admin';           // admins only
-    if (e.auth === 'colaborador')                                      // colaboradors + admins
+    if (!e.auth) return true;
+    if (!usuario) return false;
+    if (e.auth === 'user') return true;
+    if (e.auth === 'only-user') return usuario.role === 'user';
+    if (e.auth === 'admin') return usuario.role === 'admin';
+    if (e.auth === 'colaborador')
       return ['admin', 'colaborador'].includes(usuario.role);
     return true;
   });
@@ -67,8 +66,6 @@ const runSearch = (query, allEntries) => {
     .map(({ entry }) => entry);
 };
 
-// ── Recent searches persistence ──────────────────────────────────────────────
-
 const loadRecent = () => {
   try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); }
   catch { return []; }
@@ -78,8 +75,6 @@ const saveRecent = (entry) => {
   const prev = loadRecent().filter((r) => r.id !== entry.id);
   localStorage.setItem(RECENT_KEY, JSON.stringify([entry, ...prev].slice(0, MAX_RECENT)));
 };
-
-// ─── Hook ─────────────────────────────────────────────────────────────────────
 
 export const useGlobalSearch = (usuario) => {
   const [query, setQuery]           = useState('');
@@ -134,7 +129,6 @@ export const useGlobalSearch = (usuario) => {
     return () => clearTimeout(debounceTimer.current);
   }, [query, doSearch]);
 
-  // Scroll active item into view
   useEffect(() => {
     activeItemRef.current?.scrollIntoView({ block: 'nearest' });
   }, [activeIndex]);

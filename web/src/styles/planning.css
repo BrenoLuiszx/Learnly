@@ -1,6 +1,4 @@
-/* ─────────────────────────────────────────
-   Design tokens
-───────────────────────────────────────── */
+
 :root {
   --pl-bg:          #0b0b0e;
   --pl-surface:     #141417;
@@ -12,7 +10,7 @@
   --pl-text-2:      #9a9aa0;
   --pl-text-3:      #52525a;
 
-  /* Muted accent palette */
+
   --pl-blue:        #5b8dd9;
   --pl-yellow:      #c9a84c;
   --pl-purple:      #8b72c8;
@@ -22,9 +20,7 @@
   --pl-action-bg:   rgba(232, 232, 237, 0.08);
 }
 
-/* ─────────────────────────────────────────
-   Page shell
-───────────────────────────────────────── */
+
 .planning-page {
   min-height: calc(100vh - 72px);
   background:
@@ -37,9 +33,7 @@
   color: var(--pl-text-1);
 }
 
-/* ─────────────────────────────────────────
-   Workspace header
-───────────────────────────────────────── */
+
 .planning-workspace-header {
   display: flex;
   align-items: center;
@@ -89,7 +83,7 @@
   margin: 2px 0 0;
 }
 
-/* Stats row */
+
 .planning-stats-row {
   display: flex;
   align-items: center;
@@ -155,9 +149,7 @@
 .planning-add-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 .planning-add-btn:active { transform: translateY(0); }
 
-/* ─────────────────────────────────────────
-   Progress bar
-───────────────────────────────────────── */
+
 .planning-progress-wrap {
   display: flex;
   align-items: center;
@@ -189,9 +181,7 @@
   flex-shrink: 0;
 }
 
-/* ─────────────────────────────────────────
-   Add form
-───────────────────────────────────────── */
+
 .planning-form-wrap {
   padding: 0 20px;
   background: var(--pl-surface);
@@ -209,7 +199,7 @@
   gap: 10px;
 }
 
-/* Type selector tabs */
+
 .planning-tipo-tabs {
   display: flex;
   gap: 6px;
@@ -312,9 +302,7 @@
 
 .planning-cancel-btn:hover { color: var(--pl-text-2); }
 
-/* ─────────────────────────────────────────
-   Edit modal
-───────────────────────────────────────── */
+
 .planning-modal-overlay {
   position: fixed;
   inset: 0;
@@ -455,9 +443,7 @@
   border-top: 1px solid var(--pl-border);
 }
 
-/* ─────────────────────────────────────────
-   Board
-───────────────────────────────────────── */
+
 .planning-board {
   display: flex;
   flex-direction: row;
@@ -490,9 +476,7 @@
 .planning-board::-webkit-scrollbar-track  { background: transparent; }
 .planning-board::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.1); border-radius: 999px; }
 
-/* ─────────────────────────────────────────
-   List (Trello-style column)
-───────────────────────────────────────── */
+
 .kb-list {
   flex: 0 0 272px;
   width: 272px;
@@ -505,7 +489,7 @@
   overflow: hidden;
 }
 
-/* List header */
+
 .planning-col-header {
   display: flex;
   align-items: center;
@@ -586,7 +570,7 @@
 .planning-col-ctrl-btn--del:hover { color: #e74c3c; background: rgba(231,76,60,0.12); }
 .planning-col-ctrl-btn--confirm { color: #e74c3c; opacity: 1; }
 
-/* Cards area — scrolls independently */
+
 .kb-list-cards {
   overflow-y: auto;
   padding: 8px 8px 6px;
@@ -599,7 +583,7 @@
 .kb-list-cards::-webkit-scrollbar-track  { background: transparent; }
 .kb-list-cards::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.08); border-radius: 999px; }
 
-/* Empty state — compact, no forced height */
+
 .kb-list-empty {
   padding: 10px 8px;
   font-size: 0.72rem;
@@ -609,9 +593,7 @@
   border-radius: 7px;
 }
 
-/* ─────────────────────────────────────────
-   Add list tile
-───────────────────────────────────────── */
+
 .kb-add-list-btn {
   flex: 0 0 272px;
   width: 272px;
@@ -704,9 +686,7 @@
 
 .kb-add-list-cancel:hover { color: var(--pl-text-2); }
 
-/* ─────────────────────────────────────────
-   Card
-───────────────────────────────────────── */
+
 .pc {
   display: flex;
   background: var(--pl-surface-2);
@@ -735,7 +715,7 @@
   outline: 1px dashed rgba(255, 255, 255, 0.12);
 }
 
-/* Left accent */
+
 .pc-accent {
   width: 2px;
   flex-shrink: 0;
@@ -751,7 +731,7 @@
   min-width: 0;
 }
 
-/* Top row */
+
 .pc-top {
   display: flex;
   align-items: center;
@@ -783,7 +763,7 @@
   opacity: 0.85;
 }
 
-/* Action buttons */
+
 .pc-actions {
   margin-left: auto;
   display: flex;
@@ -817,7 +797,7 @@
 .pc-action-btn--del:hover { color: #c0392b; background: rgba(192, 57, 43, 0.1); }
 .pc-action-btn--confirm { color: #c0392b; }
 
-/* Title */
+
 .pc-title {
   font-size: 0.875rem;
   font-weight: 600;
@@ -827,7 +807,7 @@
   word-break: break-word;
 }
 
-/* Category badge */
+
 .pc-meta-badge {
   display: inline-block;
   padding: 1px 7px;
@@ -840,7 +820,7 @@
   align-self: flex-start;
 }
 
-/* Parent course line */
+
 .pc-meta-line {
   display: flex;
   align-items: center;
@@ -856,7 +836,7 @@
 
 .pc-meta-line svg { width: 10px; height: 10px; flex-shrink: 0; }
 
-/* Description */
+
 .pc-desc {
   font-size: 0.75rem;
   color: var(--pl-text-2);
@@ -865,7 +845,7 @@
   word-break: break-word;
 }
 
-/* Nota */
+
 .pc-nota {
   font-size: 0.72rem;
   color: var(--pl-text-3);
@@ -877,7 +857,7 @@
   margin-top: 2px;
 }
 
-/* Move buttons */
+
 .pc-move-row {
   display: flex;
   justify-content: space-between;
@@ -917,9 +897,7 @@
 
 .pc-move-btn--next { margin-left: auto; }
 
-/* ─────────────────────────────────────────
-   Responsive
-───────────────────────────────────────── */
+
 @media (max-width: 700px) {
   .planning-page              { min-height: calc(100vh - 72px); }
   .planning-workspace-header  { padding: 14px 16px 12px; gap: 12px; }
@@ -933,9 +911,7 @@
   .kb-add-list-form           { flex: 0 0 80vw; width: 80vw; }
 }
 
-/* ─────────────────────────────────────────
-   Course combobox
-───────────────────────────────────────── */
+
 .pl-combobox {
   position: relative;
   width: 100%;
@@ -964,7 +940,7 @@
 
 .pl-combobox-chevron svg { width: 14px; height: 14px; }
 
-/* Dropdown */
+
 .pl-dropdown {
   position: absolute;
   top: calc(100% + 4px);
@@ -1027,7 +1003,7 @@
   flex-shrink: 0;
 }
 
-/* Selected course meta row */
+
 .pl-selected-meta {
   display: flex;
   align-items: center;
@@ -1035,9 +1011,7 @@
   padding: 2px 0;
 }
 
-/* ─────────────────────────────────────────
-   Lesson list
-───────────────────────────────────────── */
+
 .pl-lesson-hint {
   font-size: 0.75rem;
   color: var(--pl-text-3);
@@ -1116,9 +1090,7 @@
   flex-shrink: 0;
 }
 
-/* ─────────────────────────────────────────
-   Spinner
-───────────────────────────────────────── */
+
 .pl-spinner {
   width: 14px;
   height: 14px;
@@ -1130,9 +1102,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* ─────────────────────────────────────────
-   Modal body scroll fix (for lesson list)
-───────────────────────────────────────── */
+
 .planning-modal-body {
   padding: 16px 18px;
   display: flex;
@@ -1146,9 +1116,7 @@
   padding: 0;
 }
 
-/* ─────────────────────────────────────────
-   PrefillModal — Study Plan import
-───────────────────────────────────────── */
+
 .planning-modal--prefill {
   max-width: 460px;
 }
@@ -1276,9 +1244,7 @@
   flex-shrink: 0;
 }
 
-/* ─────────────────────────────────────────
-   Workspace body — unified container
-───────────────────────────────────────── */
+
 .planning-workspace-body {
   display: flex;
   flex-direction: column;
@@ -1287,9 +1253,7 @@
   gap: 0;
 }
 
-/* ─────────────────────────────────────────
-   Zone — shared section wrapper
-───────────────────────────────────────── */
+
 .planning-zone {
   display: flex;
   flex-direction: column;
@@ -1326,9 +1290,7 @@
   margin-left: 4px;
 }
 
-/* ─────────────────────────────────────────
-   Bridge connector between calendar + board
-───────────────────────────────────────── */
+
 .planning-bridge {
   display: flex;
   flex-direction: column;
@@ -1360,9 +1322,7 @@
 
 .planning-bridge-node svg { width: 12px; height: 12px; }
 
-/* ─────────────────────────────────────────
-   Calendar layout
-───────────────────────────────────────── */
+
 .cal-layout {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -1370,9 +1330,7 @@
   max-width: 100%;
 }
 
-/* ─────────────────────────────────────────
-   Calendar panel
-───────────────────────────────────────── */
+
 .cal-panel {
   background: var(--pl-surface);
   border: 1px solid rgba(255,255,255,0.1);
@@ -1539,9 +1497,7 @@
   opacity: 0.7;
 }
 
-/* ─────────────────────────────────────────
-   Side panel
-───────────────────────────────────────── */
+
 .cal-side {
   background: var(--pl-surface);
   border: 1px solid rgba(255,255,255,0.1);
@@ -1642,9 +1598,7 @@
 .cal-side-add-btn svg { width: 12px; height: 12px; }
 .cal-side-add-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); color: var(--pl-text-1); }
 
-/* ─────────────────────────────────────────
-   Calendar event card
-───────────────────────────────────────── */
+
 .cal-event-card {
   display: flex;
   background: var(--pl-surface-2);
@@ -1723,9 +1677,7 @@
   line-height: 1.4;
 }
 
-/* ─────────────────────────────────────────
-   Schedule inline — card date picker
-───────────────────────────────────────── */
+
 .pc-schedule-btn {
   display: inline-flex;
   align-items: center;
@@ -1836,7 +1788,7 @@
 
 .pc-schedule-cancel:hover { color: var(--pl-text-2); }
 
-/* ScheduleInline inside cal-side unscheduled cards */
+
 .cal-event-body .pc-schedule-btn {
   margin-top: 4px;
   font-size: 0.7rem;
@@ -1848,9 +1800,7 @@
 
 
 
-/* ─────────────────────────────────────────
-   Calendar responsive
-───────────────────────────────────────── */
+
 @media (max-width: 900px) {
   .cal-layout { grid-template-columns: 1fr; }
   .cal-side { min-height: 300px; }
@@ -1863,9 +1813,7 @@
   .cal-cell--today .cal-day-num { width: 22px; height: 22px; }
 }
 
-/* ─────────────────────────────────────────
-   Card footer — date + time + status dot
-───────────────────────────────────────── */
+
 .pc-footer {
   display: flex;
   align-items: center;
@@ -1909,7 +1857,7 @@
   white-space: nowrap;
 }
 
-/* Status toggle button on card */
+
 .pc-status-toggle {
   display: flex;
   align-items: center;
@@ -1932,7 +1880,7 @@
 .pc-status-dot--completed { color: var(--pl-green); opacity: 0.9; }
 .pc-status-dot--completed:hover { color: var(--pl-yellow); }
 
-/* Upcoming badge */
+
 .pc-upcoming-badge {
   background: rgba(91, 141, 217, 0.15);
   color: var(--pl-blue);
@@ -1949,7 +1897,7 @@
   color: var(--pl-blue);
 }
 
-/* Card state variants */
+
 .pc--overdue {
   border-color: rgba(224, 92, 92, 0.25) !important;
   box-shadow: inset 2px 0 0 rgba(224, 92, 92, 0.4);
@@ -1964,9 +1912,7 @@
   opacity: 0.6;
 }
 
-/* ─────────────────────────────────────────
-   Inline add per column
-───────────────────────────────────────── */
+
 .kb-inline-add-btn {
   display: flex;
   align-items: center;
@@ -2006,9 +1952,7 @@
   width: 100%;
 }
 
-/* ─────────────────────────────────────────
-   Calendar cell — overdue + all-done + drag-over states
-───────────────────────────────────────── */
+
 .cal-cell--overdue {
   background: rgba(224, 92, 92, 0.07) !important;
 }
@@ -2027,16 +1971,12 @@
   box-shadow: inset 0 0 0 2px rgba(91, 141, 217, 0.6);
 }
 
-/* ─────────────────────────────────────────
-   Dot state variants
-───────────────────────────────────────── */
+
 .cal-dot--done    { opacity: 0.25; }
 .cal-dot--overdue { box-shadow: 0 0 0 2px rgba(224,92,92,0.7); opacity: 1; }
 .cal-dot--pending { opacity: 1; }
 
-/* ─────────────────────────────────────────
-   State pill — shown on every event card
-───────────────────────────────────────── */
+
 .cal-state-pill {
   font-size: 0.56rem;
   font-weight: 700;
@@ -2052,9 +1992,7 @@
 .cal-state--overdue  { color: #e05c5c;          border-color: rgba(224,92,92,0.35);   background: rgba(224,92,92,0.08);  }
 .cal-state--upcoming { color: var(--pl-blue);   border-color: rgba(91,141,217,0.35);  background: rgba(91,141,217,0.08); }
 
-/* ─────────────────────────────────────────
-   Unscheduled count badge in side header
-───────────────────────────────────────── */
+
 .cal-side-unscheduled-count {
   display: inline-flex;
   align-items: center;
@@ -2071,15 +2009,13 @@
   flex-shrink: 0;
 }
 
-/* hint with top margin variant */
+
 .cal-side-hint--top {
   margin: 10px 16px 0;
   text-align: left;
 }
 
-/* ─────────────────────────────────────────
-   Unscheduled event card variant
-───────────────────────────────────────── */
+
 .cal-event-card--unscheduled {
   border-style: dashed;
   border-color: rgba(255,255,255,0.1);
@@ -2087,13 +2023,11 @@
 }
 .cal-event-card--unscheduled:active { cursor: grabbing; opacity: 0.6; }
 
-/* draggable scheduled cards */
+
 .cal-event-card[draggable] { cursor: grab; }
 .cal-event-card[draggable]:active { cursor: grabbing; opacity: 0.55; }
 
-/* ─────────────────────────────────────────
-   Calendar event card — done + overdue
-───────────────────────────────────────── */
+
 .cal-event-card--done {
   opacity: 0.6;
 }
@@ -2107,7 +2041,7 @@
   background: #e05c5c !important;
 }
 
-/* Time chip */
+
 .cal-event-time {
   display: flex;
   align-items: center;
@@ -2120,10 +2054,10 @@
 
 .cal-event-time svg { width: 9px; height: 9px; }
 
-/* Overdue tag — kept for backward compat, superseded by cal-state-pill */
+
 .cal-event-overdue-tag { display: none; }
 
-/* Status toggle button on event card */
+
 .cal-event-status-btn {
   display: flex;
   align-items: center;
@@ -2144,9 +2078,7 @@
 .cal-event-status-btn--done { color: var(--pl-green); }
 .cal-event-status-btn--done:hover { color: var(--pl-yellow); }
 
-/* ─────────────────────────────────────────
-   Board filter banner
-───────────────────────────────────────── */
+
 .board-filter-banner {
   display: flex;
   align-items: center;
@@ -2180,17 +2112,13 @@
 
 .board-filter-clear:hover { background: rgba(91, 141, 217, 0.15); }
 
-/* ─────────────────────────────────────────
-   Card — highlighted (matches selected date)
-───────────────────────────────────────── */
+
 .pc--highlighted {
   border-color: rgba(91, 141, 217, 0.55) !important;
   box-shadow: 0 0 0 2px rgba(91, 141, 217, 0.25), 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* ─────────────────────────────────────────
-   Card — flash animation on creation
-───────────────────────────────────────── */
+
 @keyframes pc-flash {
   0%   { box-shadow: 0 0 0 0 rgba(91, 141, 217, 0.7); }
   50%  { box-shadow: 0 0 0 6px rgba(91, 141, 217, 0.25); }
@@ -2201,9 +2129,7 @@
   animation: pc-flash 0.9s ease-out;
 }
 
-/* ─────────────────────────────────────────
-   Card — dimmed (filter active, date doesn't match)
-───────────────────────────────────────── */
+
 .pc--dimmed {
   opacity: 0.28;
   pointer-events: none;
@@ -2211,7 +2137,7 @@
   transition: opacity 0.2s, filter 0.2s;
 }
 
-/* Separator label between matched and dimmed cards */
+
 .kb-list-cards .pc--dimmed:first-of-type {
   margin-top: 6px;
   border-top: 1px dashed rgba(255, 255, 255, 0.07);

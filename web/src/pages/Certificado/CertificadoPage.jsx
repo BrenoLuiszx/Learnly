@@ -44,7 +44,7 @@ const IconAlertCircle = () => (
   </svg>
 );
 
-/* Decorative corner SVG */
+
 const CornerOrnament = () => (
   <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M4 44 L4 4 L44 4"/>
@@ -97,7 +97,7 @@ const CertificadoPage = () => {
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
       pdf.save(`certificado-${cert.id}.pdf`);
     } catch {
-      // fallback to print
+
       window.print();
     }
     setDownloading(false);
@@ -135,7 +135,7 @@ const CertificadoPage = () => {
 
       <div className="cert-layout">
 
-        {/* Toolbar */}
+
         <div className="cert-toolbar">
           <button className="cert-back-btn" onClick={() => navigate('/perfil')}>
             <IconArrowLeft /> Voltar ao Perfil
@@ -150,21 +150,21 @@ const CertificadoPage = () => {
           </div>
         </div>
 
-        {/* Certificate document */}
+
         <div id="cert-document">
           <div className="cert-outer-border">
             <div className="cert-inner">
 
-              {/* Corner ornaments */}
+
               <span className="cert-corner cert-corner-tl"><CornerOrnament /></span>
               <span className="cert-corner cert-corner-tr"><CornerOrnament /></span>
               <span className="cert-corner cert-corner-bl"><CornerOrnament /></span>
               <span className="cert-corner cert-corner-br"><CornerOrnament /></span>
 
-              {/* Watermark */}
+
               <div className="cert-watermark"><IconAward /></div>
 
-              {/* Header */}
+
               <div className="cert-header">
                 <p className="cert-platform-name">Learnly</p>
                 <h1 className="cert-title-main">Certificado</h1>
@@ -177,7 +177,7 @@ const CertificadoPage = () => {
                 <div className="cert-divider-line" />
               </div>
 
-              {/* Body */}
+
               <div className="cert-body">
                 <p className="cert-presented-to">Este certificado é concedido a</p>
                 <h2 className="cert-recipient-name">{cert.nomeUsuario}</h2>
@@ -196,7 +196,7 @@ const CertificadoPage = () => {
                 <div className="cert-divider-line" />
               </div>
 
-              {/* Footer */}
+
               <div className="cert-footer">
 
                 <div className="cert-footer-block">

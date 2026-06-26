@@ -7,7 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import Header from '../Header/Header';
 import '../../styles/plano-estudo.css';
 
-/* ── Icons ── */
+
 const IconMap     = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>;
 const IconBook    = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>;
 const IconArrow   = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
@@ -18,7 +18,7 @@ const IconSpinner = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentCo
 const IconSave    = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>;
 const IconSaveFilled = () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>;
 
-/* ── Constants ── */
+
 const AREAS = ['Frontend', 'Backend', 'Data Science', 'DevOps', 'Database', 'Mobile', 'Design', 'Marketing', 'Negócios', 'Idiomas', 'Saúde', 'Diversos'];
 
 const TIME_OPTIONS = [
@@ -31,7 +31,7 @@ const LEVEL_OPTIONS = ['Iniciante', 'Intermediário', 'Avançado'];
 
 const EMPTY_PREFS = { tempo: '', areaFoco: '', topicos: [], facilidades: [], nivel: '' };
 
-/* ── Recommendation engine ── */
+
 function buildRecommendation(prefs, allCursos, jornadas) {
   const { areaFoco, topicos, facilidades, nivel } = prefs;
 
@@ -48,7 +48,7 @@ function buildRecommendation(prefs, allCursos, jornadas) {
       if (cat === tl || title.includes(tl) || desc.includes(tl)) score += 5;
     });
 
-    // Already comfortable → deprioritise
+   
     facilidades.forEach(f => {
       if (cat === f.toLowerCase()) score -= 2;
     });
@@ -71,7 +71,7 @@ function buildRecommendation(prefs, allCursos, jornadas) {
     .sort((a, b) => b._score - a._score)
     .slice(0, 6);
 
-  // Fill up to 3 with area-matching courses if needed
+  
   if (recommended.length < 3 && areaFoco) {
     const ids = new Set(recommended.map(c => c.id));
     const extras = scored
@@ -102,7 +102,7 @@ function reasonText(curso, prefs) {
   return 'complementa seu perfil de aprendizado';
 }
 
-/* ── ChipSelect ── */
+
 const ChipSelect = ({ options, selected, onChange, max = 99 }) => (
   <div className="pe-chips">
     {options.map(opt => {
@@ -124,7 +124,7 @@ const ChipSelect = ({ options, selected, onChange, max = 99 }) => (
   </div>
 );
 
-/* ── Main ── */
+
 const PlanoEstudo = () => {
   const navigate = useNavigate();
   const { usuario } = useAuth();
@@ -133,9 +133,9 @@ const PlanoEstudo = () => {
   const [allCursos, setAllCursos] = useState([]);
   const [result,    setResult]    = useState(null);
   const [loading,   setLoading]   = useState(false);
-  const [step,      setStep]      = useState('form'); // 'form' | 'result'
+  const [step,      setStep]      = useState('form'); 
 
-  // Restore saved plan after returning from login
+  
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem('learnly_plano_estudo_state');
@@ -179,7 +179,7 @@ const PlanoEstudo = () => {
     setResult(null);
     setStep('form');
   };
-  // Navigate to Planning with the recommended courses pre-filled as cards
+  
   const handleLevarParaPlanning = () => {
     if (!result?.courses?.length) return;
     const prefillCards = result.courses.map(curso => ({

@@ -7,17 +7,7 @@ import com.learnly.api.model.entity.Aula;
 import com.learnly.api.model.entity.Categoria;
 import com.learnly.api.model.entity.Curso;
 import com.learnly.api.model.entity.Instrutor;
-import com.learnly.api.model.repository.AulaRepository;
-import com.learnly.api.model.repository.CategoriaRepository;
-import com.learnly.api.model.repository.CursoRepository;
-import com.learnly.api.model.repository.InstrutorRepository;
-import com.learnly.api.model.repository.MatriculaRepository;
-import com.learnly.api.model.repository.ProgressoAulaRepository;
-
-import com.learnly.api.model.repository.UsuarioRepository;
-
-import com.learnly.api.model.repository.AvaliacaoRepository;
-
+import com.learnly.api.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,213 +18,125 @@ import java.util.stream.Collectors;
 @Service
 public class CursoService {
 
-    @Autowired
-    private CursoRepository cursoRepository;
+    @Autowired private CursoRepository cursoRepository;
+    @Autowired private CategoriaRepository categoriaRepository;
+    @Autowired private InstrutorRepository instrutorRepository;
+    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired private AvaliacaoRepository avaliacaoRepository;
+    @Autowired private AulaRepository aulaRepository;
+    @Autowired private ProgressoAulaRepository progressoAulaRepository;
+    @Autowired private MatriculaRepository matriculaRepository;
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
-
-    @Autowired
-    private InstrutorRepository instrutorRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private AvaliacaoRepository avaliacaoRepository;
-    
-    @Autowired
-    private AulaRepository aulaRepository;
-    
-    @Autowired
-    private ProgressoAulaRepository progressoAulaRepository;
-    
-    @Autowired
-    private MatriculaRepository matriculaRepository;
-
-    
-
-    
-
-    // Lista apenas cursos aprovados (público)
     public List<CursoDTO> listarTodos() {
         return cursoRepository.findByAtivoTrueAndStatus(StatusCurso.APROVADO).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
-    // Lista cursos pendentes (admin)
     public List<CursoDTO> listarPendentes() {
         return cursoRepository.findByStatus(StatusCurso.PENDENTE).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
-    /**
-     * Returns true if the given usuarioId owns the course.
-     * Ownership = the course's Instrutor has usuario_id == usuarioId.
-     * Courses whose instructor has no linked user (standalone instructors)
-     * are only accessible to admins.
-     */
     public boolean isOwner(Curso curso, Long usuarioId) {
         if (curso.getInstrutor() == null) return false;
         Long linked = curso.getInstrutor().getUsuarioId();
         return linked != null && linked.equals(usuarioId);
     }
 
-    // Lista cursos do colaborador
     public List<CursoDTO> listarPorCriador(Long usuarioId) {
         return cursoRepository.findByInstrutorUsuarioId(usuarioId).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
-    // Criar curso - admin aprova direto, colaborador fica pendente
     @Transactional
-    public CursoDTO criar(CursoDTO cursoDTO, Long usuarioId, String role) {
-        if (cursoDTO.getTitulo() == null || cursoDTO.getTitulo().isBlank())
+    public CursoDTO criar(CursoDTO dto, Long usuarioId, String role) {
+        if (dto.getTitulo() == null || dto.getTitulo().isBlank())
             throw new RuntimeException("Título é obrigatório");
-        if (cursoDTO.getDescricao() == null || cursoDTO.getDescricao().isBlank())
+        if (dto.getDescricao() == null || dto.getDescricao().isBlank())
             throw new RuntimeException("Descrição é obrigatória");
-        if (cursoDTO.getUrl() == null || cursoDTO.getUrl().isBlank())
+        if (dto.getUrl() == null || dto.getUrl().isBlank())
             throw new RuntimeException("URL é obrigatória");
-        if (cursoDTO.getCategoria() == null || cursoDTO.getCategoria().isBlank())
+        if (dto.getCategoria() == null || dto.getCategoria().isBlank())
             throw new RuntimeException("Categoria é obrigatória");
-        if (cursoDTO.getDuracao() == null || cursoDTO.getDuracao() <= 0)
+        if (dto.getDuracao() == null || dto.getDuracao() <= 0)
             throw new RuntimeException("Duração deve ser maior que zero");
 
-        Categoria categoria = categoriaRepository.findByNome(cursoDTO.getCategoria())
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada: " + cursoDTO.getCategoria()));
+        Categoria categoria = categoriaRepository.findByNome(dto.getCategoria())
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada: " + dto.getCategoria()));
 
-        Instrutor instrutor;
-        if (!"admin".equals(role)) {
-            // Collaborator: auto-link to their own Instrutor record
-            instrutor = instrutorRepository.findByUsuarioId(usuarioId).orElseGet(() -> {
-                var usuario = usuarioRepository.findById(usuarioId).orElseThrow();
-                Instrutor novo = new Instrutor(usuario.getNome(), null);
-                novo.setFoto(usuario.getFoto());
-                novo.setUsuarioId(usuarioId);
-                return instrutorRepository.save(novo);
-            });
-        } else {
-            // Admin: use the instructor name from the form, fall back to "Learnly" if blank
-            String nomeInstrutor = (cursoDTO.getInstrutor() != null && !cursoDTO.getInstrutor().isBlank())
-                    ? cursoDTO.getInstrutor().trim()
-                    : "Learnly";
-            instrutor = instrutorRepository.findByNome(nomeInstrutor).orElseGet(() -> {
-                Instrutor novo = new Instrutor(nomeInstrutor, null);
-                return instrutorRepository.save(novo);
-            });
-        }
+        Instrutor instrutor = resolverInstrutor(dto, usuarioId, role);
 
-        Curso curso = new Curso(
-            cursoDTO.getTitulo(),
-            cursoDTO.getDescricao(),
-            cursoDTO.getUrl(),
-            categoria,
-            instrutor,
-            cursoDTO.getDuracao()
-        );
+        Curso curso = new Curso(dto.getTitulo(), dto.getDescricao(), dto.getUrl(), categoria, instrutor, dto.getDuracao());
+        curso.setImagem(dto.getImagem());
+        curso.setDescricaoDetalhada(dto.getDescricaoDetalhada());
+        curso.setLinksExternos(dto.getLinksExternos());
+        curso.setAnexos(dto.getAnexos());
+        curso.setStatus("admin".equals(role) ? StatusCurso.APROVADO : StatusCurso.PENDENTE);
 
-        curso.setImagem(cursoDTO.getImagem());
-        curso.setDescricaoDetalhada(cursoDTO.getDescricaoDetalhada());
-        curso.setLinksExternos(cursoDTO.getLinksExternos());
-        curso.setAnexos(cursoDTO.getAnexos());
-
-        if ("admin".equals(role)) {
-            curso.setStatus(StatusCurso.APROVADO);
-        } else {
-            curso.setStatus(StatusCurso.PENDENTE);
-        }
-
-        Curso cursoSalvo = cursoRepository.save(curso);
-        criarPrimeiraAula(cursoSalvo);
-        return convertToDTO(cursoSalvo);
+        Curso salvo = cursoRepository.save(curso);
+        criarPrimeiraAula(salvo);
+        return toDTO(salvo);
     }
 
-    // Atualizar curso - colaborador só pode editar os seus
-    public CursoDTO atualizar(Long id, CursoDTO cursoDTO, Long usuarioId, String role) {
+    public CursoDTO atualizar(Long id, CursoDTO dto, Long usuarioId, String role) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
 
-        // Colaborador só pode editar cursos cujo instrutor está vinculado a ele
         if ("colaborador".equals(role)) {
-            Long instrutorUsuarioId = curso.getInstrutor() != null ? curso.getInstrutor().getUsuarioId() : null;
-            if (!usuarioId.equals(instrutorUsuarioId)) {
+            Long vinculado = curso.getInstrutor() != null ? curso.getInstrutor().getUsuarioId() : null;
+            if (!usuarioId.equals(vinculado))
                 throw new RuntimeException("Sem permissão para editar este curso");
-            }
         }
 
-        Categoria categoria = categoriaRepository.findByNome(cursoDTO.getCategoria())
+        Categoria categoria = categoriaRepository.findByNome(dto.getCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-        Instrutor instrutor;
-        if (!"colaborador".equals(role)) {
-            String nomeInstrutor = (cursoDTO.getInstrutor() != null && !cursoDTO.getInstrutor().isBlank())
-                    ? cursoDTO.getInstrutor().trim()
-                    : "Learnly";
-            instrutor = instrutorRepository.findByNome(nomeInstrutor).orElseGet(() -> {
-                Instrutor novo = new Instrutor(nomeInstrutor, null);
-                return instrutorRepository.save(novo);
-            });
-        } else {
-            instrutor = instrutorRepository.findByUsuarioId(usuarioId)
-                    .orElseGet(() -> instrutorRepository.findByNome(cursoDTO.getInstrutor())
-                            .orElseGet(() -> {
-                                Instrutor novo = new Instrutor(cursoDTO.getInstrutor(), "Instrutor");
-                                return instrutorRepository.save(novo);
-                            }));
-        }
+        Instrutor instrutor = resolverInstrutor(dto, usuarioId, role);
 
-        curso.setTitulo(cursoDTO.getTitulo());
-        curso.setDescricao(cursoDTO.getDescricao());
-        // Sincroniza URL da aula 1 antes de sobrescrever a URL do curso
         String urlAntiga = curso.getUrl();
-        if (cursoDTO.getUrl() != null && !cursoDTO.getUrl().equals(urlAntiga)) {
+        if (dto.getUrl() != null && !dto.getUrl().equals(urlAntiga)) {
             aulaRepository.findByCursoIdAndOrdem(curso.getId(), 1).ifPresent(aula1 -> {
                 if (urlAntiga != null && urlAntiga.equals(aula1.getUrl())) {
-                    aula1.setUrl(cursoDTO.getUrl());
+                    aula1.setUrl(dto.getUrl());
                     aulaRepository.save(aula1);
                 }
             });
         }
-        curso.setUrl(cursoDTO.getUrl());
+
+        curso.setTitulo(dto.getTitulo());
+        curso.setDescricao(dto.getDescricao());
+        curso.setUrl(dto.getUrl());
         curso.setCategoria(categoria);
         curso.setInstrutor(instrutor);
-        curso.setDuracao(cursoDTO.getDuracao());
-        curso.setImagem(cursoDTO.getImagem());
-        curso.setDescricaoDetalhada(cursoDTO.getDescricaoDetalhada());
-        curso.setLinksExternos(cursoDTO.getLinksExternos());
-        curso.setAnexos(cursoDTO.getAnexos());
+        curso.setDuracao(dto.getDuracao());
+        curso.setImagem(dto.getImagem());
+        curso.setDescricaoDetalhada(dto.getDescricaoDetalhada());
+        curso.setLinksExternos(dto.getLinksExternos());
+        curso.setAnexos(dto.getAnexos());
 
-        if ("colaborador".equals(role)) {
-            curso.setStatus(StatusCurso.PENDENTE);
-        }
+        if ("colaborador".equals(role)) curso.setStatus(StatusCurso.PENDENTE);
 
-        return convertToDTO(cursoRepository.save(curso));
+        return toDTO(cursoRepository.save(curso));
     }
 
-    // Admin aprova curso
     public CursoDTO aprovarCurso(Long id) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
         curso.setStatus(StatusCurso.APROVADO);
-        return convertToDTO(cursoRepository.save(curso));
+        return toDTO(cursoRepository.save(curso));
     }
 
-    // Admin rejeita curso
     public CursoDTO rejeitarCurso(Long id) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
         curso.setStatus(StatusCurso.REJEITADO);
-        return convertToDTO(cursoRepository.save(curso));
+        return toDTO(cursoRepository.save(curso));
     }
 
     @Transactional
     public void deletar(Long id) {
         Curso curso = cursoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
-        
         matriculaRepository.deleteByCursoId(id);
         progressoAulaRepository.deleteByCursoId(id);
         aulaRepository.deleteByCursoId(id);
@@ -243,33 +145,40 @@ public class CursoService {
 
     public List<CursoDTO> buscarPorCategoria(String categoria) {
         return cursoRepository.findByCategoriaNome(categoria, StatusCurso.APROVADO).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
     public List<CursoDTO> buscarPorTitulo(String titulo) {
         if (titulo == null || titulo.trim().isEmpty()) return listarTodos();
         return cursoRepository.buscarPorTermo(titulo, StatusCurso.APROVADO).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .map(this::toDTO).collect(Collectors.toList());
     }
 
     public CursoDetalhadoDTO buscarDetalhadoPorId(Long id) {
-        Curso curso = cursoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
-        return convertToDetalhadoDTO(curso);
+        return toDTODetalhado(cursoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Curso não encontrado")));
     }
 
-    private CursoDTO convertToDTO(Curso curso) {
-        CursoDTO dto = new CursoDTO(
-            curso.getId(),
-            curso.getTitulo(),
-            curso.getDescricao(),
-            curso.getUrl(),
-            curso.getCategoria().getNome(),
-            curso.getInstrutor().getNome(),
-            curso.getDuracao()
-        );
+    private Instrutor resolverInstrutor(CursoDTO dto, Long usuarioId, String role) {
+        if ("colaborador".equals(role)) {
+            return instrutorRepository.findByUsuarioId(usuarioId)
+                    .orElseGet(() -> {
+                        var usuario = usuarioRepository.findById(usuarioId).orElseThrow();
+                        Instrutor novo = new Instrutor(usuario.getNome(), null);
+                        novo.setFoto(usuario.getFoto());
+                        novo.setUsuarioId(usuarioId);
+                        return instrutorRepository.save(novo);
+                    });
+        }
+        String nome = (dto.getInstrutor() != null && !dto.getInstrutor().isBlank())
+                ? dto.getInstrutor().trim() : "Learnly";
+        return instrutorRepository.findByNome(nome)
+                .orElseGet(() -> instrutorRepository.save(new Instrutor(nome, null)));
+    }
+
+    private CursoDTO toDTO(Curso curso) {
+        CursoDTO dto = new CursoDTO(curso.getId(), curso.getTitulo(), curso.getDescricao(),
+                curso.getUrl(), curso.getCategoria().getNome(), curso.getInstrutor().getNome(), curso.getDuracao());
         dto.setStatus(curso.getStatus().getValor());
         dto.setInstrutorId(curso.getInstrutor().getId());
         dto.setImagem(curso.getImagem());
@@ -278,25 +187,14 @@ public class CursoService {
         dto.setAnexos(curso.getAnexos());
         dto.setMediaAvaliacao(avaliacaoRepository.mediaNotaPorCurso(curso.getId()));
         dto.setTotalAvaliacoes(avaliacaoRepository.totalAvaliacoesPorCurso(curso.getId()));
-        if (curso.getDataCriacao() != null) {
-            dto.setDataCriacao(curso.getDataCriacao().toString());
-        }
+        if (curso.getDataCriacao() != null) dto.setDataCriacao(curso.getDataCriacao().toString());
         return dto;
     }
 
-    private CursoDetalhadoDTO convertToDetalhadoDTO(Curso curso) {
-        CursoDetalhadoDTO dto = new CursoDetalhadoDTO(
-            curso.getId(),
-            curso.getTitulo(),
-            curso.getDescricao(),
-            curso.getUrl(),
-            curso.getCategoria().getNome(),
-            curso.getInstrutor().getNome(),
-            curso.getInstrutor().getFoto(),
-            curso.getInstrutor().getBio(),
-            curso.getDuracao(),
-            "Online"
-        );
+    private CursoDetalhadoDTO toDTODetalhado(Curso curso) {
+        CursoDetalhadoDTO dto = new CursoDetalhadoDTO(curso.getId(), curso.getTitulo(), curso.getDescricao(),
+                curso.getUrl(), curso.getCategoria().getNome(), curso.getInstrutor().getNome(),
+                curso.getInstrutor().getFoto(), curso.getInstrutor().getBio(), curso.getDuracao(), "Online");
         dto.setImagem(curso.getImagem());
         dto.setDescricaoDetalhada(curso.getDescricaoDetalhada());
         dto.setLinksExternos(curso.getLinksExternos());
@@ -307,28 +205,14 @@ public class CursoService {
         return dto;
     }
 
-    // Método auxiliar para criar primeira aula automaticamente
     private void criarPrimeiraAula(Curso curso) {
-        try {
-            // Verificar se já existe aula para este curso
-            long totalAulas = aulaRepository.countByCursoId(curso.getId());
-            if (totalAulas > 0) {
-                System.out.println("[CursoService] Curso já possui aulas, pulando criação automática");
-                return;
-            }
-            
-            Aula primeiraAula = new Aula();
-            primeiraAula.setCursoId(curso.getId());
-            primeiraAula.setOrdem(1);
-            primeiraAula.setTitulo("Aula 1 - " + curso.getTitulo());
-            primeiraAula.setUrl(curso.getUrl());
-            primeiraAula.setDescricao("Aula principal do curso");
-            
-            aulaRepository.save(primeiraAula);
-            System.out.println("[CursoService] Primeira aula criada automaticamente para curso: " + curso.getId());
-        } catch (Exception e) {
-            System.err.println("[CursoService] Erro ao criar primeira aula: " + e.getMessage());
-            e.printStackTrace();
-        }
+        if (aulaRepository.countByCursoId(curso.getId()) > 0) return;
+        Aula aula = new Aula();
+        aula.setCursoId(curso.getId());
+        aula.setOrdem(1);
+        aula.setTitulo("Aula 1 - " + curso.getTitulo());
+        aula.setUrl(curso.getUrl());
+        aula.setDescricao("Aula principal do curso");
+        aulaRepository.save(aula);
     }
 }

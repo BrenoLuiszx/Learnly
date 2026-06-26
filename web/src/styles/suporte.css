@@ -1,4 +1,4 @@
-/* ── Suporte Page ─────────────────────────────────────────── */
+
 
 .suporte-page {
   min-height: 100vh;
@@ -12,7 +12,7 @@
   flex: 1;
 }
 
-/* Hero */
+
 .suporte-hero {
   padding: 80px 24px 60px;
   text-align: center;
@@ -54,7 +54,7 @@
   line-height: 1.6;
 }
 
-/* FAQ Section */
+
 .suporte-faq-section {
   padding: 64px 24px;
 }
@@ -71,7 +71,7 @@
   color: var(--text-primary, #f2f2f7);
 }
 
-/* FAQ List */
+
 .faq-list {
   display: flex;
   flex-direction: column;
@@ -142,7 +142,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* CTA */
+
 .suporte-cta {
   padding: 64px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
