@@ -980,6 +980,12 @@ const Perfil = () => {
   const [justificativa, setJustificativa] = useState('');
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState('');
+  const [candidatura, setCandidatura] = useState(null);
+  const [candidaturaLoading, setCandidaturaLoading] = useState(false);
+  const [appForm, setAppForm] = useState({
+    profissao: '', experiencia: '', habilidades: '', motivacao: '', linkedin: '', portfolio: '',
+  });
+  const [appErrors, setAppErrors] = useState({});
   const [editando, setEditando] = useState(false);
   const [nomeEdit, setNomeEdit] = useState(usuario?.nome || '');
   const [certificados, setCertificados] = useState([]);
@@ -990,6 +996,14 @@ const Perfil = () => {
   useEffect(() => {
     if (usuario) { carregarStats(); carregarCertificados(); }
   }, [usuario]);
+
+  useEffect(() => {
+    if (usuario?.role === 'user') {
+      usuariosAPI.getMinhaCandidatura()
+        .then(r => setCandidatura(r.data))
+        .catch(() => setCandidatura(null));
+    }
+  }, [usuario?.id]);
 
   useEffect(() => {
     if (!usuario) return;
@@ -1016,6 +1030,37 @@ const Perfil = () => {
       }));
     } catch {}
     setProgressoLoading(false);
+  };
+
+  const parseCandidaturaForm = (justificativa) => {
+    if (!justificativa) return {};
+    try { return JSON.parse(justificativa); } catch { return {}; }
+  };
+
+  const validateAppForm = () => {
+    const errs = {};
+    if (!appForm.profissao.trim()) errs.profissao = 'Campo obrigatório';
+    if (!appForm.experiencia.trim()) errs.experiencia = 'Campo obrigatório';
+    if (!appForm.habilidades.trim()) errs.habilidades = 'Campo obrigatório';
+    if (!appForm.motivacao.trim()) errs.motivacao = 'Campo obrigatório';
+    setAppErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleEnviarCandidatura = async (e) => {
+    e.preventDefault();
+    if (!validateAppForm()) return;
+    setCandidaturaLoading(true);
+    setMensagem('');
+    try {
+      const res = await usuariosAPI.enviarCandidatura(appForm);
+      setCandidatura(res.data);
+      login({ ...usuario, statusSolicitacao: 'pendente' }, token);
+      setMensagem('Candidatura enviada com sucesso!');
+    } catch (err) {
+      setMensagem(err.response?.data?.error || 'Erro ao enviar candidatura.');
+    }
+    setCandidaturaLoading(false);
   };
 
   const handleSolicitar = async (e) => {
@@ -1051,6 +1096,7 @@ const Perfil = () => {
   }[usuario?.statusSolicitacao];
 
   const podeSolicitar = usuario?.role === 'user' &&
+    (!candidatura || candidatura.statusSolicitacao !== 'pendente') &&
     (!usuario?.statusSolicitacao || ['nenhuma', 'recusada'].includes(usuario.statusSolicitacao));
 
   const navItems = [
@@ -1220,25 +1266,107 @@ const Perfil = () => {
                   {usuario?.role === 'user' && (
                     <>
                       <p style={{ color: '#888', fontSize: '0.875rem', margin: '0 0 16px' }}>
-                        Colaboradores podem criar e submeter cursos para aprovação.
+                        Colaboradores podem criar e submeter cursos para aprovação na plataforma.
                       </p>
-                      {statusSolic && (
-                        <div className={`pf-collab-banner ${statusSolic.cls}`}>{statusSolic.texto}</div>
+
+                      {candidatura?.statusSolicitacao === 'pendente' && (
+                        <div className="pf-collab-banner warn">
+                          <strong>Candidatura enviada</strong> — aguardando análise do administrador.
+                          {(() => {
+                            const d = parseCandidaturaForm(candidatura.justificativaColaborador);
+                            return (
+                              <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem', color: '#aeaeb2' }}>
+                                {d.profissao && <span><strong>Profissão:</strong> {d.profissao}</span>}
+                                {d.habilidades && <span><strong>Habilidades:</strong> {d.habilidades}</span>}
+                              </div>
+                            );
+                          })()}
+                        </div>
                       )}
+
+                      {usuario?.statusSolicitacao === 'aprovada' && (
+                        <div className="pf-collab-banner ok">Candidatura aprovada!</div>
+                      )}
+
+                      {usuario?.statusSolicitacao === 'recusada' && !candidatura && (
+                        <div className="pf-collab-banner err" style={{ marginBottom: '16px' }}>
+                          Candidatura anterior recusada. Você pode enviar uma nova.
+                        </div>
+                      )}
+
                       {podeSolicitar && (
-                        <form onSubmit={handleSolicitar}>
-                          <textarea
-                            className="pf-textarea"
-                            value={justificativa}
-                            onChange={e => setJustificativa(e.target.value)}
-                            placeholder="Ex: Sou desenvolvedor há 3 anos e quero compartilhar meu conhecimento..."
-                            rows={4}
-                            maxLength={500}
-                          />
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                            <span style={{ color: '#555', fontSize: '0.78rem' }}>{justificativa.length}/500</span>
-                            <button type="submit" className="pf-submit-btn" disabled={loading}>
-                              {loading ? 'Enviando...' : 'Enviar Solicitação'}
+                        <form onSubmit={handleEnviarCandidatura} noValidate>
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#aeaeb2' }}>Profissão / Área de atuação *</label>
+                              <input
+                                className="pf-name-input"
+                                value={appForm.profissao}
+                                onChange={e => setAppForm(f => ({ ...f, profissao: e.target.value }))}
+                                placeholder="Ex: Desenvolvedor Full Stack"
+                                style={{ borderColor: appErrors.profissao ? '#ef4444' : undefined }}
+                              />
+                              {appErrors.profissao && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>{appErrors.profissao}</span>}
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#aeaeb2' }}>Habilidades principais *</label>
+                              <input
+                                className="pf-name-input"
+                                value={appForm.habilidades}
+                                onChange={e => setAppForm(f => ({ ...f, habilidades: e.target.value }))}
+                                placeholder="Ex: React, Node.js, Python"
+                                style={{ borderColor: appErrors.habilidades ? '#ef4444' : undefined }}
+                              />
+                              {appErrors.habilidades && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>{appErrors.habilidades}</span>}
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', gridColumn: '1 / -1' }}>
+                              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#aeaeb2' }}>Experiência profissional *</label>
+                              <textarea
+                                className="pf-textarea"
+                                rows={3}
+                                value={appForm.experiencia}
+                                onChange={e => setAppForm(f => ({ ...f, experiencia: e.target.value }))}
+                                placeholder="Descreva sua experiência na área..."
+                                style={{ borderColor: appErrors.experiencia ? '#ef4444' : undefined }}
+                              />
+                              {appErrors.experiencia && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>{appErrors.experiencia}</span>}
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', gridColumn: '1 / -1' }}>
+                              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#aeaeb2' }}>Por que quer ser colaborador? *</label>
+                              <textarea
+                                className="pf-textarea"
+                                rows={3}
+                                maxLength={600}
+                                value={appForm.motivacao}
+                                onChange={e => setAppForm(f => ({ ...f, motivacao: e.target.value }))}
+                                placeholder="Explique sua motivação e o que pretende ensinar..."
+                                style={{ borderColor: appErrors.motivacao ? '#ef4444' : undefined }}
+                              />
+                              {appErrors.motivacao && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>{appErrors.motivacao}</span>}
+                              <span style={{ fontSize: '0.72rem', color: '#555', textAlign: 'right' }}>{appForm.motivacao.length}/600</span>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#aeaeb2' }}>LinkedIn</label>
+                              <input
+                                className="pf-name-input"
+                                value={appForm.linkedin}
+                                onChange={e => setAppForm(f => ({ ...f, linkedin: e.target.value }))}
+                                placeholder="https://linkedin.com/in/..."
+                              />
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: '#aeaeb2' }}>Portfólio / GitHub</label>
+                              <input
+                                className="pf-name-input"
+                                value={appForm.portfolio}
+                                onChange={e => setAppForm(f => ({ ...f, portfolio: e.target.value }))}
+                                placeholder="https://github.com/..."
+                              />
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                            <button type="submit" className="pf-submit-btn" disabled={candidaturaLoading}>
+                              {candidaturaLoading ? 'Enviando...' : 'Enviar Candidatura'}
                             </button>
                           </div>
                         </form>

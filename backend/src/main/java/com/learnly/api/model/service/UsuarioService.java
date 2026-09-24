@@ -8,6 +8,7 @@ import com.learnly.api.model.entity.Usuario;
 import com.learnly.api.model.repository.InstrutorRepository;
 import com.learnly.api.model.repository.UsuarioRepository;
 import com.learnly.api.security.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class UsuarioService {
     @Autowired private InstrutorRepository instrutorRepository;
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private JwtService jwtService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<UsuarioDTO> listarTodos() {
         return usuarioRepository.findAll().stream()
@@ -71,6 +73,46 @@ public class UsuarioService {
         usuario.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
         usuario.setJustificativaColaborador(justificativa);
         return toDTO(usuarioRepository.save(usuario));
+    }
+
+    public UsuarioDTO enviarCandidatura(Long usuarioId, Map<String, String> dados) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (usuario.getRole() == Role.COLABORADOR || usuario.getRole() == Role.ADMIN)
+            throw new RuntimeException("Usuário já é colaborador ou admin");
+
+        if (usuario.getStatusSolicitacao() == StatusSolicitacao.PENDENTE)
+            throw new RuntimeException("Já existe uma candidatura pendente");
+
+        try {
+            usuario.setJustificativaColaborador(objectMapper.writeValueAsString(dados));
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao processar candidatura", e);
+        }
+        usuario.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
+        return toDTO(usuarioRepository.save(usuario));
+    }
+
+    public List<UsuarioDTO> listarCandidaturasPendentes() {
+        return usuarioRepository.findByStatusSolicitacao(StatusSolicitacao.PENDENTE).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public UsuarioDTO aprovarCandidatura(Long usuarioId) {
+        return aprovarColaborador(usuarioId);
+    }
+
+    public UsuarioDTO rejeitarCandidatura(Long usuarioId) {
+        return recusarColaborador(usuarioId);
+    }
+
+    public UsuarioDTO getCandidaturaAtiva(Long usuarioId) {
+        return usuarioRepository.findById(usuarioId)
+                .filter(u -> u.getStatusSolicitacao() == StatusSolicitacao.PENDENTE)
+                .map(this::toDTO)
+                .orElse(null);
     }
 
     public UsuarioDTO aprovarColaborador(Long id) {
@@ -144,6 +186,12 @@ public class UsuarioService {
             u.setCurriculo(curriculo);
             usuarioRepository.save(u);
         });
+    }
+
+    public void deletarConta(Long id) {
+        if (!usuarioRepository.existsById(id))
+            throw new RuntimeException("Usuário não encontrado");
+        usuarioRepository.deleteById(id);
     }
 
     private UsuarioDTO toDTO(Usuario u) {

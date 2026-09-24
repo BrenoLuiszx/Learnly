@@ -1,7 +1,9 @@
+/* LEARNLY - BIGTECH PROFESSIONAL DESIGN SYSTEM - CURSOS PAGE ONLY */
 
+/* Design Tokens - Scoped to courses page */
 .courses-page:root,
 .courses-page {
-
+  /* Color Palette - Sophisticated & Tech-Forward */
   --primary-900: #0a0a0b;
   --primary-800: #1c1c1e;
   --primary-700: #2c2c2e;
@@ -13,7 +15,7 @@
   --primary-100: #c7c7cc;
   --primary-50: #f2f2f7;
 
- 
+  /* Accent Colors - Premium Gold System */
   --accent-900: #b8860b;
   --accent-800: #daa520;
   --accent-700: #ffd700;
@@ -24,13 +26,13 @@
   --accent-200: #fff59d;
   --accent-100: #fff9c4;
 
-
+  /* Semantic Colors */
   --success: #34d399;
   --warning: #fbbf24;
   --error: #ef4444;
   --info: #3b82f6;
 
-
+  /* Typography Scale */
   --font-family-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     system-ui, sans-serif;
   --font-family-mono: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono",
@@ -54,7 +56,7 @@
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
 
- 
+  /* Spacing Scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -68,7 +70,7 @@
   --space-20: 5rem;
   --space-24: 6rem;
 
-
+  /* Border Radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
@@ -76,7 +78,7 @@
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
-
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -88,18 +90,18 @@
   --shadow-accent: 0 0 0 1px var(--accent-700),
     0 4px 16px rgba(255, 215, 0, 0.2);
 
-
+  /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 
-
+  /* Glass Morphism */
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-blur: blur(16px);
 }
 
-
+/* Reset & Base Styles - Scoped to courses page */
 .courses-page *,
 .courses-page *::before,
 .courses-page *::after {
@@ -118,7 +120,7 @@
   text-rendering: optimizeLegibility;
 }
 
-
+/* Layout Container */
 .courses-page .courses-container {
   position: relative;
   min-height: 100vh;
@@ -153,7 +155,7 @@
   z-index: 0;
 }
 
-
+/* Hero Section */
 .courses-page .courses-hero {
   position: relative;
   z-index: 1;
@@ -187,7 +189,7 @@
   line-height: 1.7;
 }
 
-
+/* Filters Section */
 .courses-page .course-filters {
   position: relative;
   z-index: 1;
@@ -270,7 +272,7 @@
   color: var(--primary-100);
 }
 
-
+/* Filter Controls */
 .filters-controls {
   display: grid;
   grid-template-columns: 1fr auto auto;
@@ -315,7 +317,7 @@
   pointer-events: none;
 }
 
-
+/* Category Chips */
 .courses-page .category-chips {
   display: flex;
   gap: 0.5rem;
@@ -361,7 +363,7 @@
   opacity: 0.7;
 }
 
-
+/* Removed old category-select — kept selector to avoid breaking anything */
 .courses-page .category-select {
   padding: 1rem 2.5rem 1rem 1rem;
   background: var(--bg-secondary);
@@ -427,7 +429,7 @@
   transform: translateY(-1px);
 }
 
-
+/* Course Grid */
 .courses-page .courses-grid {
   position: relative;
   z-index: 1;
@@ -447,7 +449,7 @@
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
 }
 
-
+/* Course Card */
 .courses-page .course-card {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -459,7 +461,7 @@
   overflow: hidden;
 }
 
-
+/* Cover image */
 .courses-page .course-cover {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -480,12 +482,12 @@
   transform: scale(1.04);
 }
 
-
+/* Content area below the cover (or the whole card when no cover) */
 .courses-page .course-card-body {
   padding: var(--space-6);
 }
 
-
+/* List view — horizontal card layout */
 .courses-grid.list .course-card {
   display: flex;
   flex-direction: row;
@@ -635,7 +637,7 @@
   gap: var(--space-3);
 }
 
-
+/* Card icon buttons (favorite / watch later) */
 .course-card-icons {
   display: flex;
   align-items: center;
@@ -705,7 +707,7 @@
   color: #000000 !important;
 }
 
-
+/* Loading State */
 .courses-page .courses-loading {
   display: flex;
   flex-direction: column;
@@ -739,7 +741,7 @@
   font-weight: var(--font-weight-medium);
 }
 
-
+/* Empty State */
 .courses-page .no-courses {
   text-align: center;
   padding: var(--space-20) var(--space-6);
@@ -789,7 +791,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-
+/* View Toggle Styles */
 .courses-page .view-toggle {
   display: flex !important;
   background: var(--primary-700) !important;
@@ -823,7 +825,7 @@
   color: var(--primary-100) !important;
 }
 
-
+/* Responsive Design */
 @media (max-width: 1024px) {
   .filters-controls {
     grid-template-columns: 1fr;
@@ -906,7 +908,7 @@
   }
 }
 
-
+/* Focus States for Accessibility */
 .search-input:focus,
 .category-select:focus,
 .btn-search:focus,
@@ -918,7 +920,7 @@
   outline-offset: 2px;
 }
 
-
+/* Tabs */
 .courses-page .courses-tabs {
   display: flex !important;
   gap: var(--space-2) !important;
@@ -955,7 +957,7 @@
   color: var(--primary-100) !important;
 }
 
-
+/* Jornadas Grid */
 .courses-page .jornadas-grid {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
@@ -1112,7 +1114,7 @@
   box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
 }
 
-
+/* Responsive Jornadas */
 @media (max-width: 768px) {
   .courses-page .jornadas-grid {
     grid-template-columns: 1fr !important;
@@ -1152,7 +1154,7 @@
   }
 }
 
-
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1163,7 +1165,7 @@
   }
 }
 
-
+/* Jornada card — progress bar */
 .courses-page .jornada-card-progress {
   display: flex;
   align-items: center;
@@ -1193,7 +1195,7 @@
   white-space: nowrap;
 }
 
-
+/* Jornada card — completed course row */
 .courses-page .mini-course-done .course-number {
   background: #34d399;
   color: #fff;
@@ -1205,7 +1207,7 @@
   text-decoration-color: rgba(255,255,255,0.2);
 }
 
-
+/* Jornada card — completed badge */
 .courses-page .stat-done {
   background: rgba(52, 211, 153, 0.1) !important;
   color: #34d399 !important;

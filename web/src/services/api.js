@@ -56,6 +56,12 @@ export const usuariosAPI = {
   listarSolicitacoesPendentes: () => api.get('/usuarios/solicitacoes/pendentes'),
   aprovarColaborador: (id) => api.put(`/usuarios/solicitacoes/${id}/aprovar`),
   recusarColaborador: (id) => api.put(`/usuarios/solicitacoes/${id}/recusar`),
+  deletarConta: () => api.delete('/usuarios/me'),
+  enviarCandidatura: (dados) => api.post('/usuarios/candidatura', dados),
+  getMinhaCandidatura: () => api.get('/usuarios/candidatura/minha'),
+  listarCandidaturasPendentes: () => api.get('/usuarios/candidaturas/pendentes'),
+  aprovarCandidatura: (id) => api.put(`/usuarios/candidaturas/${id}/aprovar`),
+  rejeitarCandidatura: (id) => api.put(`/usuarios/candidaturas/${id}/rejeitar`),
 };
 
 export const progressoAPI = {

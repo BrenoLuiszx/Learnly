@@ -15,6 +15,7 @@ const Admin = () => {
   const [cursosPendentes, setCursosPendentes] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [solicitacoes, setSolicitacoes] = useState([]);
+  const [candidaturas, setCandidaturas] = useState([]);
   const [activeTab, setActiveTab] = useState('cursos');
   const [form, setForm] = useState({
     titulo: '', descricao: '', url: '', categoria: '',
@@ -101,6 +102,11 @@ const Admin = () => {
 
 
 
+  const parseCandidatura = (justificativa) => {
+    if (!justificativa) return {};
+    try { return JSON.parse(justificativa); } catch { return { motivacao: justificativa }; }
+  };
+
   const jornadaRequests = solicitacoes.filter(
     s => s.justificativaColaborador?.startsWith('JORNADA_REQUEST:')
   );
@@ -154,6 +160,7 @@ const Admin = () => {
     carregarUsuarios();
     carregarCursosPendentes();
     carregarSolicitacoes();
+    carregarCandidaturas();
   }, []);
 
   const carregarCursos = async () => {
@@ -172,6 +179,28 @@ const Admin = () => {
     } catch (error) {
       console.error('Erro ao carregar cursos pendentes:', error);
     }
+  };
+
+  const carregarCandidaturas = async () => {
+    try {
+      const response = await usuariosAPI.listarCandidaturasPendentes();
+      setCandidaturas(response.data);
+    } catch {}
+  };
+
+  const aprovarCandidatura = async (id) => {
+    try {
+      await usuariosAPI.aprovarCandidatura(id);
+      carregarCandidaturas();
+      carregarUsuarios();
+    } catch { alert('Erro ao aprovar candidatura'); }
+  };
+
+  const rejeitarCandidatura = async (id) => {
+    try {
+      await usuariosAPI.rejeitarCandidatura(id);
+      carregarCandidaturas();
+    } catch { alert('Erro ao rejeitar candidatura'); }
   };
 
   const carregarSolicitacoes = async () => {
@@ -542,8 +571,8 @@ const Admin = () => {
                 <span className="stat-label">Usuários</span>
               </div>
               <div className="stat-card">
-                <span className="stat-number">{colaboradorRequests.length}</span>
-                <span className="stat-label">Solicitações</span>
+                <span className="stat-number">{candidaturas.length}</span>
+                <span className="stat-label">Candidaturas</span>
               </div>
             </div>
           </div>
@@ -554,7 +583,7 @@ const Admin = () => {
               Cursos Pendentes {cursosPendentes.length > 0 && <span style={{ background: '#ef4444', color: '#fff', borderRadius: '50%', padding: '1px 6px', fontSize: '11px', marginLeft: '6px' }}>{cursosPendentes.length}</span>}
             </button>
             <button className={`tab-btn ${activeTab === 'solicitacoes' ? 'active' : ''}`} onClick={() => setActiveTab('solicitacoes')}>
-              Solicitações {colaboradorRequests.length > 0 && <span style={{ background: '#ef4444', color: '#fff', borderRadius: '50%', padding: '1px 6px', fontSize: '11px', marginLeft: '6px' }}>{colaboradorRequests.length}</span>}
+              Candidaturas {candidaturas.length > 0 && <span style={{ background: '#ef4444', color: '#fff', borderRadius: '50%', padding: '1px 6px', fontSize: '11px', marginLeft: '6px' }}>{candidaturas.length}</span>}
             </button>
             <button className={`tab-btn ${activeTab === 'usuarios' ? 'active' : ''}`} onClick={() => setActiveTab('usuarios')}>Usuários</button>
             <button className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>Dashboard</button>
@@ -904,35 +933,68 @@ const Admin = () => {
           {activeTab === 'solicitacoes' && (
             <div className="users-management">
               <div className="management-header">
-                <h2>Solicitações de Colaborador</h2>
+                <h2>Candidaturas de Colaborador</h2>
               </div>
-              <div className="users-grid">
-                {colaboradorRequests.map((usuario) => (
-                  <div key={usuario.id} className="user-card">
-                    <div className="user-avatar">
-                      {usuario.foto
-                        ? <img src={usuario.foto} alt={usuario.nome} />
-                        : <div className="avatar-placeholder">{usuario.nome?.charAt(0).toUpperCase()}</div>
-                      }
-                    </div>
-                    <div className="user-info">
-                      <h3>{usuario.nome}</h3>
-                      <p className="user-email">{usuario.email}</p>
-                      {usuario.justificativaColaborador && (
-                        <p style={{ color: '#ccc', fontSize: '0.85rem', margin: '8px 0', fontStyle: 'italic', background: '#111', padding: '8px', borderRadius: '6px', borderLeft: '3px solid #FFD700' }}>
-                          "{usuario.justificativaColaborador}"
-                        </p>
-                      )}
-                      <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                        <button className="btn-edit" style={{ background: '#34d399', color: '#000', flex: 1 }} onClick={() => aprovarColaborador(usuario.id)}>Aprovar</button>
-                        <button className="btn-delete" style={{ flex: 1 }} onClick={() => recusarColaborador(usuario.id)}>Recusar</button>
+              {candidaturas.length === 0 ? (
+                <div className="no-users"><h3>Nenhuma candidatura pendente</h3></div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {candidaturas.map((c) => {
+                    const dados = parseCandidatura(c.justificativaColaborador);
+                    return (
+                    <div key={c.id} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,215,0,0.15)', borderRadius: '12px', padding: '20px 24px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                        <div style={{ width: 48, height: 48, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: '#2c2c2e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {c.foto
+                            ? <img src={c.foto} alt={c.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            : <span style={{ color: '#ffd700', fontWeight: 700, fontSize: '1.1rem' }}>{c.nome?.charAt(0).toUpperCase()}</span>
+                          }
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ fontWeight: 700, color: '#f2f2f7', margin: 0, fontSize: '1rem' }}>{c.nome}</p>
+                          <p style={{ color: '#888', fontSize: '0.82rem', margin: '2px 0 0' }}>{c.email}</p>
+                          {dados.profissao && <span style={{ background: 'rgba(255,215,0,0.1)', color: '#ffd700', border: '1px solid rgba(255,215,0,0.25)', borderRadius: '999px', padding: '2px 10px', fontSize: '0.72rem', fontWeight: 600, marginTop: '6px', display: 'inline-block' }}>{dados.profissao}</span>}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+                        {dados.habilidades && (
+                          <div style={{ background: '#1c1c1e', borderRadius: '8px', padding: '10px 14px' }}>
+                            <p style={{ color: '#888', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 4px' }}>Habilidades</p>
+                            <p style={{ color: '#f2f2f7', fontSize: '0.85rem', margin: 0 }}>{dados.habilidades}</p>
+                          </div>
+                        )}
+                        {(dados.linkedin || dados.portfolio) && (
+                          <div style={{ background: '#1c1c1e', borderRadius: '8px', padding: '10px 14px' }}>
+                            <p style={{ color: '#888', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 4px' }}>Links</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                              {dados.linkedin && <a href={dados.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', fontSize: '0.8rem' }}>LinkedIn</a>}
+                              {dados.portfolio && <a href={dados.portfolio} target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', fontSize: '0.8rem' }}>Portfólio / GitHub</a>}
+                            </div>
+                          </div>
+                        )}
+                        {dados.experiencia && (
+                          <div style={{ background: '#1c1c1e', borderRadius: '8px', padding: '10px 14px', gridColumn: '1 / -1' }}>
+                            <p style={{ color: '#888', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 4px' }}>Experiência</p>
+                            <p style={{ color: '#aeaeb2', fontSize: '0.85rem', margin: 0, lineHeight: 1.5 }}>{dados.experiencia}</p>
+                          </div>
+                        )}
+                        {dados.motivacao && (
+                          <div style={{ background: '#1c1c1e', borderRadius: '8px', padding: '10px 14px', gridColumn: '1 / -1', borderLeft: '3px solid rgba(255,215,0,0.4)' }}>
+                            <p style={{ color: '#888', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 4px' }}>Motivação</p>
+                            <p style={{ color: '#aeaeb2', fontSize: '0.85rem', margin: 0, lineHeight: 1.5, fontStyle: 'italic' }}>"{dados.motivacao}"</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                        <button className="btn-edit" style={{ background: '#34d399', color: '#000', flex: 1 }} onClick={() => aprovarCandidatura(c.id)}>Aprovar</button>
+                        <button className="btn-delete" style={{ flex: 1 }} onClick={() => rejeitarCandidatura(c.id)}>Rejeitar</button>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              {colaboradorRequests.length === 0 && (
-                <div className="no-users"><h3>Nenhuma solicitação pendente</h3></div>
+                    );
+                  })}
+                </div>
               )}
             </div>
           )}

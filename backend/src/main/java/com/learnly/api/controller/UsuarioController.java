@@ -61,6 +61,44 @@ public class UsuarioController {
         }
     }
 
+    @PostMapping("/candidatura")
+    public ResponseEntity<?> enviarCandidatura(@RequestBody Map<String, String> body, Authentication auth) {
+        try {
+            return ResponseEntity.ok(usuarioService.enviarCandidatura((Long) auth.getCredentials(), body));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/candidatura/minha")
+    public ResponseEntity<?> getMinhaCandidatura(Authentication auth) {
+        UsuarioDTO dto = usuarioService.getCandidaturaAtiva((Long) auth.getCredentials());
+        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/candidaturas/pendentes")
+    public ResponseEntity<List<UsuarioDTO>> listarCandidaturasPendentes() {
+        return ResponseEntity.ok(usuarioService.listarCandidaturasPendentes());
+    }
+
+    @PutMapping("/candidaturas/{id}/aprovar")
+    public ResponseEntity<?> aprovarCandidatura(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(usuarioService.aprovarCandidatura(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/candidaturas/{id}/rejeitar")
+    public ResponseEntity<?> rejeitarCandidatura(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(usuarioService.rejeitarCandidatura(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/{id}/solicitar-colaborador")
     public ResponseEntity<UsuarioDTO> solicitarColaborador(@PathVariable Long id,
                                                            @RequestBody Map<String, String> body) {
@@ -106,6 +144,16 @@ public class UsuarioController {
     @GetMapping("/gerar-hash/{senha}")
     public ResponseEntity<String> gerarHash(@PathVariable String senha) {
         return ResponseEntity.ok(usuarioService.gerarHash(senha));
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deletarConta(Authentication auth) {
+        try {
+            usuarioService.deletarConta((Long) auth.getCredentials());
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/curriculo")

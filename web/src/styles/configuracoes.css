@@ -1,4 +1,6 @@
-
+/* =============================================
+   LEARNLY — SETTINGS PAGE
+   ============================================= */
 
 .cfg-page {
   min-height: 100vh;
@@ -7,7 +9,7 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
-
+/* ── Layout ── */
 .cfg-layout {
   display: flex;
   min-height: calc(100vh - 64px);
@@ -18,7 +20,7 @@
   align-items: flex-start;
 }
 
-
+/* ── Sidebar ── */
 .cfg-sidebar {
   width: 260px;
   flex-shrink: 0;
@@ -61,7 +63,7 @@
   padding: 0 4px;
 }
 
-
+/* User card in sidebar */
 .cfg-user-card {
   display: flex;
   align-items: center;
@@ -114,7 +116,7 @@
   white-space: nowrap;
 }
 
-
+/* Nav items */
 .cfg-nav {
   display: flex;
   flex-direction: column;
@@ -157,7 +159,7 @@
   flex-shrink: 0;
 }
 
-
+/* Sidebar footer */
 .cfg-sidebar-footer {
   display: flex;
   flex-direction: column;
@@ -203,7 +205,7 @@
   background: rgba(239,68,68,0.08);
 }
 
-
+/* ── Mobile toggle ── */
 .cfg-mobile-toggle {
   display: none;
   align-items: center;
@@ -228,13 +230,13 @@
   z-index: 99;
 }
 
-
+/* ── Main content ── */
 .cfg-main {
   flex: 1;
   min-width: 0;
 }
 
-
+/* ── Section ── */
 .cfg-section {
   display: flex;
   flex-direction: column;
@@ -258,7 +260,7 @@
   margin: 0;
 }
 
-
+/* ── Card ── */
 .cfg-card {
   background: #1c1c1e;
   border: 1px solid rgba(255,255,255,0.08);
@@ -287,7 +289,7 @@
   flex-wrap: wrap;
 }
 
-
+/* ── Photo ── */
 .cfg-photo-row {
   display: flex;
   align-items: center;
@@ -355,7 +357,7 @@
   margin: 0;
 }
 
-
+/* ── Fields ── */
 .cfg-field-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -397,7 +399,7 @@
   color: #555;
 }
 
-
+/* ── Stats ── */
 .cfg-stats-row {
   display: flex;
   gap: 16px;
@@ -430,7 +432,7 @@
   text-align: center;
 }
 
-
+/* ── Theme cards ── */
 .cfg-theme-grid {
   display: flex;
   gap: 16px;
@@ -509,31 +511,7 @@
   color: #f2f2f7;
 }
 
-
-.cfg-accent-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.cfg-accent-dot {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-
-.cfg-accent-dot.active {
-  border-color: #fff;
-  transform: scale(1.15);
-}
-
-.cfg-accent-dot:disabled { cursor: not-allowed; opacity: 0.4; }
-
-
+/* ── Font size buttons ── */
 .cfg-font-row {
   display: flex;
   gap: 12px;
@@ -569,7 +547,7 @@
   color: #ffd700;
 }
 
-
+/* ── Toggle ── */
 .cfg-toggle-list {
   display: flex;
   flex-direction: column;
@@ -628,7 +606,7 @@
 
 .cfg-toggle.on .cfg-toggle-thumb { transform: translateX(20px); }
 
-
+/* ── Session info ── */
 .cfg-session-info {
   display: flex;
   align-items: center;
@@ -681,14 +659,14 @@
   font-weight: 700;
 }
 
-
+/* ── Danger card ── */
 .cfg-danger-card {
   border-color: rgba(239,68,68,0.2) !important;
 }
 
 .cfg-danger-title { color: #ef4444 !important; }
 
-
+/* ── Badges ── */
 .cfg-badge {
   display: inline-block;
   padding: 2px 8px;
@@ -704,7 +682,7 @@
   color: #ffd700;
 }
 
-
+/* ── Buttons ── */
 .cfg-btn-primary {
   padding: 9px 20px;
   background: #ffd700;
@@ -764,7 +742,7 @@
 
 .cfg-btn-danger:hover { background: rgba(239,68,68,0.18); }
 
-
+/* ── Responsive ── */
 @media (max-width: 900px) {
   .cfg-layout {
     flex-direction: column;
@@ -803,7 +781,7 @@
   .cfg-section-head h2 { font-size: 1.35rem; }
 }
 
-
+/* ── Account links (Minha Conta section) ── */
 .cfg-account-links {
   display: flex;
   flex-direction: column;

@@ -1,4 +1,4 @@
-
+/* AULA PLAYER PAGE */
 
 .aula-player-page {
   min-height: 100vh;
@@ -15,7 +15,7 @@
   min-height: calc(100vh - 80px);
 }
 
-
+/* Player Principal */
 .aula-player-main {
   background: #000;
   display: flex;
@@ -25,7 +25,7 @@
 .player-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; 
+  padding-top: 56.25%; /* 16:9 */
   background: #000;
 }
 
@@ -69,7 +69,7 @@
   transform: translateY(-1px);
 }
 
-
+/* Informações da Aula */
 .aula-info-section {
   background: var(--bg-secondary);
   padding: 24px 32px;
@@ -159,7 +159,7 @@
   background: #2dd48c;
 }
 
-
+/* Navegação entre aulas */
 .aula-navegacao {
   display: flex;
   gap: 12px;
@@ -211,7 +211,7 @@
   flex: 0 0 auto;
 }
 
-
+/* Sidebar */
 .aula-player-sidebar {
   background: var(--bg-secondary);
   border-left: 1px solid var(--border-color);
@@ -347,7 +347,7 @@
   50% { opacity: 0.5; }
 }
 
-
+/* Loading e Error */
 .aula-player-loading,
 .aula-player-error {
   display: flex;
@@ -398,7 +398,7 @@
   transform: translateY(-1px);
 }
 
-
+/* Responsivo */
 @media (max-width: 1200px) {
   .aula-player-container {
     grid-template-columns: 1fr 320px;

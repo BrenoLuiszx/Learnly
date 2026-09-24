@@ -1,4 +1,10 @@
+/* GLOBAL STYLES */
 
+/* ═══════════════════════════════════════════════
+   CATEGORY BADGE SYSTEM — single source of truth
+   Used across: Cursos, Home, CursoDetalhes,
+   CursoIntro, UserDashboard, Perfil
+   ═══════════════════════════════════════════════ */
 
 .cat-badge {
   display: inline-flex;
@@ -12,13 +18,13 @@
   text-transform: uppercase;
   white-space: nowrap;
   border: 1px solid transparent;
-
+  /* default — used as fallback */
   background: rgba(255,255,255,0.07);
   color: #aeaeb2;
   border-color: rgba(255,255,255,0.1);
 }
 
-
+/* ── Palette per category ── */
 .cat-badge[data-cat="Frontend"]     { background: rgba(96,165,250,0.12);  color: #60a5fa;  border-color: rgba(96,165,250,0.25); }
 .cat-badge[data-cat="Backend"]      { background: rgba(52,211,153,0.12);  color: #34d399;  border-color: rgba(52,211,153,0.25); }
 .cat-badge[data-cat="Data Science"] { background: rgba(167,139,250,0.12); color: #a78bfa;  border-color: rgba(167,139,250,0.25); }
@@ -36,7 +42,7 @@
 .cat-badge[data-cat="Saúde"]        { background: rgba(52,211,153,0.12);  color: #6ee7b7;  border-color: rgba(52,211,153,0.2); }
 .cat-badge[data-cat="Diversos"]     { background: rgba(148,163,184,0.1);  color: #94a3b8;  border-color: rgba(148,163,184,0.2); }
 
-
+/* ── Dot indicator ── */
 .cat-badge::before {
   content: '';
   display: inline-block;
@@ -48,7 +54,7 @@
   flex-shrink: 0;
 }
 
-
+/* ── Size variants ── */
 .cat-badge.cat-badge--sm {
   font-size: 0.62rem;
   padding: 2px 7px;
@@ -114,7 +120,7 @@ body {
   overflow-x: hidden;
 }
 
-
+/* Container padrão para páginas - apenas para páginas que usam essas classes */
 .page-container {
   min-height: calc(100vh - 80px);
   padding: 120px 20px 40px;
@@ -127,7 +133,7 @@ body {
 
 
 
-
+/* Títulos padrão */
 .page-title {
   font-size: 2.5rem;
   font-weight: 700;
@@ -143,7 +149,7 @@ body {
   margin-bottom: 40px;
 }
 
-
+/* Formulários */
 .form-container {
   background: var(--bg-secondary);
   border-radius: 16px;
@@ -195,7 +201,7 @@ body {
   box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
 }
 
-
+/* Cards */
 .card {
   background: var(--bg-secondary);
   border-radius: 16px;
@@ -209,7 +215,7 @@ body {
   transform: translateY(-2px);
 }
 
-
+/* Tabelas */
 .table-container {
   background: var(--bg-secondary);
   border-radius: 16px;
@@ -239,7 +245,7 @@ body {
   color: var(--text-secondary);
 }
 
-
+/* Responsive */
 @media (max-width: 768px) {
   body {
     padding-top: 70px;

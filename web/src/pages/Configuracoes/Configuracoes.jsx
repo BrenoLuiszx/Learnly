@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { usuarioDashboardAPI } from '../../services/api';
+import { usuarioDashboardAPI, usuariosAPI } from '../../services/api';
 import Header from '../Header/Header';
 import '../../styles/configuracoes.css';
 
@@ -37,6 +37,10 @@ const Configuracoes = () => {
 
 
   const [stats, setStats] = useState({ cursosAcessados: 0, concluidos: 0, totalMinutos: 0 });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   useEffect(() => {
     if (usuario) {
@@ -76,6 +80,19 @@ const Configuracoes = () => {
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true);
+    setDeleteError('');
+    try {
+      await usuariosAPI.deletarConta();
+      logout();
+      navigate('/login', { replace: true });
+    } catch {
+      setDeleteError('Erro ao deletar conta. Tente novamente.');
+      setDeleteLoading(false);
+    }
   };
 
   const navTo = (id) => {
@@ -240,22 +257,21 @@ const Configuracoes = () => {
             <section className="cfg-section">
               <div className="cfg-section-head">
                 <h2>Aparência</h2>
-                <p>Personalize a aparência visual da plataforma</p>
+                <p>Personalize a experiência visual da plataforma</p>
               </div>
 
               <div className="cfg-card">
                 <h3 className="cfg-card-title">Tema</h3>
-                <p className="cfg-card-desc">Escolha entre o tema escuro e o tema claro. O suporte completo ao tema claro está em desenvolvimento.</p>
+                <p className="cfg-card-desc">Escolha entre o tema escuro e o tema claro.</p>
                 <div className="cfg-theme-grid">
                   {[
-                    { id: 'dark',  label: 'Escuro',  badge: null },
-                    { id: 'light', label: 'Claro',   badge: 'Em breve' },
+                    { id: 'dark',  label: 'Escuro' },
+                    { id: 'light', label: 'Claro'  },
                   ].map(t => (
                     <button
                       key={t.id}
-                      className={`cfg-theme-card${theme === t.id ? ' active' : ''}${t.badge ? ' disabled' : ''}`}
-                      onClick={() => !t.badge && setTheme(t.id)}
-                      disabled={!!t.badge}
+                      className={`cfg-theme-card${theme === t.id ? ' active' : ''}`}
+                      onClick={() => setTheme(t.id)}
                     >
                       <div className={`cfg-theme-preview cfg-theme-${t.id}`}>
                         <div className="cfg-tp-bar" />
@@ -267,8 +283,7 @@ const Configuracoes = () => {
                       </div>
                       <div className="cfg-theme-label">
                         <span>{t.label}</span>
-                        {t.badge && <span className="cfg-badge">{t.badge}</span>}
-                        {theme === t.id && !t.badge && <span className="cfg-badge active">Ativo</span>}
+                        {theme === t.id && <span className="cfg-badge active">Ativo</span>}
                       </div>
                     </button>
                   ))}
@@ -276,19 +291,34 @@ const Configuracoes = () => {
               </div>
 
               <div className="cfg-card">
-                <h3 className="cfg-card-title">Cor de Destaque</h3>
-                <p className="cfg-card-desc">A cor de destaque atual é o dourado da Learnly.</p>
-                <div className="cfg-accent-row">
-                  {['#ffd700', '#60a5fa', '#34d399', '#f472b6', '#a78bfa'].map(color => (
+                <h3 className="cfg-card-title">Preferências Visuais</h3>
+                <div className="cfg-toggle-list">
+                  <div className="cfg-toggle-row">
+                    <div>
+                      <p className="cfg-toggle-label">Reduzir Animações</p>
+                      <p className="cfg-toggle-desc">Desativa transições e animações decorativas</p>
+                    </div>
                     <button
-                      key={color}
-                      className={`cfg-accent-dot${color === '#ffd700' ? ' active' : ''}`}
-                      style={{ background: color }}
-                      title={color}
-                      disabled={color !== '#ffd700'}
-                    />
-                  ))}
-                  <span className="cfg-field-hint" style={{ marginLeft: 8 }}>Mais cores em breve</span>
+                      className={`cfg-toggle${reducedMotion ? ' on' : ''}`}
+                      onClick={() => setReducedMotion(p => !p)}
+                      aria-label="Reduzir animações"
+                    >
+                      <span className="cfg-toggle-thumb" />
+                    </button>
+                  </div>
+                  <div className="cfg-toggle-row">
+                    <div>
+                      <p className="cfg-toggle-label">Alto Contraste</p>
+                      <p className="cfg-toggle-desc">Aumenta o contraste de cores para melhor legibilidade</p>
+                    </div>
+                    <button
+                      className={`cfg-toggle${highContrast ? ' on' : ''}`}
+                      onClick={() => setHighContrast(p => !p)}
+                      aria-label="Alto contraste"
+                    >
+                      <span className="cfg-toggle-thumb" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </section>
@@ -439,11 +469,13 @@ const Configuracoes = () => {
               </div>
 
   
-              <div className="cfg-card cfg-danger-card">
+              <div className="cfg-danger-card cfg-card">
                 <h3 className="cfg-card-title cfg-danger-title">Zona de Perigo</h3>
                 <p className="cfg-card-desc">Ações irreversíveis relacionadas à sua conta.</p>
                 <div className="cfg-card-actions">
-                  <button className="cfg-btn-danger">Deletar Conta</button>
+                  <button className="cfg-btn-danger" onClick={() => { setShowDeleteModal(true); setDeleteConfirm(''); setDeleteError(''); }}>
+                    Deletar Conta
+                  </button>
                 </div>
               </div>
             </section>
@@ -451,6 +483,39 @@ const Configuracoes = () => {
 
         </main>
       </div>
+
+      {showDeleteModal && (
+        <div className="cfg-modal-overlay" onClick={() => !deleteLoading && setShowDeleteModal(false)}>
+          <div className="cfg-modal" onClick={e => e.stopPropagation()}>
+            <div className="cfg-modal-icon">⚠️</div>
+            <h3 className="cfg-modal-title">Deletar Conta</h3>
+            <p className="cfg-modal-desc">
+              Esta ação é <strong>permanente e irreversível</strong>. Sua conta, dados e progresso serão removidos definitivamente.
+            </p>
+            <p className="cfg-modal-confirm-label">Digite <strong>DELETAR</strong> para confirmar:</p>
+            <input
+              className="cfg-input cfg-modal-input"
+              value={deleteConfirm}
+              onChange={e => setDeleteConfirm(e.target.value)}
+              placeholder="DELETAR"
+              disabled={deleteLoading}
+            />
+            {deleteError && <p className="cfg-modal-error">{deleteError}</p>}
+            <div className="cfg-modal-actions">
+              <button className="cfg-btn-secondary" onClick={() => setShowDeleteModal(false)} disabled={deleteLoading}>
+                Cancelar
+              </button>
+              <button
+                className="cfg-btn-danger"
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirm !== 'DELETAR' || deleteLoading}
+              >
+                {deleteLoading ? 'Deletando...' : 'Confirmar Exclusão'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

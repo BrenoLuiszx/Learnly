@@ -1,4 +1,8 @@
+/* =============================================
+   LEARNLY — HEADER ACCOUNT WIDGET
+   ============================================= */
 
+/* ── Widget wrapper (both dropdowns side by side) ── */
 .ud-header-widget {
   display: flex;
   align-items: center;
@@ -7,12 +11,12 @@
   z-index: 1000;
 }
 
-
+/* ── Individual dropdown wrapper ── */
 .ud-wrap {
   position: relative;
 }
 
-
+/* ── Shared panel base ── */
 .ud-panel {
   position: absolute;
   top: calc(100% + 10px);
@@ -31,14 +35,14 @@
   to   { opacity: 1; transform: translateY(0)   scale(1);    }
 }
 
-
+/* ── Divider ── */
 .ud-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.07);
   margin: 4px 0;
 }
 
-
+/* ── Group ── */
 .ud-group {
   padding: 6px 8px;
 }
@@ -53,7 +57,7 @@
   letter-spacing: 0.08em;
 }
 
-
+/* ── Shared item ── */
 .ud-item {
   display: flex;
   align-items: center;
@@ -91,7 +95,11 @@
 .ud-item-danger svg { opacity: 0.8; }
 .ud-item-danger:hover { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
+/* =============================================
+   PROFILE DROPDOWN
+   ============================================= */
 
+/* Avatar button */
 .ud-avatar-btn {
   width: 46px;
   height: 46px;
@@ -129,7 +137,7 @@
   font-weight: 700;
 }
 
-
+/* Profile panel */
 .ud-profile-panel {
   min-width: 260px;
 }
@@ -226,9 +234,11 @@
   background: rgba(255, 215, 0, 0.12);
 }
 
+/* =============================================
+   ACCOUNT DROPDOWN
+   ============================================= */
 
-
-
+/* Account button */
 .ud-account-btn {
   display: flex;
   align-items: center;
@@ -263,7 +273,7 @@
 
 .ud-account-chevron.open { transform: rotate(180deg); }
 
-
+/* Account panel */
 .ud-account-panel {
   min-width: 230px;
   right: 0;
@@ -282,7 +292,9 @@
   letter-spacing: 0.08em;
 }
 
-
+/* =============================================
+   GUEST DROPDOWN
+   ============================================= */
 
 .ud-guest-btn {
   background: rgba(255, 255, 255, 0.06);
@@ -315,7 +327,9 @@
   padding: 8px;
 }
 
-
+/* =============================================
+   RESPONSIVE
+   ============================================= */
 
 @media (max-width: 480px) {
   .ud-account-label { display: none; }
